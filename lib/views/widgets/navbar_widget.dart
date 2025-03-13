@@ -11,7 +11,7 @@ class NavbarWidget extends StatelessWidget {
       builder: (context, selectedpage, child) {
         return NavigationBar(
           destinations: [
-            NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+            NavigationDestination(icon: Icon(Icons.home), label: "Leksis"),
             NavigationDestination(
               icon: Icon(Icons.settings),
               label: "Settings",
