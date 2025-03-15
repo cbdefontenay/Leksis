@@ -1,4 +1,6 @@
 {
   "language": "Nederlands",
-  "title": "Flutter Demo op Nl"
+  "appTitle": "Leksis",
+  "createFolder": "Map maken",
+  "settings": "Instellingen"
 }

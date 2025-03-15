@@ -17,7 +17,6 @@ class WidgetTree extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Leksis")),
       body: ValueListenableBuilder(
         valueListenable: selectedPageNotifier,
         builder: (context, selectedPage, child) {

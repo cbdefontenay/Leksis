@@ -1,4 +1,6 @@
 {
   "language": "Deutsch",
-  "title": "Flutter Demo auf De"
+  "appTitle": "Leksis",
+  "createFolder": "Ordner erstellen",
+  "settings": "Einstellungen"
 }
