@@ -19,7 +19,7 @@ class SettingPage extends StatelessWidget {
             child: Column(
               children: [
                 const Text(
-                  "Setting Page",
+                  "Settings Page",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
