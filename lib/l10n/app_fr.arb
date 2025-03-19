@@ -2,5 +2,7 @@
   "language": "Fran1ais",
   "appTitle": "Leksis",
   "createFolder": "Créer un dossier",
+  "createFolderHint": "Nom du dossier",
+  "createFolderError": "Le nom du dossier ne peut pas être vide",
   "settings": "Paramètres"
 }

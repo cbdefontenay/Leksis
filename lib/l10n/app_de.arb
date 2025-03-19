@@ -2,5 +2,7 @@
   "language": "Deutsch",
   "appTitle": "Leksis",
   "createFolder": "Ordner erstellen",
+  "createFolderHint": "Ordnername",
+  "createFolderError": "Ordnername darf nicht leer sein",
   "settings": "Einstellungen"
 }

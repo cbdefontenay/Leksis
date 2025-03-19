@@ -2,5 +2,7 @@
   "language": "Nederlands",
   "appTitle": "Leksis",
   "createFolder": "Map maken",
+  "createFolderHint": "Mapnaam",
+  "createFolderError": "Mapnaam mag niet leeg zijn",
   "settings": "Instellingen"
 }
