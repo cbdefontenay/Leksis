@@ -9,6 +9,8 @@
   "delete": "Delete",
   "rename": "Rename",
   "settings": "Settings",
+  "home": "Folders",
+  "overviewTitle": "Overview",
   "renameFolder": "Rename Folder",
   "newFolderName": "New Folder Name",
   "updateButton": "Update"

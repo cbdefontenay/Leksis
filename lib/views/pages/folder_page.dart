@@ -200,7 +200,8 @@ class _FolderPageState extends State<FolderPage> {
                 icon: Icon(
                   words[index].toBeLearned ? Icons.star : Icons.star_border,
 
-                  color: words[index].toBeLearned ? Colors.amber : null,
+                  color:
+                      words[index].toBeLearned ? Colors.deepPurpleAccent : null,
                 ),
 
                 onPressed: () async {

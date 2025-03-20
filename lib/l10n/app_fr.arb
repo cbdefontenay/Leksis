@@ -9,6 +9,8 @@
   "delete": "Supprimer",
   "rename": "Renommer",
   "settings": "Paramètres",
+  "home": "Dossiers",
+  "overviewTitle": "Historique",
   "renameFolder": "Renommer le dossier",
   "newFolderName": "Nouveau nom du dossier",
   "updateButton": "Mettre à jour"

@@ -9,6 +9,8 @@
   "delete": "Verwijderen",
   "rename": "Hernoemen",
   "settings": "Instellingen",
+  "home": "Mapen",
+  "overviewTitle": "Overzicht",
   "renameFolder": "Map hernoemen",
   "newFolderName": "Nieuwe mapnaam",
   "updateButton": "Bijwerken"

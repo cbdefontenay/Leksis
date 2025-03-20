@@ -9,6 +9,8 @@
   "delete": "Löschen",
   "rename": "Umbenennen",
   "settings": "Einstellungen",
+  "home": "Ordner",
+  "overviewTitle": "Übersicht",
   "renameFolder": "Ordner umbenennen",
   "newFolderName": "Neuer Ordnername",
   "updateButton": "Aktualisieren"
