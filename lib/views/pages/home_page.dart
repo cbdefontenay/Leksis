@@ -142,78 +142,82 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: colorScheme.primary,
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemCount: folders.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: InkWell(
-              onTap:
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FolderPage(folder: folders[index]),
-                    ),
-                  ),
-              borderRadius: BorderRadius.circular(12),
-              child: Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                color: colorScheme.surface,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.folder_copy,
-                        color: colorScheme.primary,
-                        size: 32,
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 20, 0, 8),
+        child: ListView.builder(
+          itemCount: folders.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              child: InkWell(
+                onTap:
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => FolderPage(folder: folders[index]),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Text(
-                          folders[index].name,
-                          style: textTheme.headlineMedium?.copyWith(
-                            color: colorScheme.onSurface,
+                    ),
+                borderRadius: BorderRadius.circular(12),
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  color: colorScheme.surfaceContainer,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.folder_copy,
+                          color: colorScheme.primary,
+                          size: 32,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            folders[index].name,
+                            style: textTheme.headlineMedium?.copyWith(
+                              color: colorScheme.onSurface,
+                            ),
                           ),
                         ),
-                      ),
-                      PopupMenuButton<String>(
-                        onSelected: (value) {
-                          if (value == 'update') {
-                            _showUpdateFolderDialog(folders[index]);
-                          } else if (value == 'delete') {
-                            _deleteFolder(folders[index].id!);
-                          }
-                        },
-                        itemBuilder:
-                            (context) => [
-                              PopupMenuItem(
-                                value: 'update',
-                                child: Text(
-                                  AppLocalizations.of(context)!.rename,
+                        PopupMenuButton<String>(
+                          onSelected: (value) {
+                            if (value == 'update') {
+                              _showUpdateFolderDialog(folders[index]);
+                            } else if (value == 'delete') {
+                              _deleteFolder(folders[index].id!);
+                            }
+                          },
+                          itemBuilder:
+                              (context) => [
+                                PopupMenuItem(
+                                  value: 'update',
+                                  child: Text(
+                                    AppLocalizations.of(context)!.rename,
+                                  ),
                                 ),
-                              ),
-                              PopupMenuItem(
-                                value: 'delete',
-                                child: Text(
-                                  AppLocalizations.of(context)!.delete,
+                                PopupMenuItem(
+                                  value: 'delete',
+                                  child: Text(
+                                    AppLocalizations.of(context)!.delete,
+                                  ),
                                 ),
-                              ),
-                            ],
-                      ),
-                    ],
+                              ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
       floatingActionButton: DraggableFab(
         child: FloatingActionButton(

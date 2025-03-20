@@ -223,11 +223,6 @@ class _OverviewPageState extends State<OverviewPage>
   @override
   void dispose() {
     _tabController.dispose();
-
-    learnedWordsNotifier.dispose();
-
-    notLearnedWordsNotifier.dispose();
-
     super.dispose();
   }
 }

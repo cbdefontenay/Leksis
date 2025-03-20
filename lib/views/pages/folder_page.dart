@@ -186,66 +186,71 @@ class _FolderPageState extends State<FolderPage> {
     return Scaffold(
       appBar: AppBar(title: Text(widget.folder.name)),
 
-      body: ListView.builder(
-        itemCount: words.length,
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 20, 0, 16),
+        child: ListView.builder(
+          itemCount: words.length,
 
-        itemBuilder: (context, index) {
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          itemBuilder: (context, index) {
+            return Card(
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
 
-            elevation: 3,
+              elevation: 3,
 
-            child: ListTile(
-              leading: IconButton(
-                icon: Icon(
-                  words[index].toBeLearned ? Icons.star : Icons.star_border,
+              child: ListTile(
+                leading: IconButton(
+                  icon: Icon(
+                    words[index].toBeLearned ? Icons.star : Icons.star_border,
 
-                  color:
-                      words[index].toBeLearned ? Colors.deepPurpleAccent : null,
+                    color:
+                        words[index].toBeLearned
+                            ? Colors.deepPurpleAccent
+                            : null,
+                  ),
+
+                  onPressed: () async {
+                    await dbHelper.toggleWordLearnStatus(words[index]);
+
+                    _loadWords();
+                  },
                 ),
 
-                onPressed: () async {
-                  await dbHelper.toggleWordLearnStatus(words[index]);
+                title: Text(
+                  words[index].word,
 
-                  _loadWords();
-                },
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+
+                subtitle: Text(words[index].translation),
+
+                trailing: PopupMenuButton<String>(
+                  onSelected: (value) {
+                    if (value == 'update') {
+                      _showUpdateDialog(words[index]);
+                    } else if (value == 'delete') {
+                      _deleteWord(words[index].id!);
+                    }
+                  },
+
+                  itemBuilder:
+                      (context) => [
+                        const PopupMenuItem(
+                          value: 'update',
+
+                          child: Text('Update'),
+                        ),
+
+                        const PopupMenuItem(
+                          value: 'delete',
+
+                          child: Text('Delete'),
+                        ),
+                      ],
+                ),
               ),
-
-              title: Text(
-                words[index].word,
-
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-
-              subtitle: Text(words[index].translation),
-
-              trailing: PopupMenuButton<String>(
-                onSelected: (value) {
-                  if (value == 'update') {
-                    _showUpdateDialog(words[index]);
-                  } else if (value == 'delete') {
-                    _deleteWord(words[index].id!);
-                  }
-                },
-
-                itemBuilder:
-                    (context) => [
-                      const PopupMenuItem(
-                        value: 'update',
-
-                        child: Text('Update'),
-                      ),
-
-                      const PopupMenuItem(
-                        value: 'delete',
-
-                        child: Text('Delete'),
-                      ),
-                    ],
-              ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
 
       floatingActionButton: DraggableFab(
