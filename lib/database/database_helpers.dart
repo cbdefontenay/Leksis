@@ -15,7 +15,7 @@ class DatabaseHelper {
 
   int _deleteCount = 0;
 
-  final int _vacuumThreshold = 10; // Run VACUUM after 10 deletions
+  final int _vacuumThreshold = 10;
 
   Future<void> _maybeVacuum() async {
     _deleteCount++;
@@ -107,7 +107,13 @@ class DatabaseHelper {
     return result;
   }
 
-  // CRUD operations for Words
+  Future<List<Word>> getWordsOverview() async {
+    final db = await database;
+
+    final result = await db.query('words');
+
+    return result.map((map) => Word.fromMap(map)).toList();
+  }
 
   Future<int> insertWord(Word word) async {
     final db = await database;

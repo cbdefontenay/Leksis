@@ -4,5 +4,12 @@
   "createFolder": "Ordner erstellen",
   "createFolderHint": "Ordnername",
   "createFolderError": "Ordnername darf nicht leer sein",
-  "settings": "Einstellungen"
+  "cancelButton": "Abbrechen",
+  "saveButton": "Speichern",
+  "delete": "Löschen",
+  "rename": "Umbenennen",
+  "settings": "Einstellungen",
+  "renameFolder": "Ordner umbenennen",
+  "newFolderName": "Neuer Ordnername",
+  "updateButton": "Aktualisieren"
 }

@@ -1,3 +1,4 @@
+import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:leksis/models/folder_model.dart';
@@ -246,10 +247,12 @@ class _FolderPageState extends State<FolderPage> {
         },
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddWordDialog,
+      floatingActionButton: DraggableFab(
+        child: FloatingActionButton(
+          onPressed: _showAddWordDialog,
 
-        child: const Icon(Icons.add),
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

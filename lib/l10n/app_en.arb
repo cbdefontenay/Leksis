@@ -4,5 +4,12 @@
   "createFolder": "Create Folder",
   "createFolderHint": "Folder Name",
   "createFolderError": "Folder name cannot be empty",
-  "settings": "Settings"
+  "cancelButton": "Cancel",
+  "saveButton": "Save",
+  "delete": "Delete",
+  "rename": "Rename",
+  "settings": "Settings",
+  "renameFolder": "Rename Folder",
+  "newFolderName": "New Folder Name",
+  "updateButton": "Update"
 }

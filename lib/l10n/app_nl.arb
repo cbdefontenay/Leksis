@@ -4,5 +4,12 @@
   "createFolder": "Map maken",
   "createFolderHint": "Mapnaam",
   "createFolderError": "Mapnaam mag niet leeg zijn",
-  "settings": "Instellingen"
+  "cancelButton": "Annuleren",
+  "saveButton": "Opslaan",
+  "delete": "Verwijderen",
+  "rename": "Hernoemen",
+  "settings": "Instellingen",
+  "renameFolder": "Map hernoemen",
+  "newFolderName": "Nieuwe mapnaam",
+  "updateButton": "Bijwerken"
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leksis/models/word_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 ValueNotifier<int> selectedPageNotifier = ValueNotifier<int>(0);
@@ -16,3 +17,6 @@ Future<void> saveThemeMode(ThemeMode themeMode) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setInt('themeMode', themeMode.index);
 }
+
+final ValueNotifier<List<Word>> learnedWordsNotifier = ValueNotifier([]);
+final ValueNotifier<List<Word>> notLearnedWordsNotifier = ValueNotifier([]);

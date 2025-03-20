@@ -4,5 +4,12 @@
   "createFolder": "Créer un dossier",
   "createFolderHint": "Nom du dossier",
   "createFolderError": "Le nom du dossier ne peut pas être vide",
-  "settings": "Paramètres"
+  "cancelButton": "Annuler",
+  "saveButton": "Sauvegarder",
+  "delete": "Supprimer",
+  "rename": "Renommer",
+  "settings": "Paramètres",
+  "renameFolder": "Renommer le dossier",
+  "newFolderName": "Nouveau nom du dossier",
+  "updateButton": "Mettre à jour"
 }

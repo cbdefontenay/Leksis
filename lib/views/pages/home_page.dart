@@ -3,6 +3,7 @@ import 'package:leksis/database/database_helpers.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leksis/models/folder_model.dart';
 import 'folder_page.dart';
+import 'package:draggable_fab/draggable_fab.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -72,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text("Cancel"),
+                    child: Text(AppLocalizations.of(context)!.cancelButton),
                   ),
                   TextButton(
                     onPressed: () {
@@ -87,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.pop(context);
                       }
                     },
-                    child: const Text("Add"),
+                    child: Text(AppLocalizations.of(context)!.saveButton),
                   ),
                 ],
               );
@@ -104,15 +105,17 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text("Rename Folder"),
+            title: Text(AppLocalizations.of(context)!.renameFolder),
             content: TextField(
               controller: controller,
-              decoration: const InputDecoration(hintText: "New Folder Name"),
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.newFolderName,
+              ),
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel"),
+                child: Text(AppLocalizations.of(context)!.cancelButton),
               ),
               TextButton(
                 onPressed: () {
@@ -121,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text("Update"),
+                child: Text(AppLocalizations.of(context)!.updateButton),
               ),
             ],
           ),
@@ -190,13 +193,17 @@ class _HomePageState extends State<HomePage> {
                         },
                         itemBuilder:
                             (context) => [
-                              const PopupMenuItem(
+                              PopupMenuItem(
                                 value: 'update',
-                                child: Text('Rename'),
+                                child: Text(
+                                  AppLocalizations.of(context)!.rename,
+                                ),
                               ),
-                              const PopupMenuItem(
+                              PopupMenuItem(
                                 value: 'delete',
-                                child: Text('Delete'),
+                                child: Text(
+                                  AppLocalizations.of(context)!.delete,
+                                ),
                               ),
                             ],
                       ),
@@ -208,10 +215,12 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddFolderDialog,
-        backgroundColor: colorScheme.primary,
-        child: Icon(Icons.add, color: colorScheme.onPrimary),
+      floatingActionButton: DraggableFab(
+        child: FloatingActionButton(
+          onPressed: _showAddFolderDialog,
+          backgroundColor: colorScheme.primary,
+          child: Icon(Icons.add, color: colorScheme.onPrimary),
+        ),
       ),
     );
   }

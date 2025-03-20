@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'package:leksis/l10n/l10n.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:leksis/views/widget_tree.dart';
+
 import 'package:leksis/data/notifiers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await loadThemeMode();
+
   runApp(const LeksisApp());
 }
 
@@ -24,11 +31,13 @@ class _LeksisAppState extends State<LeksisApp> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
     _setDefaultLocale();
   }
 
   void _setDefaultLocale() async {
     final deviceLocale = _getDeviceLocale();
+
     final supportedLocales = L10n.allLanguages;
 
     final isSupported = supportedLocales.any(
@@ -42,6 +51,7 @@ class _LeksisAppState extends State<LeksisApp> {
 
   Locale _getDeviceLocale() {
     final platformDispatcher = WidgetsBinding.instance.platformDispatcher;
+
     final systemLocales = platformDispatcher.locales;
 
     return systemLocales.isNotEmpty ? systemLocales.first : const Locale('en');
@@ -57,24 +67,51 @@ class _LeksisAppState extends State<LeksisApp> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: themeModeNotifier,
+
       builder: (context, themeMode, child) {
         return ValueListenableBuilder<ThemeMode>(
           valueListenable: themeModeNotifier,
+
           builder: (context, themeMode, child) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'Flutter Demo',
-              theme: ThemeData.light(),
-              darkTheme: ThemeData.dark(),
+
+              title: 'Leksis',
+
+              theme: ThemeData.light().copyWith(
+                scaffoldBackgroundColor: const Color.fromARGB(
+                  255,
+
+                  218,
+
+                  214,
+
+                  214,
+                ),
+              ),
+
+              darkTheme: ThemeData.dark().copyWith(
+                scaffoldBackgroundColor: const Color.fromARGB(255, 56, 53, 53),
+              ),
+
+              scrollBehavior: MaterialScrollBehavior(),
+
               themeMode: themeMode,
+
               supportedLocales: L10n.allLanguages,
+
               locale: _locale,
+
               localizationsDelegates: [
                 AppLocalizations.delegate,
+
                 GlobalMaterialLocalizations.delegate,
+
                 GlobalWidgetsLocalizations.delegate,
+
                 GlobalCupertinoLocalizations.delegate,
               ],
+
               home: Scaffold(body: WidgetTree(onLocaleChange: _setLocale)),
             );
           },
