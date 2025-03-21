@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leksis/data/notifiers.dart';
+import 'package:leksis/views/pages/exercises_page.dart';
 import 'package:leksis/views/pages/home_page.dart';
 import 'package:leksis/views/pages/overview_page.dart';
 import 'package:leksis/views/pages/setting_page.dart';
@@ -14,6 +15,7 @@ class WidgetTree extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> pages = [
       HomePage(),
+      ExercicesPage(),
       OverviewPage(),
       SettingPage(onLocaleChange: onLocaleChange),
     ];

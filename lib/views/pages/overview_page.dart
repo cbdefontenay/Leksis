@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:leksis/data/notifiers.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leksis/database/database_helpers.dart';
-
 import 'package:leksis/models/word_model.dart';
 
 class OverviewPage extends StatefulWidget {
@@ -126,7 +124,7 @@ class _OverviewPageState extends State<OverviewPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Overview"),
+        title: Text(AppLocalizations.of(context)!.overviewTitle),
 
         bottom: TabBar(
           controller: _tabController,

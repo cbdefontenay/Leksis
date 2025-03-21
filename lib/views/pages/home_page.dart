@@ -61,6 +61,8 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
+                      autocorrect: true,
+                      autofocus: true,
                       controller: controller,
                       decoration: InputDecoration(
                         hintText:
@@ -107,6 +109,8 @@ class _HomePageState extends State<HomePage> {
           (context) => AlertDialog(
             title: Text(AppLocalizations.of(context)!.renameFolder),
             content: TextField(
+              autofocus: true,
+              autocorrect: true,
               controller: controller,
               decoration: InputDecoration(
                 hintText: AppLocalizations.of(context)!.newFolderName,

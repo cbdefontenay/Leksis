@@ -17,6 +17,10 @@ class NavbarWidget extends StatelessWidget {
               label: AppLocalizations.of(context)!.home,
             ),
             NavigationDestination(
+              icon: Icon(Icons.workspace_premium),
+              label: AppLocalizations.of(context)!.exercices,
+            ),
+            NavigationDestination(
               icon: Icon(Icons.zoom_in),
               label: AppLocalizations.of(context)!.overviewTitle,
             ),
