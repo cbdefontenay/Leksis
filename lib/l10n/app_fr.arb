@@ -14,5 +14,7 @@
   "overviewTitle": "Historique",
   "renameFolder": "Renommer le dossier",
   "newFolderName": "Nouveau nom du dossier",
-  "updateButton": "Mettre à jour"
+  "updateButton": "Mettre à jour",
+  "flashcards": "Cartes mémoire",
+  "guessTheWord": "Devine le mot"
 }

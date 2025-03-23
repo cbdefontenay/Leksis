@@ -129,7 +129,7 @@ class _OverviewPageState extends State<OverviewPage>
         bottom: TabBar(
           controller: _tabController,
 
-          tabs: const [Tab(text: "Learned"), Tab(text: "Not Learned")],
+          tabs: const [Tab(text: "Not Learned"), Tab(text: "Learned")],
         ),
       ),
 

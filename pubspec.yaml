@@ -19,6 +19,13 @@ dependencies:
   sqflite: ^2.4.2
   path: ^1.9.1
   draggable_fab: ^0.1.4
+  fluttertoast: ^8.2.12
+  swipeable_card_stack: ^0.0.5
+  flash_card: ^0.1.0
+  share_plus: ^10.1.4
+  file_picker: ^9.2.1
+  excel: ^4.0.6
+  path_provider: ^2.1.5
   #flutter_gen: any
 
 dev_dependencies:

@@ -14,5 +14,7 @@
   "overviewTitle": "Overview",
   "renameFolder": "Rename Folder",
   "newFolderName": "New Folder Name",
-  "updateButton": "Update"
+  "updateButton": "Update",
+  "flashcards": "Flashcards",
+  "guessTheWord": "Guess the Word"
 }

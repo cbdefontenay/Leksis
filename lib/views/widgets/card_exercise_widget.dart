@@ -4,7 +4,7 @@ class CardExerciseWidget extends StatelessWidget {
   final IconData icon;
   final String name;
   final Color backgroundColor;
-  final VoidCallback onTap; // Function to handle navigation
+  final VoidCallback onTap;
 
   const CardExerciseWidget({
     super.key,

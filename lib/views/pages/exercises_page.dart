@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:leksis/views/pages/flashcards_page.dart';
+import 'package:leksis/views/pages/folder_selection_flash.dart';
+import 'package:leksis/views/pages/folder_selection_guess_word.dart';
 import 'package:leksis/views/widgets/card_exercise_widget.dart';
 
 class ExercicesPage extends StatefulWidget {
@@ -24,13 +25,13 @@ class _ExercicesPageState extends State<ExercicesPage> {
           children: [
             CardExerciseWidget(
               icon: Icons.card_membership,
-              name: "Flashcards",
+              name: AppLocalizations.of(context)!.flashcards,
               backgroundColor: Colors.brown,
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FlashcardsPage(),
+                    builder: (context) => const FolderSelectionFlashPage(),
                   ),
                 );
               },
@@ -38,13 +39,13 @@ class _ExercicesPageState extends State<ExercicesPage> {
             const SizedBox(height: 20),
             CardExerciseWidget(
               icon: Icons.play_arrow,
-              name: "Align words",
+              name: AppLocalizations.of(context)!.guessTheWord,
               backgroundColor: Colors.black,
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FlashcardsPage(),
+                    builder: (context) => const FolderSelectionGuessWordPage(),
                   ),
                 );
               },
@@ -58,7 +59,7 @@ class _ExercicesPageState extends State<ExercicesPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FlashcardsPage(),
+                    builder: (context) => const FolderSelectionFlashPage(),
                   ),
                 );
               },

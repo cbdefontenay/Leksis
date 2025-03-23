@@ -14,5 +14,7 @@
   "overviewTitle": "Overzicht",
   "renameFolder": "Map hernoemen",
   "newFolderName": "Nieuwe mapnaam",
-  "updateButton": "Bijwerken"
+  "updateButton": "Bijwerken",
+  "flashcards": "Flashcards",
+  "guessTheWord": "Raad het woord"
 }

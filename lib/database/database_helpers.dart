@@ -81,8 +81,6 @@ class DatabaseHelper {
   ''');
   }
 
-  // CRUD operations for Folders
-
   Future<int> insertFolder(Folder folder) async {
     final db = await database;
 
@@ -175,17 +173,22 @@ class DatabaseHelper {
 
   Future<void> toggleWordLearnStatus(Word word) async {
     final db = await database;
-
-    int newStatus = word.toBeLearned ? 0 : 1; // Toggle between 0 and 1
-
+    int newStatus = word.toBeLearned == 1 ? 0 : 1;
     await db.update(
       'words',
-
       {'toBeLearned': newStatus},
-
       where: 'id = ?',
-
       whereArgs: [word.id],
     );
+  }
+
+  Future<List<Word>> getWordsByFolder(int folderId) async {
+    final db = await database;
+    final result = await db.query(
+      'words',
+      where: 'folderId = ?',
+      whereArgs: [folderId],
+    );
+    return result.map((map) => Word.fromMap(map)).toList();
   }
 }

@@ -14,5 +14,7 @@
   "overviewTitle": "Übersicht",
   "renameFolder": "Ordner umbenennen",
   "newFolderName": "Neuer Ordnername",
-  "updateButton": "Aktualisieren"
+  "updateButton": "Aktualisieren",
+  "flashcards": "Karteikarten",
+  "guessTheWord": "Wort erraten"
 }
