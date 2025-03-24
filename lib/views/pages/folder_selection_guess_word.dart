@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/models/folder_model.dart';
 import 'package:leksis/views/pages/guess_word_page.dart';
 import 'package:leksis/views/widgets/folder_selection_widget.dart';
@@ -16,7 +17,16 @@ class FolderSelectionGuessWordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Select a Folder"), centerTitle: true),
+      appBar: AppBar(
+        title: Text(
+          "Select a Folder",
+          style: GoogleFonts.firaSans(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FolderSelectionWidget(

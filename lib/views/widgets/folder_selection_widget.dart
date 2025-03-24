@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:leksis/models/folder_model.dart';
 
@@ -53,6 +54,10 @@ class _FolderSelectionWidgetState extends State<FolderSelectionWidget> {
       children: [
         TextField(
           controller: _searchController,
+          style: GoogleFonts.firaSans(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
           decoration: InputDecoration(
             labelText: "Search for a folder",
             prefixIcon: const Icon(Icons.search),
@@ -65,26 +70,34 @@ class _FolderSelectionWidgetState extends State<FolderSelectionWidget> {
         Expanded(
           child:
               _filteredFolders.isEmpty
-                  ? const Center(child: Text("No folders found"))
+                  ? Center(
+                    child: Text(
+                      "No folders found",
+                      style: GoogleFonts.firaSans(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
                   : ListView.builder(
                     itemCount: _filteredFolders.length,
                     itemBuilder: (context, index) {
                       final folder = _filteredFolders[index];
 
                       return Card(
-                        color: Colors.deepPurple,
+                        color: Theme.of(context).colorScheme.onSecondaryFixed,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: ListTile(
-                          leading: const Icon(
+                          leading: Icon(
                             Icons.folder,
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                           title: Text(
                             folder.name,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
