@@ -1,6 +1,7 @@
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:leksis/database/database_helpers.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leksis/models/folder_model.dart';
 import 'package:leksis/models/word_model.dart';
 import 'package:excel/excel.dart';
@@ -162,7 +163,23 @@ class _FolderPageState extends State<FolderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.folder.name),
+        centerTitle: true,
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              widget.folder.name,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              "${words.length} ${AppLocalizations.of(context)!.words}",
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+          ],
+        ),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
@@ -174,13 +191,13 @@ class _FolderPageState extends State<FolderPage> {
             },
             itemBuilder:
                 (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'import',
-                    child: Text('Import List'),
+                    child: Text(AppLocalizations.of(context)!.importList),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'export',
-                    child: Text('Export List'),
+                    child: Text(AppLocalizations.of(context)!.exportList),
                   ),
                 ],
           ),

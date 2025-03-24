@@ -16,5 +16,8 @@
   "newFolderName": "Neuer Ordnername",
   "updateButton": "Aktualisieren",
   "flashcards": "Karteikarten",
-  "guessTheWord": "Wort erraten"
+  "guessTheWord": "Wort erraten",
+  "words": "Wörter",
+  "importList": "Liste importieren",
+  "exportList": "Liste exportieren"
 }

@@ -85,7 +85,7 @@ class _FolderSelectionWidgetState extends State<FolderSelectionWidget> {
                       final folder = _filteredFolders[index];
 
                       return Card(
-                        color: Theme.of(context).colorScheme.onSecondaryFixed,
+                        color: Theme.of(context).colorScheme.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
@@ -98,6 +98,7 @@ class _FolderSelectionWidgetState extends State<FolderSelectionWidget> {
                             folder.name,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

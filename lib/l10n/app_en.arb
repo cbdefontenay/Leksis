@@ -16,5 +16,8 @@
   "newFolderName": "New Folder Name",
   "updateButton": "Update",
   "flashcards": "Flashcards",
-  "guessTheWord": "Guess the Word"
+  "guessTheWord": "Guess the Word",
+  "words": "words",
+  "importList": "Import List",
+  "exportList": "Export List"
 }

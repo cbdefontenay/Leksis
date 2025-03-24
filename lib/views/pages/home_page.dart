@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leksis/models/folder_model.dart';
@@ -142,7 +143,14 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("LEKSIS", style: TextStyle(color: colorScheme.onPrimary)),
+        title: Text(
+          "LEKSIS",
+          style: GoogleFonts.philosopher(
+            fontSize: 35,
+            fontWeight: FontWeight.w800,
+            color: colorScheme.onPrimary,
+          ),
+        ),
         backgroundColor: colorScheme.primary,
         centerTitle: true,
       ),

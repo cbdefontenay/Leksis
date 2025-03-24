@@ -21,7 +21,7 @@ class FolderSelectionGuessWordPage extends StatelessWidget {
         title: Text(
           "Select a Folder",
           style: GoogleFonts.firaSans(
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
         ),

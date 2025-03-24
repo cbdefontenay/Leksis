@@ -16,5 +16,8 @@
   "newFolderName": "Nieuwe mapnaam",
   "updateButton": "Bijwerken",
   "flashcards": "Flashcards",
-  "guessTheWord": "Raad het woord"
+  "guessTheWord": "Raad het woord",
+  "words": "woorden",
+  "importList": "Lijst importeren",
+  "exportList": "Lijst exporteren"
 }

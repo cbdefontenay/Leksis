@@ -16,5 +16,8 @@
   "newFolderName": "Nouveau nom du dossier",
   "updateButton": "Mettre à jour",
   "flashcards": "Cartes mémoire",
-  "guessTheWord": "Devine le mot"
+  "guessTheWord": "Devine le mot",
+  "words": "mots",
+  "importList": "Importer la liste",
+  "exportList": "Exporter la liste"
 }
