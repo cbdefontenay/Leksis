@@ -42,62 +42,52 @@ class DatabaseHelper {
 
     final path = join(dbPath, fileName);
 
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: _createDB,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },
+    );
   }
 
   Future<void> _createDB(Database db, int version) async {
+    await db.execute('PRAGMA foreign_keys = ON');
     await db.execute('PRAGMA auto_vacuum = INCREMENTAL');
-
-    await db.execute('''  
-
+    await db.execute(''' 
     CREATE TABLE folders (
-
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-
       name TEXT NOT NULL
-
     )
-
   ''');
 
-    await db.execute('''  
-
+    await db.execute(''' 
     CREATE TABLE words (
-
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-
       folderId INTEGER NOT NULL,
-
       word TEXT NOT NULL,
-
       translation TEXT NOT NULL,
-
       toBeLearned INTEGER DEFAULT 0,
-
       FOREIGN KEY (folderId) REFERENCES folders (id) ON DELETE CASCADE
-
     )
-
   ''');
   }
 
   Future<int> insertFolder(Folder folder) async {
     final db = await database;
-
     return await db.insert('folders', folder.toMap());
   }
 
   Future<List<Folder>> getFolders() async {
     final db = await database;
-
     final result = await db.query('folders');
-
     return result.map((map) => Folder.fromMap(map)).toList();
   }
 
   Future<int> deleteFolder(int id) async {
     final db = await database;
-
+    await db.delete('words', where: 'folderId = ?', whereArgs: [id]);
     int result = await db.delete('folders', where: 'id = ?', whereArgs: [id]);
 
     await _maybeVacuum();
@@ -107,9 +97,7 @@ class DatabaseHelper {
 
   Future<List<Word>> getWordsOverview() async {
     final db = await database;
-
     final result = await db.query('words');
-
     return result.map((map) => Word.fromMap(map)).toList();
   }
 
@@ -124,9 +112,7 @@ class DatabaseHelper {
 
     final result = await db.query(
       'words',
-
       where: 'folderId = ?',
-
       whereArgs: [folderId],
     );
 
@@ -135,11 +121,8 @@ class DatabaseHelper {
 
   Future<int> deleteWord(int id) async {
     final db = await database;
-
     int result = await db.delete('words', where: 'id = ?', whereArgs: [id]);
-
     await _maybeVacuum();
-
     return result;
   }
 
@@ -148,11 +131,8 @@ class DatabaseHelper {
 
     return await db.update(
       'words',
-
       word.toMap(),
-
       where: 'id = ?',
-
       whereArgs: [word.id],
     );
   }
@@ -162,21 +142,18 @@ class DatabaseHelper {
 
     return await db.update(
       'folders',
-
       folder.toMap(),
-
       where: 'id = ?',
-
       whereArgs: [folder.id],
     );
   }
 
   Future<void> toggleWordLearnStatus(Word word) async {
     final db = await database;
-    int newStatus = word.toBeLearned == 1 ? 0 : 1;
+
     await db.update(
       'words',
-      {'toBeLearned': newStatus},
+      {'toBeLearned': word.isLearned ? 0 : 1},
       where: 'id = ?',
       whereArgs: [word.id],
     );
@@ -189,6 +166,7 @@ class DatabaseHelper {
       where: 'folderId = ?',
       whereArgs: [folderId],
     );
+
     return result.map((map) => Word.fromMap(map)).toList();
   }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CardExerciseWidget extends StatelessWidget {
   final IconData icon;
   final String name;
+  final Color iconColor;
+  final Color color;
   final Color backgroundColor;
   final VoidCallback onTap;
 
@@ -10,8 +13,10 @@ class CardExerciseWidget extends StatelessWidget {
     super.key,
     required this.icon,
     required this.name,
+    required this.iconColor,
     required this.backgroundColor,
     required this.onTap,
+    required this.color,
   });
 
   @override
@@ -31,14 +36,14 @@ class CardExerciseWidget extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  Icon(icon, size: 32, color: Colors.white),
-                  const SizedBox(width: 12),
+                  Icon(icon, size: 32, color: iconColor),
+                  SizedBox(width: 12),
                   Text(
                     name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    style: GoogleFonts.firaSans(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w500,
+                      color: color,
                     ),
                   ),
                 ],

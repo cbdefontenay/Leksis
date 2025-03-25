@@ -13,15 +13,15 @@ class NavbarWidget extends StatelessWidget {
         return NavigationBar(
           destinations: [
             NavigationDestination(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.folder_copy),
               label: AppLocalizations.of(context)!.home,
             ),
             NavigationDestination(
-              icon: Icon(Icons.workspace_premium),
+              icon: Icon(Icons.fitness_center),
               label: AppLocalizations.of(context)!.exercices,
             ),
             NavigationDestination(
-              icon: Icon(Icons.zoom_in),
+              icon: Icon(Icons.zoom_in_map),
               label: AppLocalizations.of(context)!.overviewTitle,
             ),
             NavigationDestination(

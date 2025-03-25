@@ -7,7 +7,7 @@ class Word {
 
   String translation;
 
-  bool toBeLearned;
+  bool isLearned;
 
   Word({
     this.id,
@@ -18,7 +18,7 @@ class Word {
 
     required this.translation,
 
-    this.toBeLearned = false,
+    this.isLearned = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -31,7 +31,7 @@ class Word {
 
       'translation': translation,
 
-      'toBeLearned': toBeLearned ? 1 : 0,
+      'toBeLearned': isLearned ? 1 : 0,
     };
   }
 
@@ -45,7 +45,7 @@ class Word {
 
       translation: map['translation'],
 
-      toBeLearned: map['toBeLearned'] == 1,
+      isLearned: map['toBeLearned'] == 1,
     );
   }
 }

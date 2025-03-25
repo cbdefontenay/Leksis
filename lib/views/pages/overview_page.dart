@@ -14,14 +14,10 @@ class OverviewPage extends StatefulWidget {
 class _OverviewPageState extends State<OverviewPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
   final DatabaseHelper _dbHelper = DatabaseHelper.instance;
-
   bool isLoading = true;
-
   final GlobalKey<AnimatedListState> _learnedListKey =
       GlobalKey<AnimatedListState>();
-
   final GlobalKey<AnimatedListState> _notLearnedListKey =
       GlobalKey<AnimatedListState>();
 
@@ -38,10 +34,9 @@ class _OverviewPageState extends State<OverviewPage>
     List<Word> words = await _dbHelper.getWordsOverview();
 
     learnedWordsNotifier.value =
-        words.where((word) => word.toBeLearned == false).toList();
-
+        words.where((word) => word.isLearned == false).toList();
     notLearnedWordsNotifier.value =
-        words.where((word) => word.toBeLearned == true).toList();
+        words.where((word) => word.isLearned == true).toList();
 
     setState(() {
       isLoading = false;
@@ -67,7 +62,7 @@ class _OverviewPageState extends State<OverviewPage>
       _addWordWithAnimation(learnedWordsNotifier, _learnedListKey, word);
     }
 
-    word.toBeLearned = !word.toBeLearned;
+    word.isLearned = !word.isLearned;
   }
 
   void _removeWordWithAnimation(
@@ -124,12 +119,18 @@ class _OverviewPageState extends State<OverviewPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+
         title: Text(AppLocalizations.of(context)!.overviewTitle),
 
         bottom: TabBar(
           controller: _tabController,
 
-          tabs: const [Tab(text: "Not Learned"), Tab(text: "Learned")],
+          tabs: [
+            Tab(text: AppLocalizations.of(context)!.notLearned),
+
+            Tab(text: AppLocalizations.of(context)!.learned),
+          ],
         ),
       ),
 
@@ -172,19 +173,92 @@ class _OverviewPageState extends State<OverviewPage>
 
       builder: (context, words, child) {
         if (words.isEmpty) {
-          return const Center(child: Text("No words available"));
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+
+                    vertical: 6,
+                  ),
+
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.tertiary,
+
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+
+                  child: Text(
+                    '0 ${AppLocalizations.of(context)!.words}',
+
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onTertiary,
+
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                Text(
+                  "No words available",
+
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          );
         }
 
-        return AnimatedList(
-          key: listKey,
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 16.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      '${words.length} ${words.length == 1 ? AppLocalizations.of(context)!.word : AppLocalizations.of(context)!.words}',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onTertiary,
 
-          initialItemCount: words.length,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: AnimatedList(
+                key: listKey,
 
-          itemBuilder: (context, index, animation) {
-            final word = words[index];
+                initialItemCount: words.length,
 
-            return _buildWordItem(word, animation, listIndex);
-          },
+                itemBuilder: (context, index, animation) {
+                  final word = words[index];
+
+                  return _buildWordItem(word, animation, listIndex);
+                },
+              ),
+            ),
+          ],
         );
       },
     );
@@ -204,9 +278,9 @@ class _OverviewPageState extends State<OverviewPage>
 
           trailing: IconButton(
             icon: Icon(
-              word.toBeLearned ? Icons.star : Icons.star_border,
+              word.isLearned ? Icons.star : Icons.star_border,
 
-              color: word.toBeLearned ? Colors.deepPurple : Colors.grey,
+              color: word.isLearned ? Colors.deepPurple : Colors.grey,
             ),
 
             onPressed: () async {
@@ -221,6 +295,14 @@ class _OverviewPageState extends State<OverviewPage>
   @override
   void dispose() {
     _tabController.dispose();
+
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _loadWords();
   }
 }

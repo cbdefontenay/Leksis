@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:leksis/database/database_helpers.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:leksis/models/folder_model.dart';
+
 import 'folder_page.dart';
+
 import 'package:draggable_fab/draggable_fab.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,16 +21,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final DatabaseHelper dbHelper = DatabaseHelper.instance;
+
   List<Folder> folders = [];
 
   @override
   void initState() {
     super.initState();
+
     _loadFolders();
   }
 
   void _loadFolders() async {
     final loadedFolders = await dbHelper.getFolders();
+
     setState(() {
       folders = loadedFolders;
     });
@@ -32,6 +41,7 @@ class _HomePageState extends State<HomePage> {
 
   void _addFolder(String name) async {
     await dbHelper.insertFolder(Folder(name: name));
+
     _loadFolders();
   }
 
@@ -49,17 +59,21 @@ class _HomePageState extends State<HomePage> {
 
   void _showAddFolderDialog() {
     final TextEditingController controller = TextEditingController();
+
     String? errorMessage;
 
     showDialog(
       context: context,
+
       builder:
           (context) => StatefulBuilder(
             builder: (context, setState) {
               return AlertDialog(
                 title: Text(AppLocalizations.of(context)!.createFolder),
+
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
+
                   children: [
                     TextField(
                       autocorrect: true,
@@ -73,11 +87,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
+
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(AppLocalizations.of(context)!.cancelButton),
                   ),
+
                   TextButton(
                     onPressed: () {
                       String folderName = controller.text.trim();
@@ -91,6 +107,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.pop(context);
                       }
                     },
+
                     child: Text(AppLocalizations.of(context)!.saveButton),
                   ),
                 ],
@@ -104,11 +121,13 @@ class _HomePageState extends State<HomePage> {
     final TextEditingController controller = TextEditingController(
       text: folder.name,
     );
+
     showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
             title: Text(AppLocalizations.of(context)!.renameFolder),
+
             content: TextField(
               autofocus: true,
               autocorrect: true,
@@ -117,11 +136,13 @@ class _HomePageState extends State<HomePage> {
                 hintText: AppLocalizations.of(context)!.newFolderName,
               ),
             ),
+
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text(AppLocalizations.of(context)!.cancelButton),
               ),
+
               TextButton(
                 onPressed: () {
                   if (controller.text.isNotEmpty) {
@@ -129,6 +150,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.pop(context);
                   }
                 },
+
                 child: Text(AppLocalizations.of(context)!.updateButton),
               ),
             ],
@@ -139,6 +161,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -154,87 +177,127 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: colorScheme.primary,
         centerTitle: true,
       ),
+
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 8),
-        child: ListView.builder(
-          itemCount: folders.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
-              child: InkWell(
-                onTap:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => FolderPage(folder: folders[index]),
-                      ),
+        child:
+            folders.isEmpty
+                ? Center(
+                  child: Text(
+                    "No folders available. Please add a folder.",
+                    style: TextStyle(
+                      color: colorScheme.onSurface,
+                      fontSize: 18,
                     ),
-                borderRadius: BorderRadius.circular(12),
-                child: Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
                   ),
-                  color: colorScheme.surfaceContainer,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.folder_copy,
-                          color: colorScheme.primary,
-                          size: 32,
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Text(
-                            folders[index].name,
-                            style: textTheme.headlineMedium?.copyWith(
-                              color: colorScheme.onSurface,
+                )
+                : ListView.builder(
+                  itemCount: folders.length,
+
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+
+                        vertical: 8.0,
+                      ),
+
+                      child: InkWell(
+                        onTap:
+                            () => Navigator.push(
+                              context,
+
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        FolderPage(folder: folders[index]),
+                              ),
+                            ),
+
+                        borderRadius: BorderRadius.circular(12),
+
+                        child: Card(
+                          elevation: 4,
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+
+                          color: colorScheme.surfaceContainer,
+
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.folder_copy,
+
+                                  color: colorScheme.primary,
+
+                                  size: 32,
+                                ),
+
+                                const SizedBox(width: 16),
+
+                                Expanded(
+                                  child: Text(
+                                    folders[index].name,
+
+                                    style: textTheme.headlineMedium?.copyWith(
+                                      color: colorScheme.onSurface,
+                                    ),
+                                  ),
+                                ),
+
+                                PopupMenuButton<String>(
+                                  onSelected: (value) {
+                                    if (value == 'update') {
+                                      _showUpdateFolderDialog(folders[index]);
+                                    } else if (value == 'delete') {
+                                      _deleteFolder(folders[index].id!);
+                                    }
+                                  },
+
+                                  itemBuilder:
+                                      (context) => [
+                                        PopupMenuItem(
+                                          value: 'update',
+
+                                          child: Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.rename,
+                                          ),
+                                        ),
+
+                                        PopupMenuItem(
+                                          value: 'delete',
+
+                                          child: Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.delete,
+                                          ),
+                                        ),
+                                      ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        PopupMenuButton<String>(
-                          onSelected: (value) {
-                            if (value == 'update') {
-                              _showUpdateFolderDialog(folders[index]);
-                            } else if (value == 'delete') {
-                              _deleteFolder(folders[index].id!);
-                            }
-                          },
-                          itemBuilder:
-                              (context) => [
-                                PopupMenuItem(
-                                  value: 'update',
-                                  child: Text(
-                                    AppLocalizations.of(context)!.rename,
-                                  ),
-                                ),
-                                PopupMenuItem(
-                                  value: 'delete',
-                                  child: Text(
-                                    AppLocalizations.of(context)!.delete,
-                                  ),
-                                ),
-                              ],
-                        ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              ),
-            );
-          },
-        ),
       ),
+
       floatingActionButton: DraggableFab(
         child: FloatingActionButton(
           onPressed: _showAddFolderDialog,
+
           backgroundColor: colorScheme.primary,
+
           child: Icon(Icons.add, color: colorScheme.onPrimary),
         ),
       ),

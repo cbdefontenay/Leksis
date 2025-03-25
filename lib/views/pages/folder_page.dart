@@ -212,9 +212,11 @@ class _FolderPageState extends State<FolderPage> {
             child: ListTile(
               leading: IconButton(
                 icon: Icon(
-                  words[index].toBeLearned ? Icons.star : Icons.star_border,
+                  words[index].isLearned ? Icons.star : Icons.star_border,
                   color:
-                      words[index].toBeLearned ? Colors.deepPurpleAccent : null,
+                      words[index].isLearned
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
                 ),
                 onPressed: () async {
                   await dbHelper.toggleWordLearnStatus(words[index]);
