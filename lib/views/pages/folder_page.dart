@@ -93,7 +93,8 @@ class _FolderPageState extends State<FolderPage> {
         final sheet = excel.tables.values.first;
         int importedCount = 0;
 
-        for (var row in sheet.rows) {
+        for (int i = 1; i < sheet.rows.length; i++) {
+          var row = sheet.rows[i];
           if (row.length < 2) continue;
 
           final word = row[0]?.value?.toString().trim() ?? '';
