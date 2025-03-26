@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leksis/theme/theme.dart';
 import 'package:leksis/views/widget_tree.dart';
 import 'package:leksis/data/notifiers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,39 +28,62 @@ class _LeksisAppState extends State<LeksisApp> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    _setDefaultLocale();
+    if (_locale == null) {
+      _setDefaultLocale();
+    }
   }
 
-  void _setDefaultLocale() async {
-    final deviceLocale = _getDeviceLocale();
-    final supportedLocales = L10n.allLanguages;
-    final isSupported = supportedLocales.any(
-      (locale) => locale.languageCode == deviceLocale.languageCode,
-    );
+  Future<void> _setDefaultLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedLocaleCode = prefs.getString('selected_locale');
+    Locale newLocale;
+
+    if (savedLocaleCode != null) {
+      final parts = savedLocaleCode.split('_');
+      newLocale =
+          parts.length > 1 ? Locale(parts[0], parts[1]) : Locale(parts[0]);
+    } else {
+      final deviceLocale = _getDeviceLocale();
+
+      final supportedLocales = L10n.allLanguages;
+
+      final isSupported = supportedLocales.any(
+        (locale) => locale.languageCode == deviceLocale.languageCode,
+      );
+
+      newLocale = isSupported ? deviceLocale : const Locale('en');
+    }
 
     setState(() {
-      _locale = isSupported ? deviceLocale : const Locale('en');
+      _locale = newLocale;
+    });
+  }
+
+  void _setLocale(Locale locale) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final localeCode =
+        locale.countryCode != null
+            ? '${locale.languageCode}_${locale.countryCode}'
+            : locale.languageCode;
+    await prefs.setString('selected_locale', localeCode);
+
+    setState(() {
+      _locale = locale;
     });
   }
 
   Locale _getDeviceLocale() {
     final platformDispatcher = WidgetsBinding.instance.platformDispatcher;
     final systemLocales = platformDispatcher.locales;
-
     return systemLocales.isNotEmpty ? systemLocales.first : const Locale('en');
-  }
-
-  void _setLocale(Locale locale) {
-    setState(() {
-      _locale = locale;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: themeModeNotifier,
+
       builder: (context, themeMode, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -76,7 +100,13 @@ class _LeksisAppState extends State<LeksisApp> {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          home: Scaffold(body: WidgetTree(onLocaleChange: _setLocale)),
+          home: Scaffold(
+            body: WidgetTree(
+              currentLocale: _locale ?? const Locale('en'),
+
+              onLocaleChange: _setLocale,
+            ),
+          ),
         );
       },
     );

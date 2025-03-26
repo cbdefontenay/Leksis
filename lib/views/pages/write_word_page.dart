@@ -85,7 +85,7 @@ class _WriteWordPageState extends State<WriteWordPage> {
 
                         fontWeight: FontWeight.w500,
 
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
 
                       textAlign: TextAlign.center,

@@ -1,5 +1,6 @@
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leksis/models/folder_model.dart';
@@ -49,45 +50,89 @@ class _FolderPageState extends State<FolderPage> {
       ]);
     }
 
+    String sanitizedFolderName = widget.folder.name
+        .toLowerCase()
+        .replaceAll(RegExp(r'\s+'), '_')
+        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
+
     final directory = await getApplicationDocumentsDirectory();
-    final filePath = "${directory.path}/vocabulary_${widget.folder.name}.xlsx";
+    final filePath = "${directory.path}/leksis_$sanitizedFolderName.xlsx";
     final file = File(filePath)..writeAsBytesSync(excel.encode()!);
 
     await Share.shareXFiles([
       XFile(file.path),
-    ], text: "Here is my vocabulary list");
+    ], text: AppLocalizations.of(context)!.hereMyVocab);
   }
 
   Future<void> _importFromExcel() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['xlsx'],
-    );
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['xlsx'],
+        allowMultiple: false,
+      );
 
-    if (result != null) {
-      var bytes = File(result.files.single.path!).readAsBytesSync();
-      var excel = Excel.decodeBytes(bytes);
+      if (result == null || result.files.isEmpty) return;
 
-      for (var table in excel.tables.keys) {
-        var tableRows = excel.tables[table]?.rows;
-        if (tableRows != null && tableRows.length > 1) {
-          for (int i = 1; i < tableRows.length; i++) {
-            var row = tableRows[i];
-            var word = row[0]?.value.toString() ?? "";
-            var translation = row[1]?.value.toString() ?? "";
-            if (word.isNotEmpty && translation.isNotEmpty) {
-              await dbHelper.insertWord(
-                Word(
-                  folderId: widget.folder.id!,
-                  word: word,
-                  translation: translation,
-                ),
-              );
-            }
-          }
-        }
+      final file = result.files.first;
+      if (file.path == null) return;
+
+      final bytes = await File(file.path!).readAsBytes();
+
+      if (bytes.length < 4 || !(bytes[0] == 0x50 && bytes[1] == 0x4B)) {
+        throw Exception(AppLocalizations.of(context)!.notValidExcel);
       }
+
+      try {
+        var excel = Excel.decodeBytes(bytes);
+
+        if (excel.tables.isEmpty) {
+          throw Exception(AppLocalizations.of(context)!.successImport);
+        }
+
+        final sheet = excel.tables.values.first;
+        int importedCount = 0;
+
+        for (var row in sheet.rows) {
+          if (row.length < 2) continue;
+
+          final word = row[0]?.value?.toString().trim() ?? '';
+          final translation = row[1]?.value?.toString().trim() ?? '';
+
+          if (word.isEmpty || translation.isEmpty) continue;
+
+          await dbHelper.insertWord(
+            Word(
+              folderId: widget.folder.id!,
+              word: word,
+              translation: translation,
+            ),
+          );
+          importedCount++;
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '${AppLocalizations.of(context)!.successImport} $importedCount ${AppLocalizations.of(context)!.words}',
+            ),
+          ),
+        );
+      } catch (e) {
+        throw Exception(
+          '${AppLocalizations.of(context)!.excelProcessingError} ${e.toString()}',
+        );
+      }
+
       _loadWords();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '${AppLocalizations.of(context)!.importFailMessage} ${e.toString()}',
+          ),
+        ),
+      );
     }
   }
 
@@ -116,24 +161,28 @@ class _FolderPageState extends State<FolderPage> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text("Update Word"),
+            title: Text(AppLocalizations.of(context)!.updateWord),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: wordController,
-                  decoration: const InputDecoration(labelText: "Word"),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.word,
+                  ),
                 ),
                 TextField(
                   controller: translationController,
-                  decoration: const InputDecoration(labelText: "Translation"),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.translation,
+                  ),
                 ),
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel"),
+                child: Text(AppLocalizations.of(context)!.cancelButton),
               ),
               TextButton(
                 onPressed: () {
@@ -147,7 +196,7 @@ class _FolderPageState extends State<FolderPage> {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text("Update"),
+                child: Text(AppLocalizations.of(context)!.updateWord),
               ),
             ],
           ),
@@ -163,20 +212,28 @@ class _FolderPageState extends State<FolderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
         centerTitle: true,
         title: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               widget.folder.name,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: GoogleFonts.philosopher(
+                fontSize: 26,
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
             ),
             Text(
               "${words.length} ${AppLocalizations.of(context)!.words}",
-              style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
+              style: GoogleFonts.firaSans(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ).copyWith(color: Theme.of(context).colorScheme.onPrimary),
             ),
           ],
         ),
@@ -203,59 +260,110 @@ class _FolderPageState extends State<FolderPage> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: words.length,
-        itemBuilder: (context, index) {
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            elevation: 3,
-            child: ListTile(
-              leading: IconButton(
-                icon: Icon(
-                  words[index].isLearned ? Icons.star : Icons.star_border,
-                  color:
-                      words[index].isLearned
-                          ? Theme.of(context).colorScheme.primary
-                          : null,
-                ),
-                onPressed: () async {
-                  await dbHelper.toggleWordLearnStatus(words[index]);
-                  _loadWords();
-                },
-              ),
-              title: Text(
-                words[index].word,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text(words[index].translation),
-              trailing: PopupMenuButton<String>(
-                onSelected: (value) {
-                  if (value == 'update') {
-                    _showUpdateDialog(words[index]);
-                  } else if (value == 'delete') {
-                    _deleteWord(words[index].id!);
-                  }
-                },
-                itemBuilder:
-                    (context) => [
-                      const PopupMenuItem(
-                        value: 'update',
-                        child: Text('Update'),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(4, 20, 4, 16),
+        child:
+            words.isEmpty
+                ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.library_books_outlined,
+                        size: 50,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: Text('Delete'),
+                      const SizedBox(height: 10),
+                      Text(
+                        AppLocalizations.of(context)!.noWordsYet,
+                        style: GoogleFonts.firaSans(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        AppLocalizations.of(context)!.addWordsPrompt,
+                        style: GoogleFonts.firaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ],
-              ),
-            ),
-          );
-        },
+                  ),
+                )
+                : ListView.builder(
+                  itemCount: words.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      elevation: 3,
+                      child: ListTile(
+                        leading: IconButton(
+                          icon: Icon(
+                            words[index].isLearned
+                                ? Icons.star
+                                : Icons.star_border,
+                            color:
+                                words[index].isLearned
+                                    ? Theme.of(context).colorScheme.primary
+                                    : null,
+                          ),
+                          onPressed: () async {
+                            await dbHelper.toggleWordLearnStatus(words[index]);
+                            _loadWords();
+                          },
+                        ),
+                        title: Text(
+                          words[index].word,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(words[index].translation),
+                        trailing: PopupMenuButton<String>(
+                          onSelected: (value) {
+                            if (value == 'update') {
+                              _showUpdateDialog(words[index]);
+                            } else if (value == 'delete') {
+                              _deleteWord(words[index].id!);
+                            }
+                          },
+                          itemBuilder:
+                              (context) => [
+                                PopupMenuItem(
+                                  value: 'update',
+                                  child: Text(
+                                    AppLocalizations.of(context)!.updateWord,
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: 'delete',
+                                  child: Text(
+                                    AppLocalizations.of(context)!.delete,
+                                  ),
+                                ),
+                              ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
       ),
+
       floatingActionButton: DraggableFab(
         child: FloatingActionButton(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           onPressed: _showAddWordDialog,
-          child: const Icon(Icons.add),
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).colorScheme.onSecondary,
+          ),
         ),
       ),
     );
@@ -269,24 +377,28 @@ class _FolderPageState extends State<FolderPage> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text("New Word"),
+            title: Text(AppLocalizations.of(context)!.newWordName),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: wordController,
-                  decoration: const InputDecoration(labelText: "Word"),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.word,
+                  ),
                 ),
                 TextField(
                   controller: translationController,
-                  decoration: const InputDecoration(labelText: "Translation"),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.translation,
+                  ),
                 ),
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel"),
+                child: Text(AppLocalizations.of(context)!.cancelButton),
               ),
               TextButton(
                 onPressed: () {
@@ -296,7 +408,7 @@ class _FolderPageState extends State<FolderPage> {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text("Add"),
+                child: Text(AppLocalizations.of(context)!.add),
               ),
             ],
           ),

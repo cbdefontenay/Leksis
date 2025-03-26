@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:leksis/models/folder_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FolderSelectionWidget extends StatefulWidget {
   final String title;
@@ -59,7 +60,7 @@ class _FolderSelectionWidgetState extends State<FolderSelectionWidget> {
             fontWeight: FontWeight.w500,
           ),
           decoration: InputDecoration(
-            labelText: "Search for a folder",
+            labelText: AppLocalizations.of(context)!.selectAFolder,
             prefixIcon: const Icon(Icons.search),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),

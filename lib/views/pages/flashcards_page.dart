@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:leksis/models/folder_model.dart';
 import 'package:leksis/models/word_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class FlashcardsPage extends StatefulWidget {
@@ -45,27 +46,20 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
     switch (mode) {
       case 'all':
         filtered = List.from(_words);
-
         break;
-
       case 'learned':
         filtered = _words.where((word) => word.isLearned).toList();
-
         break;
-
       case 'notLearned':
         filtered = _words.where((word) => !word.isLearned).toList();
-
         break;
     }
 
     if (filtered.isEmpty) {
       Fluttertoast.showToast(
-        msg: "No words found in this category",
-
-        backgroundColor: Colors.red,
-
-        textColor: Colors.white,
+        msg: AppLocalizations.of(context)!.noWordForCategory,
+        backgroundColor: Theme.of(context).colorScheme.error,
+        textColor: Theme.of(context).colorScheme.onError,
       );
 
       return;
@@ -73,53 +67,41 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
 
     setState(() {
       _filteredWords = List.from(filtered)..shuffle();
-
       _currentIndex = 0;
-
       _showFront = true;
-
       _showOptionsScreen = false;
-
       _showCompletionScreen = false;
     });
   }
 
   Future<void> _updateLearnStatus(bool markAsLearned) async {
     if (_currentIndex >= _filteredWords.length) return;
-
     Word word = _filteredWords[_currentIndex];
-
     Word updatedWord = Word(
       id: word.id!,
-
       folderId: word.folderId,
-
       word: word.word,
-
       translation: word.translation,
-
       isLearned: markAsLearned,
     );
-
     await DatabaseHelper.instance.updateWord(updatedWord);
 
     setState(() {
       if (_currentIndex < _filteredWords.length) {
         _filteredWords[_currentIndex] = updatedWord;
       }
-
       int index = _words.indexWhere((w) => w.id == word.id);
-
       if (index != -1) {
         _words[index] = updatedWord;
       }
     });
 
     Fluttertoast.showToast(
-      msg: markAsLearned ? "Marked as Learned ⭐" : "Marked to Learn ❌",
-
+      msg:
+          markAsLearned
+              ? "${AppLocalizations.of(context)!.markedAsLearned} ⭐"
+              : "${AppLocalizations.of(context)!.markToBeLearned} ❌",
       backgroundColor: markAsLearned ? Colors.lightGreen : Colors.teal,
-
       textColor: Colors.white,
     );
   }
@@ -144,7 +126,6 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
     if (_currentIndex > 0) {
       setState(() {
         _currentIndex--;
-
         _showFront = true;
       });
     }
@@ -153,11 +134,8 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
   void _restartSession() {
     setState(() {
       _currentIndex = 0;
-
       _showFront = true;
-
       _showCompletionScreen = false;
-
       _filteredWords.shuffle();
     });
   }
@@ -177,29 +155,22 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
 
         children: [
           Text(
-            "Learn ${widget.folder.name}",
+            "${AppLocalizations.of(context)!.learn} ${widget.folder.name}",
 
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-
           const SizedBox(height: 40),
-
           SizedBox(
             width: 250,
-
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-
                   children: [
-                    const Text("Show Translation First"),
-
+                    Text(AppLocalizations.of(context)!.showtranslation),
                     Switch(
                       value: _showTranslationFirst,
-
                       activeColor: Theme.of(context).colorScheme.primary,
-
                       onChanged: (value) {
                         setState(() {
                           _showTranslationFirst = value;
@@ -218,29 +189,26 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
                     minimumSize: const Size(double.infinity, 50),
                   ),
 
-                  child: const Text("All Words"),
+                  child: Text(AppLocalizations.of(context)!.allWords),
                 ),
 
                 const SizedBox(height: 10),
 
                 ElevatedButton(
                   onPressed: () => _startLearning('learned'),
-
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
                   ),
-
-                  child: const Text("Learned Words"),
+                  child: Text(AppLocalizations.of(context)!.learnedWords),
                 ),
 
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () => _startLearning('notLearned'),
-
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
                   ),
-                  child: const Text("Words to Learn"),
+                  child: Text(AppLocalizations.of(context)!.wordsToLearn),
                 ),
               ],
             ),
@@ -259,12 +227,10 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
       transitionBuilder: (Widget child, Animation<double> animation) {
         return FadeTransition(
           opacity: animation,
-
           child: ScaleTransition(
             scale: Tween(begin: 0.8, end: 1.0).animate(
               CurvedAnimation(parent: animation, curve: Curves.easeOutQuint),
             ),
-
             child: child,
           ),
         );
@@ -272,28 +238,20 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
 
       child: Container(
         key: ValueKey('${word.id}_$_showFront'),
-
         height: 500,
-
         width: 350,
-
         decoration: BoxDecoration(
           color:
               word.isLearned
                   ? Theme.of(context).colorScheme.secondary
                   : Theme.of(context).colorScheme.tertiary,
-
           borderRadius: BorderRadius.circular(16),
-
           boxShadow: const [
             BoxShadow(color: Colors.black26, blurRadius: 10, spreadRadius: 3),
           ],
         ),
-
         alignment: Alignment.center,
-
         padding: const EdgeInsets.all(20),
-
         child: Text(
           _showFront
               ? (_showTranslationFirst ? word.translation : word.word)
@@ -301,12 +259,9 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
 
           style: TextStyle(
             fontSize: 36,
-
             fontWeight: FontWeight.bold,
-
             color: Theme.of(context).colorScheme.onTertiary,
           ),
-
           textAlign: TextAlign.center,
         ),
       ),
@@ -319,54 +274,39 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
         mainAxisAlignment: MainAxisAlignment.center,
 
         children: [
-          const Text(
-            "Session Complete!",
-
+          Text(
+            AppLocalizations.of(context)!.sessionComplete,
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-
           const SizedBox(height: 20),
-
           Text(
-            "You've reviewed all ${_filteredWords.length} words",
-
+            "${AppLocalizations.of(context)!.youReviewed} ${_filteredWords.length} ${AppLocalizations.of(context)!.words}",
             style: const TextStyle(fontSize: 16),
           ),
-
           const SizedBox(height: 40),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: [
               ElevatedButton(
                 onPressed: _restartSession,
-
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 30,
-
                     vertical: 15,
                   ),
                 ),
-
-                child: const Text("Restart"),
+                child: Text(AppLocalizations.of(context)!.restart),
               ),
-
               const SizedBox(width: 20),
-
               ElevatedButton(
                 onPressed: _returnToOptions,
-
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 30,
-
                     vertical: 15,
                   ),
                 ),
-
-                child: const Text("Change Mode"),
+                child: Text(AppLocalizations.of(context)!.changeMode),
               ),
             ],
           ),
@@ -379,16 +319,16 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Flashcards - ${widget.folder.name}"),
+        title: Text(
+          "${AppLocalizations.of(context)!.flashcards} - ${widget.folder.name}",
+        ),
 
         actions: [
           if (!_showOptionsScreen && !_showCompletionScreen)
             IconButton(
               icon: const Icon(Icons.refresh),
-
               onPressed: _restartSession,
-
-              tooltip: "Reshuffle",
+              tooltip: AppLocalizations.of(context)!.reshuffle,
             ),
         ],
       ),
@@ -404,12 +344,9 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
                     child: Center(
                       child: GestureDetector(
                         onTap: () => setState(() => _showFront = !_showFront),
-
                         child: Dismissible(
                           key: ValueKey(_filteredWords[_currentIndex].id),
-
                           direction: DismissDirection.horizontal,
-
                           onDismissed: (direction) {
                             if (direction == DismissDirection.endToStart) {
                               _nextCard(false);
@@ -417,7 +354,6 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
                               _nextCard(true);
                             }
                           },
-
                           child: _buildFlashCard(_currentIndex),
                         ),
                       ),
@@ -426,53 +362,36 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
 
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
-
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-
                       children: [
                         FloatingActionButton(
                           onPressed: _previousCard,
-
                           heroTag: 'prevBtn',
-
                           backgroundColor:
                               Theme.of(context).colorScheme.secondary,
-
                           child: Icon(
                             Icons.arrow_back,
-
                             color: Theme.of(context).colorScheme.onSecondary,
                           ),
                         ),
-
                         const SizedBox(width: 20),
-
                         FloatingActionButton(
                           onPressed: () => _nextCard(false),
-
                           heroTag: 'nextBtnFalse',
-
                           backgroundColor:
                               Theme.of(context).colorScheme.onError,
-
                           child: Icon(
                             Icons.close,
-
                             color:
                                 Theme.of(context).colorScheme.onErrorContainer,
                           ),
                         ),
-
                         const SizedBox(width: 20),
-
                         FloatingActionButton(
                           onPressed: () => _nextCard(true),
-
                           heroTag: 'nextBtnTrue',
-
                           backgroundColor: Colors.lightGreen[700],
-
                           child: const Icon(Icons.check, color: Colors.white),
                         ),
                       ],

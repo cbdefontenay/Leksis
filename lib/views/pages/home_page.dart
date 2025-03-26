@@ -183,11 +183,14 @@ class _HomePageState extends State<HomePage> {
         child:
             folders.isEmpty
                 ? Center(
-                  child: Text(
-                    "No folders available. Please add a folder.",
-                    style: TextStyle(
-                      color: colorScheme.onSurface,
-                      fontSize: 18,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Text(
+                      AppLocalizations.of(context)!.noFolder,
+                      style: TextStyle(
+                        color: colorScheme.onSurface,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 )
@@ -292,14 +295,10 @@ class _HomePageState extends State<HomePage> {
                 ),
       ),
 
-      floatingActionButton: DraggableFab(
-        child: FloatingActionButton(
-          onPressed: _showAddFolderDialog,
-
-          backgroundColor: colorScheme.primary,
-
-          child: Icon(Icons.add, color: colorScheme.onPrimary),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddFolderDialog,
+        backgroundColor: colorScheme.secondary,
+        child: Icon(Icons.add, color: colorScheme.onSecondary),
       ),
     );
   }
