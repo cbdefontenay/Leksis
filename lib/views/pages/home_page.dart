@@ -201,53 +201,39 @@ class _HomePageState extends State<HomePage> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16.0,
-
                         vertical: 8.0,
                       ),
-
                       child: InkWell(
                         onTap:
                             () => Navigator.push(
                               context,
-
                               MaterialPageRoute(
                                 builder:
                                     (context) =>
                                         FolderPage(folder: folders[index]),
                               ),
                             ),
-
                         borderRadius: BorderRadius.circular(12),
-
                         child: Card(
                           elevation: 4,
-
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-
                           color: colorScheme.surfaceContainer,
-
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
-
                             child: Row(
                               children: [
                                 Icon(
                                   Icons.folder_copy,
-
                                   color: colorScheme.primary,
-
                                   size: 32,
                                 ),
-
                                 const SizedBox(width: 16),
-
                                 Expanded(
                                   child: Text(
                                     folders[index].name,
-
-                                    style: textTheme.headlineMedium?.copyWith(
+                                    style: textTheme.headlineSmall?.copyWith(
                                       color: colorScheme.onSurface,
                                     ),
                                   ),
