@@ -23,6 +23,7 @@ class FolderPage extends StatefulWidget {
 class _FolderPageState extends State<FolderPage> {
   final DatabaseHelper dbHelper = DatabaseHelper.instance;
   List<Word> words = [];
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -31,9 +32,15 @@ class _FolderPageState extends State<FolderPage> {
   }
 
   void _loadWords() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     final loadedWords = await dbHelper.getWords(widget.folder.id!);
+
     setState(() {
       words = loadedWords;
+      _isLoading = false;
     });
   }
 
@@ -73,10 +80,8 @@ class _FolderPageState extends State<FolderPage> {
       );
 
       if (result == null || result.files.isEmpty) return;
-
       final file = result.files.first;
       if (file.path == null) return;
-
       final bytes = await File(file.path!).readAsBytes();
 
       if (bytes.length < 4 || !(bytes[0] == 0x50 && bytes[1] == 0x4B)) {
@@ -85,14 +90,11 @@ class _FolderPageState extends State<FolderPage> {
 
       try {
         var excel = Excel.decodeBytes(bytes);
-
         if (excel.tables.isEmpty) {
           throw Exception(AppLocalizations.of(context)!.successImport);
         }
-
         final sheet = excel.tables.values.first;
-        int importedCount = 0;
-
+        var importedCount = 0;
         for (int i = 1; i < sheet.rows.length; i++) {
           var row = sheet.rows[i];
           if (row.length < 2) continue;
@@ -264,7 +266,13 @@ class _FolderPageState extends State<FolderPage> {
       body: Padding(
         padding: const EdgeInsets.fromLTRB(4, 20, 4, 16),
         child:
-            words.isEmpty
+            _isLoading
+                ? Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                )
+                : words.isEmpty
                 ? Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -403,11 +411,21 @@ class _FolderPageState extends State<FolderPage> {
               ),
               TextButton(
                 onPressed: () {
-                  if (wordController.text.isNotEmpty &&
-                      translationController.text.isNotEmpty) {
-                    _addWord(wordController.text, translationController.text);
-                    Navigator.pop(context);
+                  if (wordController.text.isEmpty ||
+                      translationController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          AppLocalizations.of(context)!.fillFieldsError,
+                        ),
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                      ),
+                    );
+                    return;
                   }
+
+                  _addWord(wordController.text, translationController.text);
+                  Navigator.pop(context);
                 },
                 child: Text(AppLocalizations.of(context)!.add),
               ),

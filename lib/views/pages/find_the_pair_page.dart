@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:leksis/models/folder_model.dart';
 import 'package:leksis/models/word_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:async';
 
 class FindThePairPage extends StatefulWidget {
@@ -38,15 +40,29 @@ class _FindThePairPageState extends State<FindThePairPage> {
   int roundsWon = 0;
   int totalTimeSpent = 0;
   bool showMismatch = false;
-  List<String> mismatchedItems = []; // Track mismatched items
+  List<String> mismatchedItems = [];
 
-  final Map<String, int> difficultyTimes = {"Easy": 11, "Normal": 9, "Hard": 7};
+  late Map<String, int> difficultyTimes;
+  bool _isInitialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isInitialized) {
+      difficultyTimes = {
+        AppLocalizations.of(context)!.easy: 11,
+        AppLocalizations.of(context)!.normal: 9,
+        AppLocalizations.of(context)!.hard: 7,
+      };
+      _isInitialized = true;
+      loadWords();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-
-    loadWords();
+    difficultyTimes = {'Easy': 11, 'Normal': 9, 'Hard': 7};
   }
 
   Future<void> loadWords() async {
@@ -67,25 +83,15 @@ class _FindThePairPageState extends State<FindThePairPage> {
     }
 
     score = 0;
-
     correctMatches = 0;
-
     totalAttempts = 0;
-
     matchedPairs = 0;
-
     matchedItems.clear();
-
     isGameOver = false;
-
-    currentRound = 1; // Start at round 1
-
+    currentRound = 1;
     roundsWon = 0;
-
     totalTimeSpent = 0;
-
     showMismatch = false;
-
     mismatchedItems.clear();
 
     setState(() {
@@ -105,21 +111,13 @@ class _FindThePairPageState extends State<FindThePairPage> {
     }
 
     matchedPairs = 0;
-
     matchedItems.clear();
-
     firstSelected = null;
-
     secondSelected = null;
-
     showMismatch = false;
-
     mismatchedItems.clear();
-
     gameWords = List.from(words)..shuffle();
-
     gameWords = gameWords.take(5).toList();
-
     displayedItems = [];
 
     for (var word in gameWords) {
@@ -127,13 +125,9 @@ class _FindThePairPageState extends State<FindThePairPage> {
 
       displayedItems.add(word.translation);
     }
-
     displayedItems.shuffle();
-
     timeLeft = difficultyTimes[difficulty]!;
-
     timer?.cancel();
-
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         timeLeft--;
@@ -151,13 +145,9 @@ class _FindThePairPageState extends State<FindThePairPage> {
 
   void startNextRound() {
     totalTimeSpent += difficultyTimes[difficulty]! - timeLeft;
-
     timer?.cancel();
-
-    // Only proceed if we haven't completed all rounds
-
     if (currentRound < rounds) {
-      currentRound++; // Move to next round
+      currentRound++;
 
       Future.delayed(const Duration(seconds: 1), () {
         if (mounted) {
@@ -173,8 +163,7 @@ class _FindThePairPageState extends State<FindThePairPage> {
 
   void checkMatch() {
     totalAttempts++;
-
-    bool isMatch = false;
+    var isMatch = false;
 
     for (var word in gameWords) {
       if ((word.word == firstSelected && word.translation == secondSelected) ||
@@ -187,25 +176,19 @@ class _FindThePairPageState extends State<FindThePairPage> {
 
     if (isMatch) {
       correctMatches++;
-
       matchedPairs++;
-
       score += 10 * (timeLeft + 1);
-
       setState(() {
         matchedItems.add(firstSelected!);
-
         matchedItems.add(secondSelected!);
-
         showMismatch = false;
-
         mismatchedItems.clear();
       });
 
       if (matchedPairs == totalPairs) {
         roundsWon++;
 
-        startNextRound(); // Directly call without delay
+        startNextRound();
       }
     } else {
       setState(() {
@@ -217,24 +200,19 @@ class _FindThePairPageState extends State<FindThePairPage> {
       Future.delayed(const Duration(milliseconds: 500), () {
         setState(() {
           firstSelected = null;
-
           secondSelected = null;
-
           showMismatch = false;
-
           mismatchedItems.clear();
         });
       });
     }
 
     firstSelected = null;
-
     secondSelected = null;
   }
 
   void endGame() {
     timer?.cancel();
-
     if (mounted) {
       setState(() {
         isGameActive = false;
@@ -246,9 +224,6 @@ class _FindThePairPageState extends State<FindThePairPage> {
 
   void selectItem(String item) {
     if (isGameOver || matchedItems.contains(item)) return;
-
-    // Clear mismatch state when selecting a new item
-
     if (firstSelected == null && showMismatch) {
       setState(() {
         showMismatch = false;
@@ -329,18 +304,26 @@ class _FindThePairPageState extends State<FindThePairPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Find The Pair - ${widget.folder.name}'),
-
+        title: Text(
+          AppLocalizations.of(context)!.findThePair,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ).merge(
+            GoogleFonts.philosopher(fontSize: 25, fontWeight: FontWeight.w800),
+          ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        centerTitle: true,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
         bottom:
             isGameActive
                 ? PreferredSize(
                   preferredSize: const Size.fromHeight(4),
-
                   child: LinearProgressIndicator(
                     value: totalPairs > 0 ? matchedPairs / totalPairs : 0,
-
                     backgroundColor: Theme.of(context).colorScheme.surface,
-
                     valueColor: AlwaysStoppedAnimation<Color>(
                       Theme.of(context).colorScheme.primary,
                     ),
@@ -348,10 +331,8 @@ class _FindThePairPageState extends State<FindThePairPage> {
                 )
                 : null,
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-
         child:
             showOptions
                 ? buildOptionsScreen()
@@ -363,72 +344,170 @@ class _FindThePairPageState extends State<FindThePairPage> {
   }
 
   Widget buildOptionsScreen() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-      children: [
-        Text(
-          'Game Options',
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Column(
+            children: [
+              Icon(Icons.phone_android, size: 48, color: colorScheme.primary),
+              const SizedBox(height: 16),
+              Text(
+                AppLocalizations.of(context)!.gameOptions,
+                style: textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.primary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          const SizedBox(height: 32),
 
-          style: Theme.of(context).textTheme.headlineSmall,
+          Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.speed, color: colorScheme.secondary),
+                      const SizedBox(width: 8),
+                      Text(
+                        AppLocalizations.of(context)!.difficulty,
+                        style: textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    value: difficulty,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                    ),
+                    items:
+                        [
+                          AppLocalizations.of(context)!.easy,
+                          AppLocalizations.of(context)!.normal,
+                          AppLocalizations.of(context)!.hard,
+                        ].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value, style: textTheme.titleMedium),
+                          );
+                        }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        difficulty = newValue!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
 
-          textAlign: TextAlign.center,
-        ),
+          Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.repeat, color: colorScheme.secondary),
+                      const SizedBox(width: 8),
+                      Text(
+                        AppLocalizations.of(context)!.numberOfRounds,
+                        style: textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<int>(
+                    value: rounds,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                    ),
+                    items:
+                        [5, 10, 20].map((int value) {
+                          return DropdownMenuItem<int>(
+                            value: value,
+                            child: Text(
+                              AppLocalizations.of(context)!.roundsCount(value),
+                              style: textTheme.titleMedium,
+                            ),
+                          );
+                        }).toList(),
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        rounds = newValue!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 32),
 
-        const SizedBox(height: 20),
-
-        Text('Difficulty:', style: Theme.of(context).textTheme.titleMedium),
-
-        DropdownButton<String>(
-          value: difficulty,
-
-          items:
-              ["Easy", "Normal", "Hard"].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-
-                  child: Text(value),
-                );
-              }).toList(),
-
-          onChanged: (String? newValue) {
-            setState(() {
-              difficulty = newValue!;
-            });
-          },
-        ),
-
-        const SizedBox(height: 20),
-
-        Text(
-          'Number of rounds:',
-
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-
-        DropdownButton<int>(
-          value: rounds,
-
-          items:
-              [5, 10, 20].map((int value) {
-                return DropdownMenuItem<int>(
-                  value: value,
-
-                  child: Text('$value rounds'),
-                );
-              }).toList(),
-
-          onChanged: (int? newValue) {
-            setState(() {
-              rounds = newValue!;
-            });
-          },
-        ),
-
-        const SizedBox(height: 40),
-
-        ElevatedButton(onPressed: startGame, child: const Text('Start Game')),
-      ],
+          SizedBox(
+            height: 54,
+            child: ElevatedButton(
+              onPressed: startGame,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colorScheme.primary,
+                foregroundColor: colorScheme.onPrimary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 4,
+                textStyle: textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.play_arrow),
+                  const SizedBox(width: 8),
+                  Text(AppLocalizations.of(context)!.startGame),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -437,69 +516,47 @@ class _FindThePairPageState extends State<FindThePairPage> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-
           child: Text(
-            'Round $currentRound/$rounds - Matched $matchedPairs/$totalPairs pairs',
-
+            '${AppLocalizations.of(context)!.round} $currentRound/$rounds - ${AppLocalizations.of(context)!.matched} $matchedPairs/$totalPairs ${AppLocalizations.of(context)!.pairs}',
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
-
         Text(
-          'Time: $timeLeft sec',
-
+          '${AppLocalizations.of(context)!.time}: $timeLeft ${AppLocalizations.of(context)!.seconds}',
           style: TextStyle(
             fontSize: 18,
-
             color: timeLeft <= 3 ? Colors.red : null,
-
             fontWeight: FontWeight.bold,
           ),
         ),
-
         const SizedBox(height: 20),
-
         Expanded(
           child: GridView.builder(
             padding: const EdgeInsets.all(16),
-
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-
               crossAxisSpacing: 12,
-
               mainAxisSpacing: 12,
-
               childAspectRatio: 1.5,
             ),
-
             itemCount: displayedItems.length,
-
             itemBuilder: (context, index) {
               final item = displayedItems[index];
-
               return Card(
                 elevation: 4,
-
                 color: getItemColor(item),
-
                 child: InkWell(
                   borderRadius: BorderRadius.circular(4),
-
                   onTap:
                       matchedItems.contains(item)
                           ? null
                           : () => selectItem(item),
-
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-
                       child: Text(
                         item,
-
                         textAlign: TextAlign.center,
-
                         style: Theme.of(context).textTheme.titleMedium
                             ?.copyWith(color: getTextColor(item)),
                       ),
@@ -515,64 +572,237 @@ class _FindThePairPageState extends State<FindThePairPage> {
   }
 
   Widget buildGameOverScreen() {
-    // Ensure we have valid values to display
-
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final accuracyValue = accuracy.isNaN ? 0.0 : accuracy;
+    final accuracyColor =
+        accuracyValue > 70
+            ? Colors.green
+            : accuracyValue > 40
+            ? Colors.orange
+            : Colors.red;
 
     return Center(
       child: SingleChildScrollView(
-        child: Column(
+        padding: const EdgeInsets.all(16), // Reduced padding
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth:
+                MediaQuery.of(context).size.width * 0.9, // Limit max width
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.sports_esports, size: 64, color: colorScheme.primary),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  AppLocalizations.of(context)!.gameOver,
+                  style: textTheme.headlineSmall
+                      ?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.primary,
+                      )
+                      .merge(GoogleFonts.firaSans()),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.emoji_events,
+                              color: colorScheme.secondary,
+                              size: 24,
+                            ),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
+                                '${AppLocalizations.of(context)!.roundsWon}: $roundsWon/$rounds',
+                                style: textTheme.titleLarge
+                                    ?.copyWith(fontWeight: FontWeight.w500)
+                                    .merge(GoogleFonts.firaSans()),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Column(
+                        children: [
+                          Text(
+                            '${AppLocalizations.of(context)!.accuracy}:',
+                            style: textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 6),
+                          LinearProgressIndicator(
+                            value: accuracyValue / 100,
+                            minHeight: 10,
+                            borderRadius: BorderRadius.circular(5),
+                            color: accuracyColor,
+                            backgroundColor: colorScheme.surface,
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            '${accuracyValue.toStringAsFixed(1)}%',
+                            style: textTheme.titleLarge?.copyWith(
+                              color: accuracyColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.timer,
+                            color: colorScheme.secondary,
+                            size: 24,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '${AppLocalizations.of(context)!.totalTime}: ${totalTimeSpent}${AppLocalizations.of(context)!.secondsAbbr}',
+                            style: textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.w600)
+                                .merge(GoogleFonts.firaSans()),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  if (constraints.maxWidth > 400) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildActionButton(
+                          context,
+                          icon: Icons.arrow_back,
+                          text: AppLocalizations.of(context)!.goBack,
+                          onPressed: () => Navigator.of(context).pop(),
+                          isPrimary: false,
+                        ),
+                        const SizedBox(width: 16),
+                        _buildActionButton(
+                          context,
+                          icon: Icons.replay,
+                          text: AppLocalizations.of(context)!.playAgain,
+                          onPressed: restartGame,
+                          isPrimary: true,
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Column(
+                      children: [
+                        _buildActionButton(
+                          context,
+                          icon: Icons.arrow_back,
+                          text: AppLocalizations.of(context)!.goBack,
+                          onPressed: () => Navigator.of(context).pop(),
+                          isPrimary: false,
+                        ),
+                        const SizedBox(height: 12),
+                        _buildActionButton(
+                          context,
+                          icon: Icons.replay,
+                          text: AppLocalizations.of(context)!.playAgain,
+                          onPressed: restartGame,
+                          isPrimary: true,
+                        ),
+                      ],
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(
+    BuildContext context, {
+    required IconData icon,
+    required String text,
+    required VoidCallback onPressed,
+    required bool isPrimary,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return SizedBox(
+      width: 200,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor:
+              isPrimary ? colorScheme.primary : colorScheme.surface,
+          foregroundColor:
+              isPrimary ? colorScheme.onPrimary : colorScheme.onSurface,
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side:
+                isPrimary
+                    ? BorderSide.none
+                    : BorderSide(color: colorScheme.outline, width: 1),
+          ),
+          elevation: isPrimary ? 2 : 0,
+        ),
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-
           children: [
-            Text(
-              'Game Over!',
-
-              style: Theme.of(context).textTheme.headlineMedium,
+            Icon(
+              icon,
+              size: 20,
+              color:
+                  isPrimary
+                      ? colorScheme
+                          .onPrimary // Use onPrimary color for icon when primary
+                      : colorScheme
+                          .onSurface, // Keep original color for secondary
             ),
-
-            const SizedBox(height: 20),
-
-            Text(
-              'Rounds Won: $roundsWon/$rounds',
-
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-
-            Text(
-              'Accuracy: ${accuracyValue.toStringAsFixed(1)}%',
-
-              style: const TextStyle(fontSize: 20),
-            ),
-
-            Text(
-              'Total Time: ${totalTimeSpent}s',
-
-              style: const TextStyle(fontSize: 20),
-            ),
-
-            const SizedBox(height: 50),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-
-                  child: const Text('Go Back'),
-                ),
-
-                const SizedBox(width: 20),
-
-                ElevatedButton(
-                  onPressed: restartGame,
-
-                  child: const Text('Play Again'),
-                ),
-              ],
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                text,
+                style: textTheme.titleMedium
+                    ?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color:
+                          isPrimary
+                              ? colorScheme
+                                  .onPrimary // Use onPrimary color for text when primary
+                              : colorScheme
+                                  .onSurface, // Keep original color for secondary
+                    )
+                    .merge(GoogleFonts.firaSans()),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),

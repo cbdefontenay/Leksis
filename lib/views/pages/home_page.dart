@@ -16,19 +16,24 @@ class _HomePageState extends State<HomePage> {
   final DatabaseHelper dbHelper = DatabaseHelper.instance;
 
   List<Folder> folders = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-
     _loadFolders();
   }
 
   void _loadFolders() async {
+    setState(() {
+      isLoading = true;
+    });
+
     final loadedFolders = await dbHelper.getFolders();
 
     setState(() {
       folders = loadedFolders;
+      isLoading = false;
     });
   }
 
@@ -154,7 +159,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -174,22 +178,44 @@ class _HomePageState extends State<HomePage> {
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 8),
         child:
-            folders.isEmpty
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : folders.isEmpty
                 ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: Text(
-                      AppLocalizations.of(context)!.noFolder,
-                      style: TextStyle(
-                        color: colorScheme.onSurface,
-                        fontSize: 18,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.folder_open,
+                        size: 80,
+                        color: colorScheme.onSurface.withOpacity(0.5),
                       ),
-                    ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Text(
+                          AppLocalizations.of(context)!.noFolder,
+                          style: TextStyle(
+                            color: colorScheme.onSurface,
+                            fontSize: 18,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _showAddFolderDialog,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: colorScheme.secondary,
+                          foregroundColor: colorScheme.onSecondary,
+                        ),
+                        child: Text(AppLocalizations.of(context)!.createFolder),
+                      ),
+                    ],
                   ),
                 )
                 : ListView.builder(
                   itemCount: folders.length,
-
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
@@ -231,7 +257,6 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-
                                 PopupMenuButton<String>(
                                   onSelected: (value) {
                                     if (value == 'update') {
@@ -240,22 +265,18 @@ class _HomePageState extends State<HomePage> {
                                       _deleteFolder(folders[index].id!);
                                     }
                                   },
-
                                   itemBuilder:
                                       (context) => [
                                         PopupMenuItem(
                                           value: 'update',
-
                                           child: Text(
                                             AppLocalizations.of(
                                               context,
                                             )!.rename,
                                           ),
                                         ),
-
                                         PopupMenuItem(
                                           value: 'delete',
-
                                           child: Text(
                                             AppLocalizations.of(
                                               context,

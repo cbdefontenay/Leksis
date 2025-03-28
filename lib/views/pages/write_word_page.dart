@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:leksis/database/database_helpers.dart';
 
@@ -280,20 +281,20 @@ class _GameScreenState extends State<_GameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.enterTheWord),
-
+        title: Text(
+          AppLocalizations.of(context)!.enterTheWord,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ).merge(
+            GoogleFonts.philosopher(fontSize: 25, fontWeight: FontWeight.w800),
+          ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
-
-        leading:
-            _showSelection
-                ? IconButton(
-                  icon: const Icon(Icons.arrow_back),
-
-                  onPressed: () => Navigator.pop(context),
-                )
-                : null,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
       ),
-
       body:
           _showSelection
               ? _selectionScreen()
@@ -382,43 +383,31 @@ class _GameScreenState extends State<_GameScreen> {
 
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: [
               Text(
                 _selectedWords[_currentIndex].translation,
-
                 style: const TextStyle(
                   fontSize: 24,
-
                   fontWeight: FontWeight.bold,
                 ),
-
                 textAlign: TextAlign.center,
               ),
-
               const SizedBox(height: 32),
 
               TextField(
                 controller: _answerController,
-
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context)!.enterTheWord,
-
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-
                   filled: true,
-
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
-
                     vertical: 16,
                   ),
                 ),
-
                 textCapitalization: TextCapitalization.sentences,
-
                 onSubmitted: (value) => _checkAnswer(),
               ),
 
@@ -426,7 +415,6 @@ class _GameScreenState extends State<_GameScreen> {
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                 children: [
                   Text(
                     "${AppLocalizations.of(context)!.attemptLeft} $_attemptsLeft",
@@ -450,9 +438,7 @@ class _GameScreenState extends State<_GameScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-
                     onPressed: _checkAnswer,
-
                     child: Text(AppLocalizations.of(context)!.submit),
                   ),
                 ],
@@ -464,103 +450,178 @@ class _GameScreenState extends State<_GameScreen> {
     ],
   );
 
-  Widget _resultsScreen() => Center(
-    child: Padding(
-      padding: const EdgeInsets.all(24.0),
+  Widget _resultsScreen() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final accuracy = (_score / _totalWords * 100).toStringAsFixed(1);
 
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-
-        children: [
-          Card(
-            elevation: 2,
-
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-
-              child: Column(
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.quizCompleted,
-
-                    style: TextStyle(
-                      fontSize: 24,
-
-                      fontWeight: FontWeight.bold,
-
-                      color: Theme.of(context).colorScheme.primary,
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Result Card with celebration
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Column(
+                  children: [
+                    // Celebration icon with animated confetti effect
+                    Icon(
+                      Icons.celebration,
+                      size: 64,
+                      color: colorScheme.primary,
                     ),
-                  ),
+                    const SizedBox(height: 16),
 
-                  const SizedBox(height: 16),
-
-                  Text(
-                    "${AppLocalizations.of(context)!.score} $_score/$_totalWords",
-
-                    style: const TextStyle(fontSize: 20),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  Text(
-                    "${AppLocalizations.of(context)!.accuracy} ${(_score / _totalWords * 100).toStringAsFixed(1)}%",
-
-                    style: TextStyle(
-                      fontSize: 18,
-
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    // Quiz completed text
+                    Text(
+                      AppLocalizations.of(context)!.quizCompleted,
+                      style: textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.primary,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 24),
+
+                    // Score display
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceVariant.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        children: [
+                          // Score
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.star,
+                                color: colorScheme.primary,
+                                size: 28,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "${AppLocalizations.of(context)!.score} $_score/$_totalWords",
+                                style: textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+
+                          // Accuracy meter
+                          LinearProgressIndicator(
+                            value: _score / _totalWords,
+                            minHeight: 12,
+                            borderRadius: BorderRadius.circular(6),
+                            color:
+                                _score / _totalWords > 0.7
+                                    ? Colors.green
+                                    : _score / _totalWords > 0.4
+                                    ? Colors.orange
+                                    : Colors.red,
+                            backgroundColor: colorScheme.surfaceVariant,
+                          ),
+                          const SizedBox(height: 8),
+
+                          // Accuracy percentage
+                          Text(
+                            "${AppLocalizations.of(context)!.accuracy} $accuracy%",
+                            style: textTheme.titleMedium?.copyWith(
+                              color:
+                                  _score / _totalWords > 0.7
+                                      ? Colors.green
+                                      : _score / _totalWords > 0.4
+                                      ? Colors.orange[700]
+                                      : Colors.red[700],
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
+            const SizedBox(height: 32),
 
-          const SizedBox(height: 32),
-
-          Column(
-            children: [
-              FilledButton(
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 48),
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+            // Action buttons
+            Column(
+              children: [
+                // Try Again button
+                ElevatedButton(
+                  onPressed: () => _startGame(_totalWords),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: colorScheme.secondary,
+                    foregroundColor: colorScheme.onSecondary,
+                    minimumSize: const Size(double.infinity, 56),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 2,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.refresh),
+                      const SizedBox(width: 12),
+                      Text(
+                        AppLocalizations.of(context)!.tryAgain,
+                        style: textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.onSecondary,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                const SizedBox(height: 16),
 
-                onPressed: () => _startGame(_totalWords),
-
-                child: Text(AppLocalizations.of(context)!.tryAgain),
-              ),
-
-              const SizedBox(height: 12),
-
-              OutlinedButton(
-                onPressed: () => Navigator.pop(context),
-
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 48),
-
-                  side: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
+                // Return to folder button
+                OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: colorScheme.onSurface,
+                    minimumSize: const Size(double.infinity, 56),
+                    side: BorderSide(color: colorScheme.outline, width: 1.5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.arrow_back),
+                      const SizedBox(width: 12),
+                      Text(
+                        AppLocalizations.of(context)!.returnToFolder,
+                        style: textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-
-                child: Text(AppLocalizations.of(context)!.returnToFolder),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

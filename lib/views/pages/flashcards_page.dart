@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:leksis/models/folder_model.dart';
 import 'package:leksis/models/word_model.dart';
@@ -149,69 +150,153 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
   }
 
   Widget _buildOptionsScreen() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-
-        children: [
-          Text(
-            "${AppLocalizations.of(context)!.learn} ${widget.folder.name}",
-
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 40),
-          SizedBox(
-            width: 250,
-            child: Column(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Header with folder name
+            Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(AppLocalizations.of(context)!.showtranslation),
-                    Switch(
-                      value: _showTranslationFirst,
-                      activeColor: Theme.of(context).colorScheme.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          _showTranslationFirst = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 20),
-
-                ElevatedButton(
-                  onPressed: () => _startLearning('all'),
-
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-
-                  child: Text(AppLocalizations.of(context)!.allWords),
-                ),
-
-                const SizedBox(height: 10),
-
-                ElevatedButton(
-                  onPressed: () => _startLearning('learned'),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  child: Text(AppLocalizations.of(context)!.learnedWords),
-                ),
-
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () => _startLearning('notLearned'),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  child: Text(AppLocalizations.of(context)!.wordsToLearn),
+                Icon(Icons.school, size: 48, color: colorScheme.primary),
+                const SizedBox(height: 16),
+                Text(
+                  "${AppLocalizations.of(context)!.learn} ${widget.folder.name}",
+                  style: textTheme.headlineSmall
+                      ?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.onSurface,
+                      )
+                      .merge(GoogleFonts.firaSans()),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
+            const SizedBox(height: 40),
+
+            // Options Card
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    // Translation Toggle - Fixed overflow
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceContainer,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context)!.showtranslation,
+                              style: textTheme.titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.w500)
+                                  .merge(GoogleFonts.firaSans()),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Switch(
+                            value: _showTranslationFirst,
+                            activeColor: colorScheme.primary,
+                            inactiveThumbColor: colorScheme.tertiary,
+                            inactiveTrackColor: colorScheme.onTertiary,
+                            activeTrackColor: colorScheme.onPrimary,
+                            onChanged: (value) {
+                              setState(() {
+                                _showTranslationFirst = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Learning Mode Buttons
+                    Column(
+                      children: [
+                        _buildLearningModeButton(
+                          context,
+                          icon: Icons.all_inclusive,
+                          text: AppLocalizations.of(context)!.allWords,
+                          onPressed: () => _startLearning('all'),
+                        ),
+                        const SizedBox(height: 12),
+                        _buildLearningModeButton(
+                          context,
+                          icon: Icons.check_circle,
+                          text: AppLocalizations.of(context)!.learnedWords,
+                          onPressed: () => _startLearning('learned'),
+                        ),
+                        const SizedBox(height: 12),
+                        _buildLearningModeButton(
+                          context,
+                          icon: Icons.lightbulb,
+                          text: AppLocalizations.of(context)!.wordsToLearn,
+                          onPressed: () => _startLearning('notLearned'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLearningModeButton(
+    BuildContext context, {
+    required IconData icon,
+    required String text,
+    required VoidCallback onPressed,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: colorScheme.secondary,
+        foregroundColor: colorScheme.onSecondary,
+        elevation: 2,
+        minimumSize: const Size(double.infinity, 60),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: colorScheme.outline),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 24, color: colorScheme.onSecondary),
+          const SizedBox(width: 12),
+          Text(
+            text,
+            style: textTheme.titleMedium
+                ?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSecondary,
+                )
+                .merge(GoogleFonts.firaSans()),
           ),
         ],
       ),
@@ -269,46 +354,122 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
   }
 
   Widget _buildCompletionScreen() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Celebration icon
+            Icon(Icons.celebration, size: 72, color: colorScheme.primary),
+            const SizedBox(height: 24),
+
+            // Completion message
+            Text(
+              AppLocalizations.of(context)!.sessionComplete,
+              style: textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: colorScheme.primary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+
+            // Stats card
+            Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              color: colorScheme.surfaceVariant,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.library_books,
+                      size: 36,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      "${AppLocalizations.of(context)!.youReviewed} ${_filteredWords.length} ${AppLocalizations.of(context)!.words}",
+                      style: textTheme.titleMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 40),
+
+            // Action buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildActionButton(
+                  context,
+                  icon: Icons.replay,
+                  text: AppLocalizations.of(context)!.restart,
+                  onPressed: _restartSession,
+                  backgroundColor: colorScheme.primaryContainer,
+                  foregroundColor: colorScheme.onPrimaryContainer,
+                ),
+                const SizedBox(width: 16),
+                _buildActionButton(
+                  context,
+                  icon: Icons.settings,
+                  text: AppLocalizations.of(context)!.goBack,
+                  onPressed: _returnToOptions,
+                  backgroundColor: colorScheme.surfaceBright,
+                  foregroundColor: colorScheme.primary,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(
+    BuildContext context, {
+    required IconData icon,
+    required String text,
+    required VoidCallback onPressed,
+    required Color backgroundColor,
+    required Color foregroundColor,
+  }) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor,
+        elevation: 2,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline,
+            width: 1,
+          ),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
+          Icon(icon, size: 20),
+          const SizedBox(width: 8),
           Text(
-            AppLocalizations.of(context)!.sessionComplete,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            "${AppLocalizations.of(context)!.youReviewed} ${_filteredWords.length} ${AppLocalizations.of(context)!.words}",
-            style: const TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: _restartSession,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 15,
-                  ),
-                ),
-                child: Text(AppLocalizations.of(context)!.restart),
-              ),
-              const SizedBox(width: 20),
-              ElevatedButton(
-                onPressed: _returnToOptions,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 15,
-                  ),
-                ),
-                child: Text(AppLocalizations.of(context)!.changeMode),
-              ),
-            ],
+            text,
+            style: Theme.of(
+              context,
+            ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -321,6 +482,16 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
       appBar: AppBar(
         title: Text(
           "${AppLocalizations.of(context)!.flashcards} - ${widget.folder.name}",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ).merge(
+            GoogleFonts.philosopher(fontSize: 20, fontWeight: FontWeight.w700),
+          ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        centerTitle: true,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
 
         actions: [

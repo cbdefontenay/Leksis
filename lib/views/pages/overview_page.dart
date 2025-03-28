@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/data/notifiers.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leksis/database/database_helpers.dart';
@@ -119,17 +120,52 @@ class _OverviewPageState extends State<OverviewPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          AppLocalizations.of(context)!.overviewTitle,
+          style: GoogleFonts.philosopher(
+            fontSize: 25,
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
-
-        title: Text(AppLocalizations.of(context)!.overviewTitle),
-
         bottom: TabBar(
           controller: _tabController,
-
+          indicatorColor: Theme.of(context).colorScheme.onTertiary,
+          indicatorWeight: 3,
+          indicatorPadding: const EdgeInsets.symmetric(horizontal: 16),
+          labelColor: Theme.of(context).colorScheme.onTertiary,
+          unselectedLabelColor: Theme.of(context).colorScheme.onTertiary,
+          labelStyle: GoogleFonts.firaSans(
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+          unselectedLabelStyle: GoogleFonts.firaSans(
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+          ),
           tabs: [
-            Tab(text: AppLocalizations.of(context)!.notLearned),
-
-            Tab(text: AppLocalizations.of(context)!.learned),
+            Tab(
+              icon: Icon(
+                Icons.star_border,
+                color:
+                    _tabController.index == 0
+                        ? Theme.of(context).colorScheme.onTertiary
+                        : Theme.of(context).colorScheme.onTertiary,
+              ),
+              text: AppLocalizations.of(context)!.notLearned,
+            ),
+            Tab(
+              icon: Icon(
+                Icons.star,
+                color:
+                    _tabController.index == 1
+                        ? Theme.of(context).colorScheme.onTertiary
+                        : Theme.of(context).colorScheme.onTertiary,
+              ),
+              text: AppLocalizations.of(context)!.learned,
+            ),
           ],
         ),
       ),
@@ -148,12 +184,9 @@ class _OverviewPageState extends State<OverviewPage>
 
                     0,
                   ),
-
                   _buildAnimatedWordList(
                     notLearnedWordsNotifier,
-
                     _notLearnedListKey,
-
                     1,
                   ),
                 ],
@@ -163,51 +196,63 @@ class _OverviewPageState extends State<OverviewPage>
 
   Widget _buildAnimatedWordList(
     ValueNotifier<List<Word>> wordsNotifier,
-
     GlobalKey<AnimatedListState> listKey,
-
     int listIndex,
   ) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return ValueListenableBuilder<List<Word>>(
       valueListenable: wordsNotifier,
-
       builder: (context, words, child) {
+        if (isLoading) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(height: 16),
+                Text(
+                  AppLocalizations.of(context)!.loadingWords,
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
         if (words.isEmpty) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-
               children: [
+                Icon(Icons.auto_awesome, size: 64, color: colorScheme.primary),
+                const SizedBox(height: 16),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-
-                    vertical: 6,
+                    horizontal: 16,
+                    vertical: 8,
                   ),
-
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.tertiary,
-
+                    color: colorScheme.tertiary,
                     borderRadius: BorderRadius.circular(20),
                   ),
-
                   child: Text(
                     '0 ${AppLocalizations.of(context)!.words}',
-
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onTertiary,
-
+                    style: textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onTertiary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 16),
-
                 Text(
-                  "No words available",
-
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  AppLocalizations.of(context)!.noWordsAvailable,
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
                 ),
               ],
             ),
@@ -230,14 +275,13 @@ class _OverviewPageState extends State<OverviewPage>
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.tertiary,
+                      color: colorScheme.tertiary,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       '${words.length} ${words.length == 1 ? AppLocalizations.of(context)!.word : AppLocalizations.of(context)!.words}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onTertiary,
-
+                      style: textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onTertiary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -248,12 +292,9 @@ class _OverviewPageState extends State<OverviewPage>
             Expanded(
               child: AnimatedList(
                 key: listKey,
-
                 initialItemCount: words.length,
-
                 itemBuilder: (context, index, animation) {
                   final word = words[index];
-
                   return _buildWordItem(word, animation, listIndex);
                 },
               ),
@@ -270,19 +311,17 @@ class _OverviewPageState extends State<OverviewPage>
 
       child: Card(
         margin: const EdgeInsets.all(8.0),
-
         child: ListTile(
           title: Text(word.word),
-
           subtitle: Text(word.translation),
-
           trailing: IconButton(
             icon: Icon(
               word.isLearned ? Icons.star : Icons.star_border,
-
-              color: word.isLearned ? Colors.deepPurple : Colors.grey,
+              color:
+                  word.isLearned
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.secondary,
             ),
-
             onPressed: () async {
               await _toggleWordLearnStatus(word, listIndex);
             },

@@ -51,6 +51,9 @@ class _FolderSelectionWidgetState extends State<FolderSelectionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Column(
       children: [
         TextField(
@@ -72,12 +75,24 @@ class _FolderSelectionWidgetState extends State<FolderSelectionWidget> {
           child:
               _filteredFolders.isEmpty
                   ? Center(
-                    child: Text(
-                      "No folders found",
-                      style: GoogleFonts.firaSans(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.folder_open,
+                          size: 80,
+                          color: colorScheme.onSurface,
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          AppLocalizations.of(context)!.createYourFirstFolder,
+                          style: GoogleFonts.firaSans(
+                            fontSize: 20,
+                            color: colorScheme.onSurface,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   )
                   : ListView.builder(
@@ -86,19 +101,19 @@ class _FolderSelectionWidgetState extends State<FolderSelectionWidget> {
                       final folder = _filteredFolders[index];
 
                       return Card(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: colorScheme.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: ListTile(
                           leading: Icon(
                             Icons.folder,
-                            color: Theme.of(context).colorScheme.onPrimary,
+                            color: colorScheme.onPrimary,
                           ),
                           title: Text(
                             folder.name,
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: colorScheme.onPrimary,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),

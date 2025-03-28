@@ -21,12 +21,17 @@ class FolderSelectionGuessWordPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.selectAFolder,
-          style: GoogleFonts.firaSans(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ).merge(
+            GoogleFonts.philosopher(fontSize: 22, fontWeight: FontWeight.w800),
           ),
         ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

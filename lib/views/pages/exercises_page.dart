@@ -95,7 +95,7 @@ class _ExercicesPageState extends State<ExercicesPage> {
             const SizedBox(height: 20),
 
             CardExerciseWidget(
-              icon: Icons.two_wheeler,
+              icon: Icons.unfold_less_double,
               iconColor: Theme.of(context).colorScheme.onTertiary,
               name: AppLocalizations.of(context)!.findThePair,
               backgroundColor: Theme.of(context).colorScheme.onSurface,

@@ -38,7 +38,6 @@ class FolderSelectionLink extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: FolderSelectionWidget(
           title: AppLocalizations.of(context)!.selectAFolder,
-
           onFolderSelected:
               (folder) => _navigauteToFindThePair(context, folder),
         ),
