@@ -1,5 +1,5 @@
 {
-  "language": "Fran1ais",
+  "language": "Français",
   "appTitle": "Leksis",
   "createFolder": "Créer un dossier",
   "createFolderHint": "Nom du dossier",
@@ -21,7 +21,7 @@
   "word": "mot",
   "importList": "Importer la liste",
   "exportList": "Exporter la liste",
-  "notLearned": "Pas appris",
+  "notLearned": "A apprendre",
   "learned": "Appris",
   "enterTheWord": "Ecris le mot",
   "attemptLeft": "Tentatives restantes :",
@@ -53,7 +53,7 @@
   "noSheetFound": "Aucune feuille trouvée dans le fichier Excel",
   "notValidExcel": "Fichier Excel non valide",
   "hereMyVocab": "Voici ma liste de vocabulaire",
-  "noFolder": "Il n'y a pas encore de dossier. Créez-en un pour l'afficher.",
+  "noFolder": "Il n'y a pas encore de dossier. Pourquoi pas en créer un ?",
   "noWordsYet": "Aucun mot ajouté pour le moment !",
   "addWordsPrompt": "Appuyez sur le bouton + pour ajouter des mots.",
   "noWordForCategory": "Aucun mot dans cette catégorie",
@@ -99,5 +99,9 @@
   "correctAnswer": "Bonne réponse",
   "yourAnswer": "Ta réponse",
   "mistakes": "Erreurs",
-  "noAnswer": "Pas de réponse"
+  "noAnswer": "Pas de réponse",
+  "light": "Clair",
+  "dark": "Sombre",
+  "system": "Système",
+  "modus": "Mode"
 }

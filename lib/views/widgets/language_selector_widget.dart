@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:leksis/l10n/l10n.dart';
 
 class LanguageSelector extends StatefulWidget {
   final Locale currentLocale;
-
   final Function(Locale) onLocaleChange;
 
   const LanguageSelector({
     super.key,
-
     required this.currentLocale,
-
     required this.onLocaleChange,
   });
 
@@ -34,8 +29,6 @@ class _LanguageSelectorState extends State<LanguageSelector> {
   }
 
   Locale _findMatchingLocale(Locale locale) {
-    // Try to find exact match first
-
     final exactMatch = L10n.allLanguages.firstWhere(
       (l) =>
           l.languageCode == locale.languageCode &&
@@ -43,8 +36,6 @@ class _LanguageSelectorState extends State<LanguageSelector> {
 
       orElse: () => const Locale('en'),
     );
-
-    // If no exact match, try language code only
 
     if (exactMatch.languageCode == 'en' && locale.languageCode != 'en') {
       return L10n.allLanguages.firstWhere(
@@ -59,7 +50,6 @@ class _LanguageSelectorState extends State<LanguageSelector> {
 
   Future<void> _loadLocale() async {
     final prefs = await SharedPreferences.getInstance();
-
     final localeCode = prefs.getString('selected_locale');
 
     if (localeCode != null && localeCode != _selectedLocale.languageCode) {
@@ -102,6 +92,9 @@ class _LanguageSelectorState extends State<LanguageSelector> {
 
       case 'nl':
         return 'Nederlands';
+
+      case 'da':
+        return 'Dansk';
 
       default:
         return code;

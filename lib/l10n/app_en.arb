@@ -99,5 +99,9 @@
   "correctAnswer": "Correct answer",
   "yourAnswer": "Your answer",
   "mistakes": "Mistakes:",
-  "noAnswer": "No answer"
+  "noAnswer": "No answer",
+  "light": "Light",
+  "dark": "Dark",
+  "system": "System",
+  "modus": "Mode"
 }

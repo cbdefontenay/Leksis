@@ -32,16 +32,22 @@ class _OverviewPageState extends State<OverviewPage>
   }
 
   Future<void> _loadWords() async {
+    if (!mounted) return;
+
     List<Word> words = await _dbHelper.getWordsOverview();
+
+    if (!mounted) return;
 
     learnedWordsNotifier.value =
         words.where((word) => word.isLearned == false).toList();
     notLearnedWordsNotifier.value =
         words.where((word) => word.isLearned == true).toList();
 
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   Future<void> _toggleWordLearnStatus(Word word, int fromListIndex) async {
@@ -131,6 +137,7 @@ class _OverviewPageState extends State<OverviewPage>
         backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
         bottom: TabBar(
+          key: const ValueKey('overview_tab_bar'),
           controller: _tabController,
           indicatorColor: Theme.of(context).colorScheme.onTertiary,
           indicatorWeight: 3,
@@ -147,22 +154,18 @@ class _OverviewPageState extends State<OverviewPage>
           ),
           tabs: [
             Tab(
+              key: const ValueKey('not_learned_tab'),
               icon: Icon(
                 Icons.star_border,
-                color:
-                    _tabController.index == 0
-                        ? Theme.of(context).colorScheme.onTertiary
-                        : Theme.of(context).colorScheme.onTertiary,
+                color: Theme.of(context).colorScheme.onTertiary,
               ),
               text: AppLocalizations.of(context)!.notLearned,
             ),
             Tab(
+              key: const ValueKey('learned_tab'),
               icon: Icon(
                 Icons.star,
-                color:
-                    _tabController.index == 1
-                        ? Theme.of(context).colorScheme.onTertiary
-                        : Theme.of(context).colorScheme.onTertiary,
+                color: Theme.of(context).colorScheme.onTertiary,
               ),
               text: AppLocalizations.of(context)!.learned,
             ),
@@ -341,7 +344,16 @@ class _OverviewPageState extends State<OverviewPage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    if (mounted) {
+      _loadWords();
+    }
+  }
 
-    _loadWords();
+  @override
+  void didUpdateWidget(covariant OverviewPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (mounted) {
+      setState(() {});
+    }
   }
 }

@@ -14,7 +14,6 @@ class SettingPage extends StatelessWidget {
   });
 
   final Locale currentLocale;
-
   final Function(Locale) onLocaleChange;
 
   @override
@@ -59,7 +58,7 @@ class SettingPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 _buildSettingItem(
                   context,
-                  title: AppLocalizations.of(context)!.changeMode,
+                  title: AppLocalizations.of(context)!.modus,
                   child: _buildThemeSelector(context, themeMode),
                 ),
               ],
@@ -163,10 +162,10 @@ class SettingPage extends StatelessWidget {
                         const SizedBox(width: 12),
                         Text(
                           mode == ThemeMode.system
-                              ? "System"
+                              ? AppLocalizations.of(context)!.system
                               : mode == ThemeMode.light
-                              ? "Light"
-                              : "Dark",
+                              ? AppLocalizations.of(context)!.light
+                              : AppLocalizations.of(context)!.dark,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                           ),

@@ -99,5 +99,9 @@
   "correctAnswer": "Richtige Antwort",
   "yourAnswer": "Deine Antwort",
   "mistakes": "Fehler",
-  "noAnswer": "Keine Antwort"
+  "noAnswer": "Keine Antwort",
+  "light": "Hell",
+  "dark": "Dunkel",
+  "system": "System",
+  "modus": "Modus"
 }
