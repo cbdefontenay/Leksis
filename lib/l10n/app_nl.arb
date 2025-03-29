@@ -121,5 +121,13 @@
         "example": "3"
       }
     }
+  },
+  "searchFolders": "Mappen zoeken...",
+  "@searchFolders": {
+    "description": "Placeholder tekst voor map zoekveld"
+  },
+  "noResultsFound": "Geen overeenkomende mappen gevonden",
+  "@noResultsFound": {
+    "description": "Bericht dat wordt weergegeven wanneer geen mappen overeenkomen met de zoekopdracht"
   }
 }

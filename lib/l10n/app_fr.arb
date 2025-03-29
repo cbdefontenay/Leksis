@@ -121,5 +121,13 @@
         "example": "3"
       }
     }
+  },
+  "searchFolders": "Rechercher des dossiers...",
+  "@searchFolders": {
+    "description": "Texte indicatif pour le champ de recherche de dossiers"
+  },
+  "noResultsFound": "Aucun dossier correspondant trouvé",
+  "@noResultsFound": {
+    "description": "Message affiché lorsqu'aucun dossier ne correspond à la recherche"
   }
 }

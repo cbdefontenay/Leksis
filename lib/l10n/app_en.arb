@@ -121,5 +121,13 @@
         "example": "3"
       }
     }
+  },
+  "searchFolders": "Search folders...",
+  "@searchFolders": {
+    "description": "Placeholder text for folder search input field"
+  },
+  "noResultsFound": "No matching folders found",
+  "@noResultsFound": {
+    "description": "Message shown when no folders match the search query"
   }
 }

@@ -121,5 +121,13 @@
         "example": "3"
       }
     }
+  },
+  "searchFolders": "Ordner durchsuchen...",
+  "@searchFolders": {
+    "description": "Platzhaltertext für die Ordner-Sucheingabe"
+  },
+  "noResultsFound": "Keine passenden Ordner gefunden",
+  "@noResultsFound": {
+    "description": "Meldung, die angezeigt wird, wenn keine Ordner der Suche entsprechen"
   }
 }
