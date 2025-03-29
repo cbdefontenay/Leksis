@@ -55,12 +55,14 @@ class DatabaseHelper {
   Future<void> _createDB(Database db, int version) async {
     await db.execute('PRAGMA foreign_keys = ON');
     await db.execute('PRAGMA auto_vacuum = INCREMENTAL');
+
     await db.execute(''' 
-    CREATE TABLE folders (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL
-    )
-  ''');
+  CREATE TABLE folders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    sortOrder INTEGER NOT NULL DEFAULT 0
+  )
+''');
 
     await db.execute(''' 
     CREATE TABLE words (
@@ -79,9 +81,26 @@ class DatabaseHelper {
     return await db.insert('folders', folder.toMap());
   }
 
+  Future<int> updateFolderOrder(List<Folder> folders) async {
+    final db = await database;
+    final batch = db.batch();
+
+    for (var folder in folders) {
+      batch.update(
+        'folders',
+        {'sortOrder': folders.indexOf(folder)},
+        where: 'id = ?',
+        whereArgs: [folder.id],
+      );
+    }
+
+    await batch.commit();
+    return folders.length;
+  }
+
   Future<List<Folder>> getFolders() async {
     final db = await database;
-    final result = await db.query('folders');
+    final result = await db.query('folders', orderBy: 'sortOrder ASC');
     return result.map((map) => Folder.fromMap(map)).toList();
   }
 

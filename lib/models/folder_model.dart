@@ -1,15 +1,19 @@
 class Folder {
-  int? id;
+  final int? id;
+  final String name;
+  final int sortOrder;
 
-  String name;
-
-  Folder({this.id, required this.name});
-
-  Map<String, dynamic> toMap() {
-    return {'id': id, 'name': name};
-  }
+  Folder({this.id, required this.name, this.sortOrder = 0});
 
   factory Folder.fromMap(Map<String, dynamic> map) {
-    return Folder(id: map['id'], name: map['name']);
+    return Folder(
+      id: map['id'],
+      name: map['name'],
+      sortOrder: map['sortOrder'] ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {'id': id, 'name': name, 'sortOrder': sortOrder};
   }
 }

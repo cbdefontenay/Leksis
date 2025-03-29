@@ -1,3 +1,4 @@
+import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/database/database_helpers.dart';
@@ -35,6 +36,19 @@ class _HomePageState extends State<HomePage> {
       folders = loadedFolders;
       isLoading = false;
     });
+  }
+
+  void _reorderFolders(int oldIndex, int newIndex) async {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final Folder item = folders.removeAt(oldIndex);
+    folders.insert(newIndex, item);
+
+    await dbHelper.updateFolderOrder(folders);
+
+    setState(() {});
   }
 
   void _addFolder(String name) async {
@@ -188,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                       Icon(
                         Icons.folder_open,
                         size: 80,
-                        color: colorScheme.onSurface.withOpacity(0.5),
+                        color: colorScheme.onSurface,
                       ),
                       const SizedBox(height: 20),
                       Padding(
@@ -214,10 +228,13 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 )
-                : ListView.builder(
+                : ReorderableListView.builder(
                   itemCount: folders.length,
+                  onReorder: _reorderFolders,
                   itemBuilder: (context, index) {
+                    final folder = folders[index];
                     return Padding(
+                      key: Key('folder_${folder.id}'),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16.0,
                         vertical: 8.0,
@@ -295,10 +312,12 @@ class _HomePageState extends State<HomePage> {
                 ),
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddFolderDialog,
-        backgroundColor: colorScheme.secondary,
-        child: Icon(Icons.add, color: colorScheme.onSecondary),
+      floatingActionButton: DraggableFab(
+        child: FloatingActionButton(
+          onPressed: _showAddFolderDialog,
+          backgroundColor: colorScheme.secondary,
+          child: Icon(Icons.add, color: colorScheme.onSecondary),
+        ),
       ),
     );
   }

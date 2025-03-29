@@ -93,8 +93,8 @@ class _LanguageSelectorState extends State<LanguageSelector> {
       case 'nl':
         return 'Nederlands';
 
-      case 'da':
-        return 'Dansk';
+      case 'no':
+        return 'Norsk';
 
       default:
         return code;
