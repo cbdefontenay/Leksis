@@ -325,213 +325,199 @@ class _GameScreenState extends State<_GameScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return Stack(
+    return Column(
       children: [
-        Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
               ),
-              child: Column(
+            ],
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Chip(
-                        backgroundColor: colorScheme.surface,
-                        label: Text(
-                          '${_currentIndex + 1}/$_totalWords',
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Chip(
-                        backgroundColor: colorScheme.surface,
-                        label: Text(
-                          '${AppLocalizations.of(context)!.score} $_score',
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  LinearProgressIndicator(
-                    value: (_currentIndex + 1) / _totalWords,
-                    minHeight: 8,
-                    borderRadius: BorderRadius.circular(4),
+                  Chip(
                     backgroundColor: colorScheme.surface,
-                    color: colorScheme.primary,
+                    label: Text(
+                      '${_currentIndex + 1}/$_totalWords',
+                      style: TextStyle(
+                        color: colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Chip(
+                    backgroundColor: colorScheme.surface,
+                    label: Text(
+                      '${AppLocalizations.of(context)!.score} $_score',
+                      style: TextStyle(
+                        color: colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Card(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)!.translateThis,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: colorScheme.onSurface,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              _selectedWords[_currentIndex].translation,
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                                color: colorScheme.primary,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    TextField(
-                      controller: _answerController,
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)!.enterTheWord,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                          borderSide: BorderSide(
-                            color: colorScheme.outline,
-                            width: 1.5,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                          borderSide: BorderSide(
-                            color: colorScheme.outline,
-                            width: 1.5,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: colorScheme.surface,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 18,
-                        ),
-                      ),
-                      textCapitalization: TextCapitalization.sentences,
-                      onSubmitted: (value) => _checkAnswer(),
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              const SizedBox(height: 12),
+              LinearProgressIndicator(
+                value: (_currentIndex + 1) / _totalWords,
+                minHeight: 8,
+                borderRadius: BorderRadius.circular(4),
+                backgroundColor: colorScheme.surface,
+                color: colorScheme.primary,
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
                       children: [
-                        Chip(
-                          backgroundColor:
-                              _attemptsLeft > 1
-                                  ? colorScheme.errorContainer
-                                  : colorScheme.error,
-                          label: Text(
-                            "${AppLocalizations.of(context)!.attemptLeft} $_attemptsLeft",
-                            style: TextStyle(
-                              color:
-                                  _attemptsLeft > 1
-                                      ? colorScheme.onErrorContainer
-                                      : colorScheme.onError,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        Text(
+                          AppLocalizations.of(context)!.translateThis,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: colorScheme.onSurface.withOpacity(0.7),
                           ),
                         ),
-                        FilledButton.icon(
-                          style: FilledButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 16,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            backgroundColor: colorScheme.primary,
+                        const SizedBox(height: 8),
+                        Text(
+                          _selectedWords[_currentIndex].translation,
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: colorScheme.primary,
                           ),
-                          onPressed: _checkAnswer,
-                          icon: const Icon(Icons.check),
-                          label: Text(AppLocalizations.of(context)!.submit),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        if (_showCorrectAnswer)
-          Positioned.fill(
-            child: Container(
-              color: Colors.black,
-              child: Center(
-                child: Card(
-                  elevation: 8,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                ),
+
+                // Correct answer display area (visible only when showing correct answer)
+                if (_showCorrectAnswer) ...[
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: colorScheme.errorContainer,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          Icons.lightbulb,
-                          size: 48,
-                          color: colorScheme.primary,
-                        ),
-                        const SizedBox(height: 16),
                         Text(
                           AppLocalizations.of(context)!.correctAnswer,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 16,
+                            color: colorScheme.onErrorContainer,
                             fontWeight: FontWeight.bold,
-                            color: colorScheme.primary,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
                         Text(
                           _lastCorrectAnswer,
-                          style: const TextStyle(
-                            fontSize: 24,
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: colorScheme.onErrorContainer,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
                   ),
+                ],
+
+                const SizedBox(height: 32),
+                TextField(
+                  controller: _answerController,
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.enterTheWord,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                      borderSide: BorderSide(
+                        color: colorScheme.outline,
+                        width: 1.5,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                      borderSide: BorderSide(
+                        color: colorScheme.outline,
+                        width: 1.5,
+                      ),
+                    ),
+                    filled: true,
+                    fillColor: colorScheme.surface,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 18,
+                    ),
+                  ),
+                  textCapitalization: TextCapitalization.sentences,
+                  onSubmitted: (value) => _checkAnswer(),
+                  style: const TextStyle(fontSize: 18),
                 ),
-              ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Chip(
+                      backgroundColor:
+                          _attemptsLeft > 1
+                              ? colorScheme.errorContainer
+                              : colorScheme.error.withOpacity(0.2),
+                      label: Text(
+                        "${AppLocalizations.of(context)!.attemptLeft} $_attemptsLeft",
+                        style: TextStyle(
+                          color:
+                              _attemptsLeft > 1
+                                  ? colorScheme.onErrorContainer
+                                  : colorScheme.onError,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    FilledButton.icon(
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 16,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        backgroundColor: colorScheme.primary,
+                      ),
+                      onPressed: _checkAnswer,
+                      icon: const Icon(Icons.check),
+                      label: Text(AppLocalizations.of(context)!.submit),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
+        ),
       ],
     );
   }
