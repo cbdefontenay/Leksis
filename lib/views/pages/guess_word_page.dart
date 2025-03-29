@@ -190,7 +190,7 @@ class _GuessWordPageState extends State<GuessWordPage> {
           alignment: Alignment.center,
           child: Text(
             "$totalWords",
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.firaSans(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Theme.of(context).colorScheme.primary,
@@ -304,11 +304,11 @@ class _GuessWordPageState extends State<GuessWordPage> {
 
                     // Score display
                     Text(
-                      "${AppLocalizations.of(context)!.score}",
+                      AppLocalizations.of(context)!.score,
                       style: GoogleFonts.firaSans(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: colorScheme.onSurface.withOpacity(0.8),
+                        color: colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -329,7 +329,7 @@ class _GuessWordPageState extends State<GuessWordPage> {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: colorScheme.surfaceVariant,
+                        color: colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -348,7 +348,7 @@ class _GuessWordPageState extends State<GuessWordPage> {
                           const SizedBox(width: 8),
                           Text(
                             "${AppLocalizations.of(context)!.accuracy} $accuracy%",
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.firaSans(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
@@ -370,7 +370,7 @@ class _GuessWordPageState extends State<GuessWordPage> {
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
                     "${AppLocalizations.of(context)!.mistakes}:",
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.firaSans(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: colorScheme.error,
@@ -405,7 +405,7 @@ class _GuessWordPageState extends State<GuessWordPage> {
                     icon: const Icon(Icons.refresh),
                     label: Text(
                       AppLocalizations.of(context)!.restart,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.firaSans(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
@@ -436,7 +436,7 @@ class _GuessWordPageState extends State<GuessWordPage> {
                     icon: const Icon(Icons.tune),
                     label: Text(
                       AppLocalizations.of(context)!.changeWordCount,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.firaSans(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
@@ -461,7 +461,7 @@ class _GuessWordPageState extends State<GuessWordPage> {
                     icon: const Icon(Icons.exit_to_app),
                     label: Text(
                       AppLocalizations.of(context)!.exit,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.firaSans(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
@@ -558,7 +558,7 @@ class _GuessWordPageState extends State<GuessWordPage> {
         // Calculate if the text will fit in one line
         final textSpan = TextSpan(
           text: '$label $value',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.firaSans(
             fontWeight: FontWeight.w500,
             fontSize: 14,
             color: Theme.of(context).colorScheme.onSurface,
@@ -588,7 +588,7 @@ class _GuessWordPageState extends State<GuessWordPage> {
                           children: [
                             TextSpan(
                               text: label,
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.firaSans(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
                                 color: Theme.of(context).colorScheme.onSurface,
@@ -603,7 +603,7 @@ class _GuessWordPageState extends State<GuessWordPage> {
                         children: [
                           Text(
                             label,
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.firaSans(
                               fontWeight: FontWeight.w500,
                               fontSize: 14,
                               color: Theme.of(context).colorScheme.onSurface,
@@ -625,40 +625,163 @@ class _GuessWordPageState extends State<GuessWordPage> {
     );
   }
 
-  Widget _buildStartScreen() => Center(
-    child: SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                AppLocalizations.of(context)!.selectNumberWords,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+  Widget _buildStartScreen() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isSmallScreen = MediaQuery.of(context).size.width < 400;
+
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Header Card
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  margin: const EdgeInsets.only(bottom: 32),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.psychology_alt,
+                          size: 60,
+                          color: colorScheme.primary,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          AppLocalizations.of(context)!.guessTheWord,
+                          style: GoogleFonts.firaSans(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            color: colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          AppLocalizations.of(context)!.selectNumberWords,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.firaSans(
+                            fontSize: 16,
+                            color: colorScheme.onSurfaceVariant,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+
+                // Word Count Selection Grid
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final buttonSize = constraints.maxWidth / 2 - 24;
+                    return GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      childAspectRatio: 1,
+                      children:
+                          [5, 10, 15, 20].map((count) {
+                            return Animate(
+                              effects: [
+                                FadeEffect(duration: 300.ms),
+                                ScaleEffect(
+                                  duration: 300.ms,
+                                  curve: Curves.easeOutBack,
+                                ),
+                              ],
+                              child: Material(
+                                borderRadius: BorderRadius.circular(16),
+                                color: colorScheme.secondary,
+                                elevation: 4,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(16),
+                                  onTap: () => _startGame(count),
+                                  child: SizedBox(
+                                    width: buttonSize,
+                                    height: buttonSize,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          count.toString(),
+                                          style: GoogleFonts.firaSans(
+                                            fontSize: isSmallScreen ? 28 : 36,
+                                            fontWeight: FontWeight.w700,
+                                            color: colorScheme.onSecondary,
+                                            height: 1,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          AppLocalizations.of(context)!.words,
+                                          style: GoogleFonts.firaSans(
+                                            fontSize: isSmallScreen ? 14 : 16,
+                                            color: colorScheme.onSecondary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                    );
+                  },
+                ),
+
+                // All Words Button
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => _startGame(words.length),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorScheme.secondary,
+                      foregroundColor: colorScheme.onSecondary,
+                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 2,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.all_inclusive, size: 20),
+                        const SizedBox(width: 12),
+                        Flexible(
+                          child: Text(
+                            "${AppLocalizations.of(context)!.allWords} (${words.length})",
+                            style: GoogleFonts.firaSans(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 32),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              alignment: WrapAlignment.center,
-              children: List.generate(
-                4,
-                (i) => _buildNumberButton([5, 10, 15, 20][i]),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 
   Widget _buildGameScreen() => Column(
     children: [

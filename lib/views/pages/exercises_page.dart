@@ -34,7 +34,7 @@ class _ExercicesPageState extends State<ExercicesPage> {
         child: Column(
           children: [
             CardExerciseWidget(
-              icon: Icons.games_rounded,
+              icon: Icons.school,
               iconColor: Theme.of(context).colorScheme.onPrimary,
               name: AppLocalizations.of(context)!.flashcards,
               backgroundColor: Theme.of(context).colorScheme.primary,
@@ -53,12 +53,10 @@ class _ExercicesPageState extends State<ExercicesPage> {
             const SizedBox(height: 20),
 
             CardExerciseWidget(
-              icon: Icons.speaker_notes,
+              icon: Icons.psychology_alt,
               iconColor: Theme.of(context).colorScheme.onPrimaryFixed,
               name: AppLocalizations.of(context)!.guessTheWord,
-
               backgroundColor: Theme.of(context).colorScheme.primaryFixed,
-
               onTap: () {
                 Navigator.push(
                   context,
@@ -75,7 +73,7 @@ class _ExercicesPageState extends State<ExercicesPage> {
             const SizedBox(height: 20),
 
             CardExerciseWidget(
-              icon: Icons.line_style,
+              icon: Icons.edit_note,
               iconColor: Theme.of(context).colorScheme.onTertiary,
               name: AppLocalizations.of(context)!.writeTheWord,
               backgroundColor: Theme.of(context).colorScheme.tertiary,

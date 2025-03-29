@@ -485,7 +485,7 @@ class _GameScreenState extends State<_GameScreen> {
                       backgroundColor:
                           _attemptsLeft > 1
                               ? colorScheme.errorContainer
-                              : colorScheme.error.withOpacity(0.2),
+                              : colorScheme.error,
                       label: Text(
                         "${AppLocalizations.of(context)!.attemptLeft} $_attemptsLeft",
                         style: TextStyle(
