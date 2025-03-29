@@ -103,5 +103,23 @@
   "light": "Hell",
   "dark": "Dunkel",
   "system": "System",
-  "modus": "Modus"
+  "modus": "Modus",
+  "chooseWordCount": "Wörteranzahl wählen",
+  "@chooseWordCount": {
+    "description": "Aufforderung zur Auswahl der Anzahl der zu übenden Wörter"
+  },
+  "translateThis": "Übersetze dies",
+  "@translateThis": {
+    "description": "Anweisung zum Übersetzen des angezeigten Wortes"
+  },
+  "nextWordIn": "Nächstes Wort in {seconds}",
+  "@nextWordIn": {
+    "description": "Countdown-Nachricht, die anzeigt, wann das nächste Wort erscheint",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  }
 }

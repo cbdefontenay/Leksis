@@ -103,5 +103,23 @@
   "light": "Light",
   "dark": "Dark",
   "system": "System",
-  "modus": "Mode"
+  "modus": "Mode",
+  "chooseWordCount": "Choose word count",
+  "@chooseWordCount": {
+    "description": "Prompt to select how many words to practice"
+  },
+  "translateThis": "Translate this",
+  "@translateThis": {
+    "description": "Instruction to translate the displayed word"
+  },
+  "nextWordIn": "Next word in {seconds}",
+  "@nextWordIn": {
+    "description": "Countdown message showing when next word will appear",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  }
 }

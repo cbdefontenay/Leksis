@@ -103,5 +103,23 @@
   "light": "Clair",
   "dark": "Sombre",
   "system": "Système",
-  "modus": "Mode"
+  "modus": "Mode",
+  "chooseWordCount": "Choisi le nombre de mots",
+  "@chooseWordCount": {
+    "description": "Invite pour sélectionner le nombre de mots à pratiquer"
+  },
+  "translateThis": "Traduis ceci",
+  "@translateThis": {
+    "description": "Instruction pour traduire le mot affiché"
+  },
+  "nextWordIn": "Prochain mot dans {seconds}",
+  "@nextWordIn": {
+    "description": "Message de compte à rebours indiquant quand le mot suivant apparaîtra",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  }
 }

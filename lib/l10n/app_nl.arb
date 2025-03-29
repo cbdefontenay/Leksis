@@ -103,5 +103,23 @@
   "light": "Licht",
   "dark": "Donker",
   "system": "Systeem",
-  "mode": "Modus"
+  "mode": "Modus",
+  "chooseWordCount": "Aantal woorden kiezen",
+  "@chooseWordCount": {
+    "description": "Vraag om het aantal te oefenen woorden te selecteren"
+  },
+  "translateThis": "Vertaal dit",
+  "@translateThis": {
+    "description": "Instructie om het weergegeven woord te vertalen"
+  },
+  "nextWordIn": "Volgend woord over {seconds}",
+  "@nextWordIn": {
+    "description": "Telt af wanneer het volgende woord verschijnt",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  }
 }
