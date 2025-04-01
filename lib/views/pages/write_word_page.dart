@@ -325,64 +325,70 @@ class _GameScreenState extends State<_GameScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: colorScheme.surface,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Chip(
-                    backgroundColor: colorScheme.surface,
-                    label: Text(
-                      '${_currentIndex + 1}/$_totalWords',
-                      style: TextStyle(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      padding: EdgeInsets.only(
+        bottom:
+            MediaQuery.of(context).viewInsets.bottom +
+            20, // Add extra space for keyboard
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Chip(
+                      backgroundColor: colorScheme.surface,
+                      label: Text(
+                        '${_currentIndex + 1}/$_totalWords',
+                        style: TextStyle(
+                          color: colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Chip(
-                    backgroundColor: colorScheme.surface,
-                    label: Text(
-                      '${AppLocalizations.of(context)!.score} $_score',
-                      style: TextStyle(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.bold,
+                    Chip(
+                      backgroundColor: colorScheme.surface,
+                      label: Text(
+                        '${AppLocalizations.of(context)!.score} $_score',
+                        style: TextStyle(
+                          color: colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              LinearProgressIndicator(
-                value: (_currentIndex + 1) / _totalWords,
-                minHeight: 8,
-                borderRadius: BorderRadius.circular(4),
-                backgroundColor: colorScheme.surface,
-                color: colorScheme.primary,
-              ),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 12),
+                LinearProgressIndicator(
+                  value: (_currentIndex + 1) / _totalWords,
+                  minHeight: 8,
+                  borderRadius: BorderRadius.circular(4),
+                  backgroundColor: colorScheme.surface,
+                  color: colorScheme.primary,
+                ),
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: Padding(
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(height: 20),
                 Card(
                   elevation: 2,
                   shape: RoundedRectangleBorder(
@@ -414,7 +420,6 @@ class _GameScreenState extends State<_GameScreen> {
                   ),
                 ),
 
-                // Correct answer display area (visible only when showing correct answer)
                 if (_showCorrectAnswer) ...[
                   const SizedBox(height: 20),
                   Container(
@@ -514,11 +519,12 @@ class _GameScreenState extends State<_GameScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 20), // Extra space at bottom
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
