@@ -533,39 +533,45 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
 
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FloatingActionButton(
-                          onPressed: _previousCard,
-                          heroTag: 'prevBtn',
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                          child: Icon(
-                            Icons.arrow_back,
-                            color: Theme.of(context).colorScheme.onSecondary,
+                    child: SafeArea(
+                      top: false,
+                      bottom: true,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FloatingActionButton(
+                            onPressed: _previousCard,
+                            heroTag: 'prevBtn',
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Theme.of(context).colorScheme.onSecondary,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 20),
-                        FloatingActionButton(
-                          onPressed: () => _nextCard(false),
-                          heroTag: 'nextBtnFalse',
-                          backgroundColor:
-                              Theme.of(context).colorScheme.onError,
-                          child: Icon(
-                            Icons.close,
-                            color:
-                                Theme.of(context).colorScheme.onErrorContainer,
+                          const SizedBox(width: 20),
+                          FloatingActionButton(
+                            onPressed: () => _nextCard(false),
+                            heroTag: 'nextBtnFalse',
+                            backgroundColor:
+                                Theme.of(context).colorScheme.onError,
+                            child: Icon(
+                              Icons.close,
+                              color:
+                                  Theme.of(
+                                    context,
+                                  ).colorScheme.onErrorContainer,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 20),
-                        FloatingActionButton(
-                          onPressed: () => _nextCard(true),
-                          heroTag: 'nextBtnTrue',
-                          backgroundColor: Colors.lightGreen[700],
-                          child: const Icon(Icons.check, color: Colors.white),
-                        ),
-                      ],
+                          const SizedBox(width: 20),
+                          FloatingActionButton(
+                            onPressed: () => _nextCard(true),
+                            heroTag: 'nextBtnTrue',
+                            backgroundColor: Colors.lightGreen[700],
+                            child: const Icon(Icons.check, color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

@@ -690,51 +690,58 @@ class _FindThePairPageState extends State<FindThePairPage> {
                 ),
               ),
               const SizedBox(height: 24),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  if (constraints.maxWidth > 400) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildActionButton(
-                          context,
-                          icon: Icons.arrow_back,
-                          text: AppLocalizations.of(context)!.goBack,
-                          onPressed: () => Navigator.of(context).pop(),
-                          isPrimary: false,
-                        ),
-                        const SizedBox(width: 16),
-                        _buildActionButton(
-                          context,
-                          icon: Icons.replay,
-                          text: AppLocalizations.of(context)!.playAgain,
-                          onPressed: restartGame,
-                          isPrimary: true,
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Column(
-                      children: [
-                        _buildActionButton(
-                          context,
-                          icon: Icons.arrow_back,
-                          text: AppLocalizations.of(context)!.goBack,
-                          onPressed: () => Navigator.of(context).pop(),
-                          isPrimary: false,
-                        ),
-                        const SizedBox(height: 12),
-                        _buildActionButton(
-                          context,
-                          icon: Icons.replay,
-                          text: AppLocalizations.of(context)!.playAgain,
-                          onPressed: restartGame,
-                          isPrimary: true,
-                        ),
-                      ],
-                    );
-                  }
-                },
+              SafeArea(
+                top: false,
+                bottom: true,
+                minimum: const EdgeInsets.only(
+                  bottom: 16,
+                ), // Add some extra padding
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    if (constraints.maxWidth > 400) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildActionButton(
+                            context,
+                            icon: Icons.arrow_back,
+                            text: AppLocalizations.of(context)!.goBack,
+                            onPressed: () => Navigator.of(context).pop(),
+                            isPrimary: false,
+                          ),
+                          const SizedBox(width: 16),
+                          _buildActionButton(
+                            context,
+                            icon: Icons.replay,
+                            text: AppLocalizations.of(context)!.playAgain,
+                            onPressed: restartGame,
+                            isPrimary: true,
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          _buildActionButton(
+                            context,
+                            icon: Icons.arrow_back,
+                            text: AppLocalizations.of(context)!.goBack,
+                            onPressed: () => Navigator.of(context).pop(),
+                            isPrimary: false,
+                          ),
+                          const SizedBox(height: 12),
+                          _buildActionButton(
+                            context,
+                            icon: Icons.replay,
+                            text: AppLocalizations.of(context)!.playAgain,
+                            onPressed: restartGame,
+                            isPrimary: true,
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                ),
               ),
             ],
           ),
