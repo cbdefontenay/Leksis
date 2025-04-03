@@ -104,6 +104,7 @@
   "dark": "Sombre",
   "system": "Système",
   "modus": "Mode",
+  "learned2": "Appris",
   "chooseWordCount": "Choisi le nombre de mots",
   "@chooseWordCount": {
     "description": "Invite pour sélectionner le nombre de mots à pratiquer"

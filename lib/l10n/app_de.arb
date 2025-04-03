@@ -104,6 +104,7 @@
   "dark": "Dunkel",
   "system": "System",
   "modus": "Modus",
+  "learned2": "Gelernt",
   "chooseWordCount": "Wörteranzahl wählen",
   "@chooseWordCount": {
     "description": "Aufforderung zur Auswahl der Anzahl der zu übenden Wörter"

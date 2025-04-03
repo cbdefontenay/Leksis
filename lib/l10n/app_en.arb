@@ -104,6 +104,7 @@
   "dark": "Dark",
   "system": "System",
   "modus": "Mode",
+  "learned2": "Learned",
   "chooseWordCount": "Choose word count",
   "@chooseWordCount": {
     "description": "Prompt to select how many words to practice"

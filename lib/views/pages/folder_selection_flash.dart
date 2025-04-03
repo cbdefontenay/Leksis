@@ -34,7 +34,7 @@ class FolderSelectionFlashPage extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: FolderSelectionWidget(
           title: AppLocalizations.of(context)!.selectAFolder,
           onFolderSelected: (folder) => _navigateToFlashcards(context, folder),

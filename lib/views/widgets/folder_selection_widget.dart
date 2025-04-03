@@ -105,20 +105,23 @@ class _FolderSelectionWidgetState extends State<FolderSelectionWidget> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
-                        child: ListTile(
-                          leading: Icon(
-                            Icons.folder,
-                            color: colorScheme.onPrimary,
-                          ),
-                          title: Text(
-                            folder.name,
-                            style: TextStyle(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.folder,
                               color: colorScheme.onPrimary,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
                             ),
+                            title: Text(
+                              folder.name,
+                              style: TextStyle(
+                                color: colorScheme.onPrimary,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            onTap: () => widget.onFolderSelected(folder),
                           ),
-                          onTap: () => widget.onFolderSelected(folder),
                         ),
                       );
                     },
