@@ -331,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                       )
                       : ReorderableListView.builder(
                         itemCount: filteredFolders.length,
-                        onReorder: _reorderFolders, // Directly use the method
+                        onReorder: _reorderFolders,
                         itemBuilder: (context, index) {
                           final folder = filteredFolders[index];
                           return Padding(

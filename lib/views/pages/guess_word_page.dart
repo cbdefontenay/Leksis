@@ -36,13 +36,40 @@ class _GuessWordPageState extends State<GuessWordPage> {
   }
 
   Future<void> _loadWords() async {
-    words = await dbHelper.getWords(widget.folder.id!);
-
-    setState(() => isLoading = false);
+    try {
+      words = await dbHelper.getWords(widget.folder.id!);
+      if (words.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.emptyFolderError),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.failedLoadWords),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    } finally {
+      setState(() => isLoading = false);
+    }
   }
 
   void _startGame(int numberOfWords) {
-    if (words.length < numberOfWords) {
+    if (words.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.emptyFolderError),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+      return;
+    }
+
+    if (numberOfWords > words.length) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -62,17 +89,22 @@ class _GuessWordPageState extends State<GuessWordPage> {
       showResults = gameStarted = false;
       isTransitioning = true;
       gameStarted = true;
-      userAnswers = List.filled(
-        numberOfWords,
-        null,
-      ); // Initialize answer tracking
+      userAnswers = List.filled(numberOfWords, null);
       _setNewChoices();
     });
   }
 
   void _setNewChoices() {
-    final currentWord = selectedWords[currentIndex];
+    if (selectedWords.isEmpty || currentIndex >= selectedWords.length) {
+      setState(() {
+        isTransitioning = false;
+        showResults = true;
+        gameStarted = false;
+      });
+      return;
+    }
 
+    final currentWord = selectedWords[currentIndex];
     final random = Random();
 
     final otherTranslations =
@@ -87,7 +119,6 @@ class _GuessWordPageState extends State<GuessWordPage> {
       currentChoices =
           {currentWord.translation, ...otherTranslations.take(2)}.toList()
             ..shuffle(random);
-
       isTransitioning = false;
     });
   }
@@ -745,10 +776,17 @@ class _GuessWordPageState extends State<GuessWordPage> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => _startGame(words.length),
+                    onPressed:
+                        words.isEmpty ? null : () => _startGame(words.length),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.secondary,
-                      foregroundColor: colorScheme.onSecondary,
+                      backgroundColor:
+                          words.isEmpty
+                              ? Theme.of(context).colorScheme.surface
+                              : Theme.of(context).colorScheme.secondary,
+                      foregroundColor:
+                          words.isEmpty
+                              ? Theme.of(context).colorScheme.onSurface
+                              : Theme.of(context).colorScheme.onSecondary,
                       padding: const EdgeInsets.symmetric(vertical: 18),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),

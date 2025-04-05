@@ -54,6 +54,7 @@ class _FindThePairPageState extends State<FindThePairPage> {
         AppLocalizations.of(context)!.normal: 9,
         AppLocalizations.of(context)!.hard: 7,
       };
+      difficulty = AppLocalizations.of(context)!.normal;
       _isInitialized = true;
       loadWords();
     }
@@ -74,7 +75,7 @@ class _FindThePairPageState extends State<FindThePairPage> {
   void startGame() {
     if (words.length < 5) {
       Fluttertoast.showToast(
-        msg: "You need at least 5 words to play.",
+        msg: AppLocalizations.of(context)!.needFiveWords,
 
         backgroundColor: Colors.red,
       );
@@ -392,7 +393,10 @@ class _FindThePairPageState extends State<FindThePairPage> {
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<String>(
-                    value: difficulty,
+                    value:
+                        AppLocalizations.of(
+                          context,
+                        )!.normal, // Use localized value
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -402,17 +406,29 @@ class _FindThePairPageState extends State<FindThePairPage> {
                         vertical: 12,
                       ),
                     ),
-                    items:
-                        [
+                    items: [
+                      DropdownMenuItem<String>(
+                        value: AppLocalizations.of(context)!.easy,
+                        child: Text(
                           AppLocalizations.of(context)!.easy,
+                          style: textTheme.titleMedium,
+                        ),
+                      ),
+                      DropdownMenuItem<String>(
+                        value: AppLocalizations.of(context)!.normal,
+                        child: Text(
                           AppLocalizations.of(context)!.normal,
+                          style: textTheme.titleMedium,
+                        ),
+                      ),
+                      DropdownMenuItem<String>(
+                        value: AppLocalizations.of(context)!.hard,
+                        child: Text(
                           AppLocalizations.of(context)!.hard,
-                        ].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value, style: textTheme.titleMedium),
-                          );
-                        }).toList(),
+                          style: textTheme.titleMedium,
+                        ),
+                      ),
+                    ],
                     onChanged: (String? newValue) {
                       setState(() {
                         difficulty = newValue!;

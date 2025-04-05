@@ -5,24 +5,23 @@ import '../models/word_model.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
-
   static Database? _database;
 
   DatabaseHelper._init();
 
   int _deleteCount = 0;
 
-  final int _vacuumThreshold = 10;
+  final int _vacuumThreshold = 100;
 
   Future<void> _maybeVacuum() async {
     _deleteCount++;
 
     if (_deleteCount >= _vacuumThreshold) {
       final db = await database;
-
-      await db.execute('VACUUM');
-
-      _deleteCount = 0;
+      Future.delayed(const Duration(milliseconds: 300), () async {
+        await db.execute('PRAGMA incremental_vacuum(100)');
+        _deleteCount = 0;
+      });
     }
   }
 
@@ -51,7 +50,7 @@ class DatabaseHelper {
 
   Future<void> _createDB(Database db, int version) async {
     await db.execute('PRAGMA foreign_keys = ON');
-    await db.execute('PRAGMA auto_vacuum = INCREMENTAL');
+    await db.execute('PRAGMA incremental_vacuum(100)');
 
     await db.execute(''' 
   CREATE TABLE folders (
