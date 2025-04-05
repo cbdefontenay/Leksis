@@ -1,9 +1,6 @@
 import 'package:sqflite/sqflite.dart';
-
 import 'package:path/path.dart';
-
 import '../models/folder_model.dart';
-
 import '../models/word_model.dart';
 
 class DatabaseHelper {
@@ -78,23 +75,30 @@ class DatabaseHelper {
 
   Future<int> insertFolder(Folder folder) async {
     final db = await database;
-    return await db.insert('folders', folder.toMap());
+
+    final maxOrderResult = await db.rawQuery(
+      'SELECT MAX(sortOrder) as max FROM folders',
+    );
+    final maxOrder = maxOrderResult.first['max'] as int? ?? -1;
+
+    return await db.insert('folders', {
+      'name': folder.name,
+      'sortOrder': maxOrder + 1,
+    });
   }
 
   Future<int> updateFolderOrder(List<Folder> folders) async {
     final db = await database;
-    final batch = db.batch();
-
-    for (var folder in folders) {
-      batch.update(
-        'folders',
-        {'sortOrder': folders.indexOf(folder)},
-        where: 'id = ?',
-        whereArgs: [folder.id],
-      );
-    }
-
-    await batch.commit();
+    await db.transaction((txn) async {
+      for (var folder in folders) {
+        await txn.update(
+          'folders',
+          {'sortOrder': folders.indexOf(folder)},
+          where: 'id = ?',
+          whereArgs: [folder.id],
+        );
+      }
+    });
     return folders.length;
   }
 

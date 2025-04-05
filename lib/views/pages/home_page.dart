@@ -65,16 +65,62 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _reorderFolders(int oldIndex, int newIndex) async {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
+    // Get the folder being moved from the filtered list
+    final movedFolder = filteredFolders[oldIndex];
+
+    // Find its position in the full list
+    final actualOldIndex = folders.indexWhere((f) => f.id == movedFolder.id);
+
+    // Calculate new position in full list
+    int actualNewIndex;
+    if (newIndex >= filteredFolders.length) {
+      // Moving to the end
+      actualNewIndex = folders.length - 1;
+    } else if (newIndex == 0) {
+      // Moving to the beginning
+      actualNewIndex = 0;
+    } else {
+      // Find the position relative to adjacent items in filtered list
+      final referenceFolder =
+          filteredFolders[newIndex > oldIndex ? newIndex : newIndex - 1];
+      final referenceIndex = folders.indexWhere(
+        (f) => f.id == referenceFolder.id,
+      );
+      actualNewIndex =
+          newIndex > oldIndex ? referenceIndex : referenceIndex + 1;
     }
 
-    final Folder item = folders.removeAt(oldIndex);
-    folders.insert(newIndex, item);
+    // Adjust if moving to same position
+    if (actualOldIndex == actualNewIndex) return;
 
-    await dbHelper.updateFolderOrder(folders);
+    // Perform the reorder on the full list
+    final newFolders = [...folders];
+    final item = newFolders.removeAt(actualOldIndex);
+    newFolders.insert(actualNewIndex, item);
 
-    setState(() {});
+    // Update sortOrder for all folders
+    for (int i = 0; i < newFolders.length; i++) {
+      newFolders[i] = Folder(
+        id: newFolders[i].id,
+        name: newFolders[i].name,
+        sortOrder: i,
+      );
+    }
+
+    // Update database
+    await dbHelper.updateFolderOrder(newFolders);
+
+    // Update state
+    setState(() {
+      folders = newFolders;
+      // Reapply filter
+      filteredFolders =
+          folders.where((folder) {
+            return folder.name.toLowerCase().contains(
+              _searchController.text.toLowerCase(),
+            );
+          }).toList();
+    });
   }
 
   void _addFolder(String name) async {
@@ -285,19 +331,7 @@ class _HomePageState extends State<HomePage> {
                       )
                       : ReorderableListView.builder(
                         itemCount: filteredFolders.length,
-                        onReorder: (oldIndex, newIndex) {
-                          // Need to adjust indices since we're working with filtered list
-                          final actualOldIndex = folders.indexWhere(
-                            (f) => f.id == filteredFolders[oldIndex].id,
-                          );
-                          int actualNewIndex = folders.indexWhere(
-                            (f) => f.id == filteredFolders[newIndex].id,
-                          );
-                          if (actualOldIndex < actualNewIndex) {
-                            actualNewIndex--;
-                          }
-                          _reorderFolders(actualOldIndex, actualNewIndex);
-                        },
+                        onReorder: _reorderFolders, // Directly use the method
                         itemBuilder: (context, index) {
                           final folder = filteredFolders[index];
                           return Padding(
