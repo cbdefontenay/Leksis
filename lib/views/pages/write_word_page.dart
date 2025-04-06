@@ -163,11 +163,11 @@ class _GameScreenState extends State<_GameScreen> {
     }
 
     final correct = _selectedWords[_currentIndex].word.toLowerCase().replaceAll(
-      RegExp(r'[^a-zA-Z0-9]'),
+      RegExp(r'[\s\p{P}]', unicode: true),
       '',
     );
     final userAnswer = answer.toLowerCase().replaceAll(
-      RegExp(r'[^a-zA-Z0-9]'),
+      RegExp(r'[\s\p{P}]', unicode: true),
       '',
     );
 
