@@ -1,81 +1,63 @@
 import 'dart:async';
-
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:leksis/data/state/folder_state.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leksis/models/folder_model.dart';
 import 'folder_page.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final DatabaseHelper dbHelper = DatabaseHelper.instance;
+class _HomePageState extends ConsumerState<HomePage> {
   final TextEditingController _searchController = TextEditingController();
-
-  List<Folder> folders = [];
-  List<Folder> filteredFolders = [];
-  bool isLoading = true;
   Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-    _loadFolders();
-    _searchController.addListener(_filterFolders);
+    _searchController.addListener(_onSearchChanged);
   }
 
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
-  void _filterFolders() {
+  void _onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
-      final query = _searchController.text.toLowerCase();
-      setState(() {
-        filteredFolders =
-            folders.where((folder) {
-              return folder.name.toLowerCase().contains(query);
-            }).toList();
-      });
+      setState(() {}); // Trigger rebuild to update filtered list
     });
   }
 
-  void _loadFolders() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final loadedFolders = await dbHelper.getFolders();
-
-    setState(() {
-      folders = loadedFolders;
-      filteredFolders = List.from(folders);
-      isLoading = false;
-    });
-  }
-
-  void _reorderFolders(int oldIndex, int newIndex) async {
+  void _reorderFolders(
+    int oldIndex,
+    int newIndex,
+    List<Folder> filteredFolders,
+    List<Folder> allFolders,
+  ) async {
     // Get the folder being moved from the filtered list
     final movedFolder = filteredFolders[oldIndex];
 
     // Find its position in the full list
-    final actualOldIndex = folders.indexWhere((f) => f.id == movedFolder.id);
+    final actualOldIndex = allFolders.indexWhere((f) => f.id == movedFolder.id);
 
     // Calculate new position in full list
     int actualNewIndex;
     if (newIndex >= filteredFolders.length) {
       // Moving to the end
-      actualNewIndex = folders.length - 1;
+      actualNewIndex = allFolders.length - 1;
     } else if (newIndex == 0) {
       // Moving to the beginning
       actualNewIndex = 0;
@@ -83,7 +65,7 @@ class _HomePageState extends State<HomePage> {
       // Find the position relative to adjacent items in filtered list
       final referenceFolder =
           filteredFolders[newIndex > oldIndex ? newIndex : newIndex - 1];
-      final referenceIndex = folders.indexWhere(
+      final referenceIndex = allFolders.indexWhere(
         (f) => f.id == referenceFolder.id,
       );
       actualNewIndex =
@@ -94,51 +76,12 @@ class _HomePageState extends State<HomePage> {
     if (actualOldIndex == actualNewIndex) return;
 
     // Perform the reorder on the full list
-    final newFolders = [...folders];
+    final newFolders = [...allFolders];
     final item = newFolders.removeAt(actualOldIndex);
     newFolders.insert(actualNewIndex, item);
 
-    // Update sortOrder for all folders
-    for (int i = 0; i < newFolders.length; i++) {
-      newFolders[i] = Folder(
-        id: newFolders[i].id,
-        name: newFolders[i].name,
-        sortOrder: i,
-      );
-    }
-
-    // Update database
-    await dbHelper.updateFolderOrder(newFolders);
-
-    // Update state
-    setState(() {
-      folders = newFolders;
-      // Reapply filter
-      filteredFolders =
-          folders.where((folder) {
-            return folder.name.toLowerCase().contains(
-              _searchController.text.toLowerCase(),
-            );
-          }).toList();
-    });
-  }
-
-  void _addFolder(String name) async {
-    await dbHelper.insertFolder(Folder(name: name));
-
-    _loadFolders();
-  }
-
-  void _deleteFolder(int id) async {
-    await dbHelper.deleteFolder(id);
-
-    _loadFolders();
-  }
-
-  void _updateFolder(int id, String newName) async {
-    await dbHelper.updateFolder(Folder(id: id, name: newName));
-
-    _loadFolders();
+    // Update state through provider
+    ref.read(foldersProvider.notifier).reorderFolders(newFolders);
   }
 
   void _showAddFolderDialog() {
@@ -148,16 +91,13 @@ class _HomePageState extends State<HomePage> {
 
     showDialog(
       context: context,
-
       builder:
           (context) => StatefulBuilder(
             builder: (context, setState) {
               return AlertDialog(
                 title: Text(AppLocalizations.of(context)!.createFolder),
-
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
-
                   children: [
                     TextField(
                       autocorrect: true,
@@ -171,13 +111,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(AppLocalizations.of(context)!.cancelButton),
                   ),
-
                   TextButton(
                     onPressed: () {
                       String folderName = controller.text.trim();
@@ -187,11 +125,12 @@ class _HomePageState extends State<HomePage> {
                               AppLocalizations.of(context)!.createFolderError;
                         });
                       } else {
-                        _addFolder(folderName);
+                        ref
+                            .read(foldersProvider.notifier)
+                            .addFolder(folderName);
                         Navigator.pop(context);
                       }
                     },
-
                     child: Text(AppLocalizations.of(context)!.saveButton),
                   ),
                 ],
@@ -211,7 +150,6 @@ class _HomePageState extends State<HomePage> {
       builder:
           (context) => AlertDialog(
             title: Text(AppLocalizations.of(context)!.renameFolder),
-
             content: TextField(
               autofocus: true,
               autocorrect: true,
@@ -220,21 +158,22 @@ class _HomePageState extends State<HomePage> {
                 hintText: AppLocalizations.of(context)!.newFolderName,
               ),
             ),
-
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text(AppLocalizations.of(context)!.cancelButton),
               ),
-
               TextButton(
                 onPressed: () {
                   if (controller.text.isNotEmpty) {
-                    _updateFolder(folder.id!, controller.text);
+                    ref
+                        .read(foldersProvider.notifier)
+                        .updateFolder(
+                          Folder(id: folder.id, name: controller.text),
+                        );
                     Navigator.pop(context);
                   }
                 },
-
                 child: Text(AppLocalizations.of(context)!.updateButton),
               ),
             ],
@@ -246,6 +185,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
+    // Watch the folders list
+    final folders = ref.watch(foldersProvider);
+    // Get filtered folders based on search query
+    final filteredFolders = ref.watch(
+      filteredFoldersProvider(_searchController.text),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -262,7 +208,6 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          // Add the search bar at the top
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
@@ -283,9 +228,7 @@ class _HomePageState extends State<HomePage> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
               child:
-                  isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : filteredFolders.isEmpty
+                  filteredFolders.isEmpty
                       ? Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -331,7 +274,13 @@ class _HomePageState extends State<HomePage> {
                       )
                       : ReorderableListView.builder(
                         itemCount: filteredFolders.length,
-                        onReorder: _reorderFolders,
+                        onReorder:
+                            (oldIndex, newIndex) => _reorderFolders(
+                              oldIndex,
+                              newIndex,
+                              filteredFolders,
+                              folders,
+                            ),
                         itemBuilder: (context, index) {
                           final folder = filteredFolders[index];
                           return Padding(
@@ -381,7 +330,9 @@ class _HomePageState extends State<HomePage> {
                                           if (value == 'update') {
                                             _showUpdateFolderDialog(folder);
                                           } else if (value == 'delete') {
-                                            _deleteFolder(folder.id!);
+                                            ref
+                                                .read(foldersProvider.notifier)
+                                                .deleteFolder(folder.id!);
                                           }
                                         },
                                         itemBuilder:

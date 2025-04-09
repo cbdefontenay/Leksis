@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:leksis/l10n/l10n.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leksis/theme/theme.dart';
@@ -12,7 +13,7 @@ void main() async {
 
   await loadThemeMode();
 
-  runApp(const LeksisApp());
+  runApp(ProviderScope(child: LeksisApp()));
 }
 
 class LeksisApp extends StatefulWidget {
