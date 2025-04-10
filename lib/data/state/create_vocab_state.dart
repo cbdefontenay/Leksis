@@ -38,7 +38,6 @@ class VocabNotifier extends StateNotifier<List<Word>> {
   }
 }
 
-// Provider for vocabulary words
 final vocabProvider =
     StateNotifierProvider.family<VocabNotifier, List<Word>, int>((
       ref,
