@@ -130,5 +130,7 @@
   "noResultsFound": "Aucun dossier correspondant trouvé",
   "@noResultsFound": {
     "description": "Message affiché lorsqu'aucun dossier ne correspond à la recherche"
-  }
+  },
+  "seeMoreWords": "Voir plus de mots",
+  "showingWords": "Affichage de {count} sur {total}"
 }

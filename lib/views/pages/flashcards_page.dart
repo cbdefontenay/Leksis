@@ -384,7 +384,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              color: colorScheme.surfaceVariant,
+              color: colorScheme.surfaceContainerHighest,
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(

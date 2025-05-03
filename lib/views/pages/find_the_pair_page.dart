@@ -694,7 +694,7 @@ class _FindThePairPageState extends State<FindThePairPage> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            '${AppLocalizations.of(context)!.totalTime}: ${totalTimeSpent}${AppLocalizations.of(context)!.secondsAbbr}',
+                            '${AppLocalizations.of(context)!.totalTime}: $totalTimeSpent${AppLocalizations.of(context)!.secondsAbbr}',
                             style: textTheme.titleLarge
                                 ?.copyWith(fontWeight: FontWeight.w600)
                                 .merge(GoogleFonts.firaSans()),

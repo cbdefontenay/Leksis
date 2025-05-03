@@ -130,5 +130,7 @@
   "noResultsFound": "No matching folders found",
   "@noResultsFound": {
     "description": "Message shown when no folders match the search query"
-  }
+  },
+  "seeMoreWords": "See more words",
+  "showingWords": "Showing {count} out of {total}"
 }

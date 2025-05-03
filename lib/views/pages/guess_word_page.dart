@@ -305,203 +305,208 @@ class _GuessWordPageState extends State<GuessWordPage> {
     }
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Results Card
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  children: [
-                    // Trophy icon with conditional color based on performance
-                    Icon(
-                      Icons.emoji_events,
-                      size: 64,
-                      color:
-                          (score / totalWords) > 0.7
-                              ? Colors.amber
-                              : (score / totalWords) > 0.4
-                              ? colorScheme.primary
-                              : colorScheme.error,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Score display
-                    Text(
-                      AppLocalizations.of(context)!.score,
-                      style: GoogleFonts.firaSans(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "$score/$totalWords",
-                      style: GoogleFonts.firaSans(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Accuracy display
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: colorScheme.surface,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.auto_graph,
-                            color:
-                                (score / totalWords) > 0.7
-                                    ? Colors.green
-                                    : (score / totalWords) > 0.4
-                                    ? colorScheme.primary
-                                    : colorScheme.error,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            "${AppLocalizations.of(context)!.accuracy} $accuracy%",
-                            style: GoogleFonts.firaSans(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Results Card
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
-              ),
-            ),
-            const SizedBox(height: 32),
-
-            // Mistakes section - only shown if there are errors
-            if (incorrectAnswers.isNotEmpty) ...[
-              Align(
-                alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    "${AppLocalizations.of(context)!.mistakes}:",
-                    style: GoogleFonts.firaSans(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.error,
-                    ),
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    children: [
+                      // Trophy icon with conditional color based on performance
+                      Icon(
+                        Icons.emoji_events,
+                        size: 64,
+                        color:
+                            (score / totalWords) > 0.7
+                                ? Colors.amber
+                                : (score / totalWords) > 0.4
+                                ? colorScheme.primary
+                                : colorScheme.error,
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Score display
+                      Text(
+                        AppLocalizations.of(context)!.score,
+                        style: GoogleFonts.firaSans(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "$score/$totalWords",
+                        style: GoogleFonts.firaSans(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Accuracy display
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: colorScheme.surface,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.auto_graph,
+                              color:
+                                  (score / totalWords) > 0.7
+                                      ? Colors.green
+                                      : (score / totalWords) > 0.4
+                                      ? colorScheme.primary
+                                      : colorScheme.error,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "${AppLocalizations.of(context)!.accuracy} $accuracy%",
+                              style: GoogleFonts.firaSans(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
-              ...incorrectAnswers
-                  .map((mistake) => _buildMistakeCard(mistake))
-                  .toList(),
-              const SizedBox(height: 24),
-            ],
+              const SizedBox(height: 32),
 
-            // Action Buttons
-            Column(
-              children: [
-                // Restart Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: () => _startGame(totalWords),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.primary,
-                      foregroundColor: colorScheme.onPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      elevation: 4,
-                    ),
-                    icon: const Icon(Icons.refresh),
-                    label: Text(
-                      AppLocalizations.of(context)!.restart,
+              // Mistakes section - only shown if there are errors
+              if (incorrectAnswers.isNotEmpty) ...[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      "${AppLocalizations.of(context)!.mistakes}:",
                       style: GoogleFonts.firaSans(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
+                        color: colorScheme.error,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
-
-                // Change Word Count Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        showResults = false;
-                        gameStarted = false;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.secondaryContainer,
-                      foregroundColor: colorScheme.onSecondaryContainer,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      elevation: 2,
-                    ),
-                    icon: const Icon(Icons.tune),
-                    label: Text(
-                      AppLocalizations.of(context)!.changeWordCount,
-                      style: GoogleFonts.firaSans(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                const SizedBox(height: 12),
+                ...incorrectAnswers.map(
+                  (mistake) => _buildMistakeCard(mistake),
                 ),
-                const SizedBox(height: 16),
-
-                // Exit Button
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: () => Navigator.pop(context),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: colorScheme.onSurface,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      side: BorderSide(color: colorScheme.outline, width: 1.5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    icon: const Icon(Icons.exit_to_app),
-                    label: Text(
-                      AppLocalizations.of(context)!.exit,
-                      style: GoogleFonts.firaSans(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 24),
               ],
-            ),
-          ],
+
+              // Action Buttons
+              Column(
+                children: [
+                  // Restart Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () => _startGame(totalWords),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorScheme.primary,
+                        foregroundColor: colorScheme.onPrimary,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 4,
+                      ),
+                      icon: const Icon(Icons.refresh),
+                      label: Text(
+                        AppLocalizations.of(context)!.restart,
+                        style: GoogleFonts.firaSans(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Change Word Count Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          showResults = false;
+                          gameStarted = false;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorScheme.secondaryContainer,
+                        foregroundColor: colorScheme.onSecondaryContainer,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 2,
+                      ),
+                      icon: const Icon(Icons.tune),
+                      label: Text(
+                        AppLocalizations.of(context)!.changeWordCount,
+                        style: GoogleFonts.firaSans(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Exit Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: colorScheme.onSurface,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        side: BorderSide(
+                          color: colorScheme.outline,
+                          width: 1.5,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      icon: const Icon(Icons.exit_to_app),
+                      label: Text(
+                        AppLocalizations.of(context)!.exit,
+                        style: GoogleFonts.firaSans(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -130,5 +130,7 @@
   "noResultsFound": "Keine passenden Ordner gefunden",
   "@noResultsFound": {
     "description": "Meldung, die angezeigt wird, wenn keine Ordner der Suche entsprechen"
-  }
+  },
+  "seeMoreWords": "Mehr Wörter anzeigen",
+  "showingWords": "Zeige {count} von {total}"
 }

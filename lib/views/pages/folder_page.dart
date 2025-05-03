@@ -50,7 +50,7 @@ class FolderPage extends ConsumerWidget {
       ], text: AppLocalizations.of(context)!.hereMyVocab);
     }
 
-    Future<void> _importFromExcel() async {
+    Future<void> importFromExcel() async {
       try {
         FilePickerResult? result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
@@ -112,7 +112,7 @@ class FolderPage extends ConsumerWidget {
       }
     }
 
-    void _showUpdateDialog(Word word) {
+    void showUpdateDialog(Word word) {
       final wordController = TextEditingController(text: word.word);
       final translationController = TextEditingController(
         text: word.translation,
@@ -165,7 +165,7 @@ class FolderPage extends ConsumerWidget {
       );
     }
 
-    void _showAddWordDialog() {
+    void showAddWordDialog() {
       final wordController = TextEditingController();
       final translationController = TextEditingController();
 
@@ -256,7 +256,7 @@ class FolderPage extends ConsumerWidget {
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'import') {
-                _importFromExcel();
+                importFromExcel();
               } else if (value == 'export') {
                 exportToExcel();
               }
@@ -338,7 +338,7 @@ class FolderPage extends ConsumerWidget {
                         trailing: PopupMenuButton<String>(
                           onSelected: (value) {
                             if (value == 'update') {
-                              _showUpdateDialog(word);
+                              showUpdateDialog(word);
                             } else if (value == 'delete') {
                               vocabNotifier.deleteWord(word.id!);
                             }
@@ -367,7 +367,7 @@ class FolderPage extends ConsumerWidget {
       floatingActionButton: DraggableFab(
         child: FloatingActionButton(
           backgroundColor: colorScheme.secondary,
-          onPressed: _showAddWordDialog,
+          onPressed: showAddWordDialog,
           child: Icon(Icons.add, color: colorScheme.onSecondary),
         ),
       ),

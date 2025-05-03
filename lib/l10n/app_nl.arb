@@ -130,5 +130,7 @@
   "noResultsFound": "Geen overeenkomende mappen gevonden",
   "@noResultsFound": {
     "description": "Bericht wanneer geen mappen overeenkomen met de zoekopdracht"
-  }
+  },
+  "seeMoreWords": "Meer woorden tonen",
+  "showingWords": "Toont {count} van {total}"
 }

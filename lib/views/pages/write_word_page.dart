@@ -608,7 +608,7 @@ class _GameScreenState extends State<_GameScreen> {
                                     : _score / _totalWords > 0.4
                                     ? Colors.orange
                                     : Colors.red,
-                            backgroundColor: colorScheme.surfaceVariant,
+                            backgroundColor: colorScheme.surfaceContainerHighest,
                           ),
                           const SizedBox(height: 8),
 
