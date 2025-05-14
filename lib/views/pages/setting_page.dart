@@ -42,9 +42,8 @@ class SettingPage extends StatelessWidget {
             shadowColor: Theme.of(context).colorScheme.scrim,
           ),
 
-          body: Padding(
+          body: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
-
             child: Column(
               children: [
                 _buildSettingItem(
@@ -61,11 +60,149 @@ class SettingPage extends StatelessWidget {
                   title: AppLocalizations.of(context)!.modus,
                   child: _buildThemeSelector(context, themeMode),
                 ),
+                const SizedBox(height: 16),
+                _buildAboutButton(context),
+                const SizedBox(height: 16), // Add extra space at bottom
               ],
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildAboutButton(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: double.infinity),
+      child: InkWell(
+        onTap: () => _showAboutDialog(context),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondary,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.scrim,
+                blurRadius: 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.aboutTheApp,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
+              ),
+              Icon(
+                Icons.info_outline,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showAboutDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder:
+          (context) => Container(
+            height: MediaQuery.of(context).size.height * 0.9,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(20),
+              ),
+            ),
+            padding: const EdgeInsets.only(
+              top: 24,
+              left: 24,
+              right: 24,
+              bottom: 40,
+            ),
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 40,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        AppLocalizations.of(context)!.aboutTitle,
+                        style: GoogleFonts.philosopher(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        AppLocalizations.of(context)!.aboutContent1,
+                        style: TextStyle(
+                          fontSize: 16,
+                          height: 1.5,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        AppLocalizations.of(context)!.aboutContent2,
+                        style: TextStyle(
+                          fontSize: 16,
+                          height: 1.5,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        AppLocalizations.of(context)!.aboutContent3,
+                        style: TextStyle(
+                          fontSize: 16,
+                          height: 1.5,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: 12,
+                  right: 12,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+              ],
+            ),
+          ),
     );
   }
 

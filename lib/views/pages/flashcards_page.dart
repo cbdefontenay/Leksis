@@ -149,6 +149,23 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
     });
   }
 
+  void _showHelpDialog() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(AppLocalizations.of(context)!.flashcardHelpTitle),
+            content: Text(AppLocalizations.of(context)!.flashcardHelpMessage),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(AppLocalizations.of(context)!.flashcardHelpButton),
+              ),
+            ],
+          ),
+    );
+  }
+
   Widget _buildOptionsScreen() {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
@@ -481,7 +498,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "${AppLocalizations.of(context)!.flashcards} - ${widget.folder.name}",
+          widget.folder.name,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimary,
           ).merge(
@@ -493,14 +510,19 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
         iconTheme: IconThemeData(
           color: Theme.of(context).colorScheme.onPrimary,
         ),
-
         actions: [
-          if (!_showOptionsScreen && !_showCompletionScreen)
+          if (!_showOptionsScreen && !_showCompletionScreen) ...[
+            IconButton(
+              icon: const Icon(Icons.help_outline),
+              onPressed: _showHelpDialog,
+              tooltip: AppLocalizations.of(context)!.help,
+            ),
             IconButton(
               icon: const Icon(Icons.refresh),
               onPressed: _restartSession,
               tooltip: AppLocalizations.of(context)!.reshuffle,
             ),
+          ],
         ],
       ),
 
@@ -511,6 +533,34 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
               ? _buildCompletionScreen()
               : Column(
                 children: [
+                  // Progress bar and counter
+                  if (_filteredWords.isNotEmpty) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 8.0,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: (_currentIndex + 1) / _filteredWords.length,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surfaceVariant,
+                          color: Theme.of(context).colorScheme.primary,
+                          minHeight: 8,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      '${_currentIndex + 1}/${_filteredWords.length}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+
+                  // Flashcard content
                   Expanded(
                     child: Center(
                       child: GestureDetector(
@@ -531,6 +581,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
                     ),
                   ),
 
+                  // Bottom buttons
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: SafeArea(

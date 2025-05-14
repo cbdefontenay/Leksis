@@ -132,5 +132,14 @@
     "description": "Message shown when no folders match the search query"
   },
   "seeMoreWords": "See more words",
-  "showingWords": "Showing {count} out of {total}"
+  "showingWords": "Showing {count} out of {total}",
+  "flashcardHelpTitle": "How to use flashcards",
+  "flashcardHelpMessage": "Swipe right to mark as learned ✅\nSwipe left to mark as unlearned ❌\n\nOr tap the card to flip it",
+  "flashcardHelpButton": "Got it!",
+  "help": "Help",
+  "aboutTheApp": "About the app",
+  "aboutTitle": "About Leksis",
+  "aboutContent1": "Leksis is an application designed to be simple and effective for learning one or more languages. The goal isn't to have lots of options that few people use. Leksis is a place where users can simply store their vocabulary words or everyday phrases, and practice them through easily accessible exercises.",
+  "aboutContent2": "Data is stored directly on the user's device via a local SQLite database, which means the app works offline. However, sharing vocabulary lists with friends is only possible by exporting or importing lists via \".xlsx\" files from created folders.",
+  "aboutContent3": "The advantage is that your data belongs to you and no one else has access to it. The disadvantage is that if something happens to your phone, you'll lose your data unless you've exported it beforehand."
 }

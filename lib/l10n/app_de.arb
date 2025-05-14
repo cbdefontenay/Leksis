@@ -132,5 +132,14 @@
     "description": "Meldung, die angezeigt wird, wenn keine Ordner der Suche entsprechen"
   },
   "seeMoreWords": "Mehr Wörter anzeigen",
-  "showingWords": "Zeige {count} von {total}"
+  "showingWords": "Zeige {count} von {total}",
+  "flashcardHelpTitle": "Wie man Karteikarten verwendet",
+  "flashcardHelpMessage": "Nach rechts wischen, um als gelernt zu markieren ✅\nNach links wischen, um als ungelernt zu markieren ❌\n\nOder auf die Karte tippen, um sie umzudrehen",
+  "flashcardHelpButton": "Verstanden!",
+  "help": "Hilfe",
+  "aboutTheApp": "Über die App",
+  "aboutTitle": "Über Leksis",
+  "aboutContent1": "Leksis ist eine Anwendung, die einfach und effektiv das Lernen einer oder mehrerer Sprachen ermöglicht. Das Ziel ist nicht, viele Optionen anzubieten, die kaum genutzt werden. Leksis ist ein Ort, an dem Benutzer einfach ihre Vokabeln oder alltägliche Sätze speichern und sie durch leicht zugängliche Übungen lernen können.",
+  "aboutContent2": "Daten werden direkt auf dem Gerät des Benutzers in einer lokalen SQLite-Datenbank gespeichert, was bedeutet, dass die App offline funktioniert. Das Teilen von Vokabellisten mit Freunden ist jedoch nur möglich, indem Listen über \".xlsx\"-Dateien aus erstellten Ordnern exportiert oder importiert werden.",
+  "aboutContent3": "Der Vorteil ist, dass Ihre Daten Ihnen gehören und niemand sonst Zugriff darauf hat. Der Nachteil ist, dass Sie Ihre Daten verlieren, wenn Ihrem Telefon etwas zustößt, es sei denn, Sie haben sie vorher exportiert."
 }
