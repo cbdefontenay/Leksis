@@ -62,7 +62,7 @@ class SettingPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 _buildAboutButton(context),
-                const SizedBox(height: 16), // Add extra space at bottom
+                const SizedBox(height: 16),
               ],
             ),
           ),
