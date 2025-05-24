@@ -413,7 +413,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      "${AppLocalizations.of(context)!.youReviewed} ${_filteredWords.length} ${AppLocalizations.of(context)!.words}",
+                      AppLocalizations.of(context)!.youReviewed,
                       style: textTheme.titleMedium?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),

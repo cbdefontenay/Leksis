@@ -32,7 +32,7 @@
   "tryAgain": "Probeer opnieuw",
   "returnToFolder": "Terug naar mappen",
   "wordToPractice": "Woorden om te oefenen",
-  "writeWordErrorMessage": "Er zijn niet genoeg woorden in de lijst. Huidig aantal:",
+  "writeWordErrorMessage": "Er zijn niet genoeg woorden in de lijst. Aantal:",
   "validAnswer": "Voer een geldig antwoord in",
   "emptyFolderError": "Deze map is leeg",
   "failedLoadWords": "Laden van de lijst mislukt",
@@ -123,7 +123,7 @@
       }
     }
   },
-  "searchFolders": "Zoek mappen...",
+  "searchFolders": "Mappen zoeken...",
   "@searchFolders": {
     "description": "Tijdelijke tekst voor zoekveld mappen"
   },

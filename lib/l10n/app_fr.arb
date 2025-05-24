@@ -123,7 +123,7 @@
       }
     }
   },
-  "searchFolders": "Rechercher des dossiers...",
+  "searchFolders": "Rechercher un dossier...",
   "@searchFolders": {
     "description": "Texte indicatif pour le champ de recherche de dossiers"
   },
