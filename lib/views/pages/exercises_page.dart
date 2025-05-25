@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/views/pages/folder_selection_flash.dart';
 import 'package:leksis/views/pages/folder_selection_guess_word.dart';

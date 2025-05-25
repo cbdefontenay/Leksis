@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/data/notifiers.dart';
 import 'package:leksis/views/widgets/language_selector_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({
@@ -143,9 +143,7 @@ class SettingPage extends StatelessWidget {
                           width: 40,
                           height: 4,
                           decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurface.withOpacity(0.2),
+                            color: Theme.of(context).colorScheme.onSurface,
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),

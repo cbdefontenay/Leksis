@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:leksis/models/folder_model.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import 'package:leksis/models/word_model.dart';
 
 class WriteWordPage extends StatefulWidget {
@@ -608,7 +608,8 @@ class _GameScreenState extends State<_GameScreen> {
                                     : _score / _totalWords > 0.4
                                     ? Colors.orange
                                     : Colors.red,
-                            backgroundColor: colorScheme.surfaceContainerHighest,
+                            backgroundColor:
+                                colorScheme.surfaceContainerHighest,
                           ),
                           const SizedBox(height: 8),
 

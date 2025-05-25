@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:leksis/models/folder_model.dart';
 import 'package:leksis/models/word_model.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import 'dart:async';
 
 class FindThePairPage extends StatefulWidget {

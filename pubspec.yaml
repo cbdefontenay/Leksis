@@ -1,5 +1,5 @@
 name: leksis
-description: "A new Flutter project."
+description: "A vocabulary learning App."
 publish_to: "none"
 
 version: 1.0.0+1
@@ -28,6 +28,7 @@ dependencies:
   path_provider: ^2.1.5
   flutter_animate: ^4.5.2
   flutter_riverpod: ^2.6.1
+  flutter_gen: ^5.10.0
 
 dev_dependencies:
   flutter_test:

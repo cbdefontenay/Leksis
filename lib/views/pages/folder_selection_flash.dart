@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/models/folder_model.dart';
 import 'package:leksis/views/pages/flashcards_page.dart';
 import 'package:leksis/views/widgets/folder_selection_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 class FolderSelectionFlashPage extends StatelessWidget {
   const FolderSelectionFlashPage({super.key});
