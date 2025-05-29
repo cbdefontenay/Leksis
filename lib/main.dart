@@ -41,8 +41,9 @@ class _LeksisAppState extends State<LeksisApp> {
 
     if (savedLocaleCode != null) {
       final parts = savedLocaleCode.split('_');
-      newLocale =
-          parts.length > 1 ? Locale(parts[0], parts[1]) : Locale(parts[0]);
+      newLocale = parts.length > 1
+          ? Locale(parts[0], parts[1])
+          : Locale(parts[0]);
     } else {
       final deviceLocale = _getDeviceLocale();
 
@@ -63,10 +64,9 @@ class _LeksisAppState extends State<LeksisApp> {
   void _setLocale(Locale locale) async {
     final prefs = await SharedPreferences.getInstance();
 
-    final localeCode =
-        locale.countryCode != null
-            ? '${locale.languageCode}_${locale.countryCode}'
-            : locale.languageCode;
+    final localeCode = locale.countryCode != null
+        ? '${locale.languageCode}_${locale.countryCode}'
+        : locale.languageCode;
     await prefs.setString('selected_locale', localeCode);
 
     setState(() {

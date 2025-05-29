@@ -1,4 +1,4 @@
-package com.example.leksis
+package com.cyprien.leksis
 
 import io.flutter.embedding.android.FlutterActivity
 
