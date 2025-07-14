@@ -1,5 +1,7 @@
 # Leksis
 
+#### Find it here on the ***Google Play Store***: [leksis](https://play.google.com/store/apps/details?id=com.cyprien.leksis&hl=en)
+
 <table>
   <tr>
     <td>
