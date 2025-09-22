@@ -833,6 +833,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The advantage is that your data belongs to you and no one else has access to it. The disadvantage is that if something happens to your phone, you\'ll lose your data unless you\'ve exported it beforehand.'**
   String get aboutContent3;
+
+  /// No description provided for @changePronunciationLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change pronunciation language'**
+  String get changePronunciationLanguage;
+
+  /// No description provided for @pronounceWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Pronounce word'**
+  String get pronounceWord;
+
+  /// No description provided for @selectPronounciationWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Pronunciation Language'**
+  String get selectPronounciationWord;
+
+  /// No description provided for @pronounciationMessageSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Pronunciation language set to {selectedLanguage} for this folder'**
+  String pronounciationMessageSet(Object selectedLanguage);
+
+  /// No description provided for @errorChangingLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Error changing language...'**
+  String get errorChangingLanguage;
+
+  /// No description provided for @unableSpeakWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to pronounce word. Trying to reinitialize...'**
+  String get unableSpeakWord;
 }
 
 class _AppLocalizationsDelegate

@@ -141,5 +141,11 @@
   "aboutTitle": "Over Leksis",
   "aboutContent1": "Leksis is een applicatie ontworpen om eenvoudig en effectief een of meer talen te leren. Het doel is niet om veel opties te hebben die weinig mensen gebruiken. Leksis is een plek waar gebruikers eenvoudig hun vocabulairewoorden of alledaagse zinnen kunnen opslaan en oefenen via gemakkelijk toegankelijke oefeningen.",
   "aboutContent2": "Gegevens worden rechtstreeks op het apparaat van de gebruiker opgeslagen via een lokale SQLite-database, wat betekent dat de app offline werkt. Het delen van vocabulairelijsten met vrienden is echter alleen mogelijk door lijsten te exporteren of importeren via \".xlsx\"-bestanden uit gemaakte mappen.",
-  "aboutContent3": "Het voordeel is dat uw gegevens van u zijn en niemand anders er toegang toe heeft. Het nadeel is dat als er iets met uw telefoon gebeurt, u uw gegevens verliest tenzij u ze van tevoren heeft geëxporteerd."
+  "aboutContent3": "Het voordeel is dat uw gegevens van u zijn en niemand anders er toegang toe heeft. Het nadeel is dat als er iets met uw telefoon gebeurt, u uw gegevens verliest tenzij u ze van tevoren heeft geëxporteerd.",
+  "changePronunciationLanguage": "Uitspraaktaal wijzigen",
+  "pronounceWord": "Woord uitspreken",
+  "selectPronounciationWord": "Uitspraaktaal selecteren",
+  "pronounciationMessageSet": "Uitspraaktaal ingesteld op {selectedLanguage} voor deze map",
+  "errorChangingLanguage": "Fout bij het wijzigen van de taal...",
+  "unableSpeakWord": "Kan woord niet uitspreken. Probeer opnieuw te initialiseren..."
 }

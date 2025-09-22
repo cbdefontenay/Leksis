@@ -141,5 +141,11 @@
   "aboutTitle": "À propos de Leksis",
   "aboutContent1": "Leksis est une application conçue pour être simple et efficace dans l'apprentissage d'une ou plusieurs langues. L'objectif n'est pas d'accumuler des options rarement utilisées. Leksis offre un espace où l'utilisateur peut simplement stocker son vocabulaire ou des phrases du quotidien, et les travailler à travers des exercices ludiques et facilement accessibles.",
   "aboutContent2": "Les données sont enregistrées directement sur l'appareil de l'utilisateur via une base de données SQLite locale, ce qui signifie que l'application fonctionne hors connexion. Cependant, le partage de listes de vocabulaire avec des amis n'est possible qu'en exportant ou important des listes via des fichiers \".xlsx\" depuis les dossiers créés.",
-  "aboutContent3": "L'avantage est que vos données vous appartiennent exclusivement. L'inconvénient étant que si votre téléphone est endommagé ou perdu, vous perdrez vos données à moins de les avoir exportées au préalable."
+  "aboutContent3": "L'avantage est que vos données vous appartiennent exclusivement. L'inconvénient étant que si votre téléphone est endommagé ou perdu, vous perdrez vos données à moins de les avoir exportées au préalable.",
+  "changePronunciationLanguage": "Changer la langue de prononciation",
+  "pronounceWord": "Prononcer le mot",
+  "selectPronounciationWord": "Sélectionner la langue de prononciation",
+  "pronounciationMessageSet": "Langue de prononciation définie sur {selectedLanguage} pour ce dossier",
+  "errorChangingLanguage": "Erreur lors du changement de langue...",
+  "unableSpeakWord": "Impossible de prononcer le mot. Tentative de réinitialisation..."
 }

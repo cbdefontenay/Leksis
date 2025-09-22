@@ -385,4 +385,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aboutContent3 =>
       'The advantage is that your data belongs to you and no one else has access to it. The disadvantage is that if something happens to your phone, you\'ll lose your data unless you\'ve exported it beforehand.';
+
+  @override
+  String get changePronunciationLanguage => 'Change pronunciation language';
+
+  @override
+  String get pronounceWord => 'Pronounce word';
+
+  @override
+  String get selectPronounciationWord => 'Select Pronunciation Language';
+
+  @override
+  String pronounciationMessageSet(Object selectedLanguage) {
+    return 'Pronunciation language set to $selectedLanguage for this folder';
+  }
+
+  @override
+  String get errorChangingLanguage => 'Error changing language...';
+
+  @override
+  String get unableSpeakWord =>
+      'Unable to pronounce word. Trying to reinitialize...';
 }

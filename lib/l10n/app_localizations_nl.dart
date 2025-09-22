@@ -386,4 +386,25 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get aboutContent3 =>
       'Het voordeel is dat uw gegevens van u zijn en niemand anders er toegang toe heeft. Het nadeel is dat als er iets met uw telefoon gebeurt, u uw gegevens verliest tenzij u ze van tevoren heeft geëxporteerd.';
+
+  @override
+  String get changePronunciationLanguage => 'Uitspraaktaal wijzigen';
+
+  @override
+  String get pronounceWord => 'Woord uitspreken';
+
+  @override
+  String get selectPronounciationWord => 'Uitspraaktaal selecteren';
+
+  @override
+  String pronounciationMessageSet(Object selectedLanguage) {
+    return 'Uitspraaktaal ingesteld op $selectedLanguage voor deze map';
+  }
+
+  @override
+  String get errorChangingLanguage => 'Fout bij het wijzigen van de taal...';
+
+  @override
+  String get unableSpeakWord =>
+      'Kan woord niet uitspreken. Probeer opnieuw te initialiseren...';
 }

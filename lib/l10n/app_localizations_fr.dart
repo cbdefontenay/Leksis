@@ -387,4 +387,27 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get aboutContent3 =>
       'L\'avantage est que vos données vous appartiennent exclusivement. L\'inconvénient étant que si votre téléphone est endommagé ou perdu, vous perdrez vos données à moins de les avoir exportées au préalable.';
+
+  @override
+  String get changePronunciationLanguage =>
+      'Changer la langue de prononciation';
+
+  @override
+  String get pronounceWord => 'Prononcer le mot';
+
+  @override
+  String get selectPronounciationWord =>
+      'Sélectionner la langue de prononciation';
+
+  @override
+  String pronounciationMessageSet(Object selectedLanguage) {
+    return 'Langue de prononciation définie sur $selectedLanguage pour ce dossier';
+  }
+
+  @override
+  String get errorChangingLanguage => 'Erreur lors du changement de langue...';
+
+  @override
+  String get unableSpeakWord =>
+      'Impossible de prononcer le mot. Tentative de réinitialisation...';
 }
