@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -133,9 +134,16 @@ class TTSService {
     try {
       if (_disposed || _audioPlayer == null) return;
 
+      // Get API key from environment variables
+      final apiKey = dotenv.env['WELSH_TTS_API_KEY'];
+
+      if (apiKey == null) {
+        throw Exception('Welsh TTS API key not found in environment variables');
+      }
+
       final url = Uri.parse(
         "https://api.techiaith.org/marytts/v1/"
-        "?api_key=6c436171-de50-4edc-9613-c3d57b63a7d5"
+        "?api_key=$apiKey"
         "&uid=benyw-gogledd"
         "&text=${Uri.encodeComponent(text)}",
       );

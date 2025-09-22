@@ -32,6 +32,7 @@ dependencies:
   flutter_animate: ^4.5.2
   flutter_riverpod: ^2.6.1
   flutter_gen: ^5.10.0
+  flutter_dotenv: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -41,3 +42,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - .env

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:leksis/l10n/l10n.dart';
@@ -13,6 +14,7 @@ void main() async {
 
   await loadThemeMode();
 
+  await dotenv.load(fileName: ".env");
   runApp(ProviderScope(child: LeksisApp()));
 }
 
