@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
+import 'package:leksis/secrets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +17,7 @@ enum TTSLanguage {
   french('fr-FR', 'Français', 'fr_FR'),
   german('de-DE', 'Deutsch', 'de_DE'),
   italian('it-IT', 'Italiano', 'it_IT'),
+  polish('pl-PL', 'Polski', 'pl-PL'),
   portuguese('pt-BR', 'Português', 'pt_BR'),
   russian('ru-RU', 'Русский', 'ru_RU'),
   turkish('tr-TR', 'Türkçe', 'tr_TR'),
@@ -123,8 +124,6 @@ class TTSService {
       if (_disposed) return;
       await _flutterTts.speak(text);
     } catch (e) {
-      print('TTS Error: $e');
-      // Reinitialize if there's an error
       _initialized = false;
       await initialize();
     }
@@ -134,12 +133,7 @@ class TTSService {
     try {
       if (_disposed || _audioPlayer == null) return;
 
-      // Get API key from environment variables
-      final apiKey = dotenv.env['WELSH_TTS_API_KEY'];
-
-      if (apiKey == null) {
-        throw Exception('Welsh TTS API key not found in environment variables');
-      }
+      const apiKey = Secrets.apiKey;
 
       final url = Uri.parse(
         "https://api.techiaith.org/marytts/v1/"
@@ -164,7 +158,7 @@ class TTSService {
       }
     } catch (e) {
       if (!_disposed) {
-        await _flutterTts.setLanguage('en-US');
+        await _flutterTts.setLanguage('cy');
         await _flutterTts.speak(text);
       }
     }
