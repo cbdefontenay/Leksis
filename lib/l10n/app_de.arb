@@ -147,5 +147,10 @@
   "selectPronounciationWord": "Aussprachesprache auswählen",
   "pronounciationMessageSet": "Aussprachesprache für diesen Ordner auf {selectedLanguage} festgelegt",
   "errorChangingLanguage": "Fehler beim Ändern der Sprache...",
-  "unableSpeakWord": "Wort kann nicht ausgesprochen werden. Versuche erneut zu initialisieren..."
+  "unableSpeakWord": "Wort kann nicht ausgesprochen werden. Versuche erneut zu initialisieren...",
+  "enjoyingApp": "Gefällt dir Leksis?",
+  "ratingPrompt": "Würdest du Leksis im Play Store bewerten? Es hilft die App besser zu werden!",
+  "maybeLater": "Vielleicht später",
+  "rateNow": "Jetzt bewerten",
+  "thankYou": "Vielen Dank für deine Unterstützung!"
 }

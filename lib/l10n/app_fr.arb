@@ -147,5 +147,10 @@
   "selectPronounciationWord": "Sélectionner la langue de prononciation",
   "pronounciationMessageSet": "Langue de prononciation définie sur {selectedLanguage} pour ce dossier",
   "errorChangingLanguage": "Erreur lors du changement de langue...",
-  "unableSpeakWord": "Impossible de prononcer le mot. Tentative de réinitialisation..."
+  "unableSpeakWord": "Impossible de prononcer le mot. Tentative de réinitialisation...",
+  "enjoyingApp": "Tu aimes Leksis ?",
+  "ratingPrompt": "Veux-tu noter Leksis sur le Google Play Store ? Cela nous aide à améliorer Leksis !",
+  "maybeLater": "Peut-être plus tard",
+  "rateNow": "Noter maintenant",
+  "thankYou": "Merci pour ton soutien !"
 }

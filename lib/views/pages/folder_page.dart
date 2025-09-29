@@ -419,37 +419,54 @@ class _FolderPageState extends ConsumerState<FolderPage> {
                     ),
                     elevation: 3,
                     child: ListTile(
-                      leading: IconButton(
-                        icon: Icon(
-                          word.isLearned ? Icons.star : Icons.star_border,
-                          color: word.isLearned ? colorScheme.primary : null,
-                        ),
-                        onPressed: () => vocabNotifier.toggleLearnStatus(word),
-                      ),
-                      title: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              word.word,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+                      leading: Container(
+                        width: 48,
+                        height: 48,
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 24,
+                              child: IconButton(
+                                icon: Icon(
+                                  word.isLearned
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  color: word.isLearned
+                                      ? colorScheme.primary
+                                      : null,
+                                  size: 20,
+                                ),
+                                onPressed: () =>
+                                    vocabNotifier.toggleLearnStatus(word),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
                               ),
                             ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.volume_up,
-                              color: colorScheme.primary,
-                              size: 20,
+                            SizedBox(
+                              height: 24,
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.volume_up,
+                                  color: colorScheme.primary,
+                                  size: 18,
+                                ),
+                                onPressed: () => _speakWord(word.word),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                                tooltip: AppLocalizations.of(
+                                  context,
+                                )!.pronounceWord,
+                              ),
                             ),
-                            onPressed: () => _speakWord(word.word),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            tooltip: AppLocalizations.of(
-                              context,
-                            )!.pronounceWord,
-                          ),
-                        ],
+                          ],
+                        ),
+                      ),
+                      title: Text(
+                        word.word,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(word.translation),
                       trailing: PopupMenuButton<String>(

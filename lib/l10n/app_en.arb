@@ -147,5 +147,10 @@
   "selectPronounciationWord": "Select Pronunciation Language",
   "pronounciationMessageSet": "Pronunciation language set to {selectedLanguage} for this folder",
   "errorChangingLanguage": "Error changing language...",
-  "unableSpeakWord": "Unable to pronounce word. Trying to reinitialize..."
+  "unableSpeakWord": "Unable to pronounce word. Trying to reinitialize...",
+  "enjoyingApp": "Enjoying Leksis?",
+  "ratingPrompt": "Would you mind rating Leksis on the Play Store? It helps us improve!",
+  "maybeLater": "Maybe Later",
+  "rateNow": "Rate Now",
+  "thankYou": "Thank you for your support!"
 }

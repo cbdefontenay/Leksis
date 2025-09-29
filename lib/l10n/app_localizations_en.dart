@@ -406,4 +406,20 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get unableSpeakWord =>
       'Unable to pronounce word. Trying to reinitialize...';
+
+  @override
+  String get enjoyingApp => 'Enjoying Leksis?';
+
+  @override
+  String get ratingPrompt =>
+      'Would you mind rating Leksis on the Play Store? It helps us improve!';
+
+  @override
+  String get maybeLater => 'Maybe Later';
+
+  @override
+  String get rateNow => 'Rate Now';
+
+  @override
+  String get thankYou => 'Thank you for your support!';
 }

@@ -33,6 +33,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   flutter_gen: ^5.10.0
   flutter_dotenv: ^6.0.0
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

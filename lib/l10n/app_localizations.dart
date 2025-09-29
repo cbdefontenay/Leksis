@@ -869,6 +869,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unable to pronounce word. Trying to reinitialize...'**
   String get unableSpeakWord;
+
+  /// No description provided for @enjoyingApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoying Leksis?'**
+  String get enjoyingApp;
+
+  /// No description provided for @ratingPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you mind rating Leksis on the Play Store? It helps us improve!'**
+  String get ratingPrompt;
+
+  /// No description provided for @maybeLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe Later'**
+  String get maybeLater;
+
+  /// No description provided for @rateNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Now'**
+  String get rateNow;
+
+  /// No description provided for @thankYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for your support!'**
+  String get thankYou;
 }
 
 class _AppLocalizationsDelegate

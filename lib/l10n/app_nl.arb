@@ -147,5 +147,10 @@
   "selectPronounciationWord": "Uitspraaktaal selecteren",
   "pronounciationMessageSet": "Uitspraaktaal ingesteld op {selectedLanguage} voor deze map",
   "errorChangingLanguage": "Fout bij het wijzigen van de taal...",
-  "unableSpeakWord": "Kan woord niet uitspreken. Probeer opnieuw te initialiseren..."
+  "unableSpeakWord": "Kan woord niet uitspreken. Probeer opnieuw te initialiseren...",
+  "enjoyingApp": "Geniet je van Leksis?",
+  "ratingPrompt": "Wil je Leksis beoordelen in de Play Store? Het helpt de app te verbeteren!",
+  "maybeLater": "Misschien later",
+  "rateNow": "Nu beoordelen",
+  "thankYou": "Bedankt voor je steun!"
 }

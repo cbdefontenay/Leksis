@@ -407,4 +407,20 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get unableSpeakWord =>
       'Kan woord niet uitspreken. Probeer opnieuw te initialiseren...';
+
+  @override
+  String get enjoyingApp => 'Geniet je van Leksis?';
+
+  @override
+  String get ratingPrompt =>
+      'Wil je Leksis beoordelen in de Play Store? Het helpt de app te verbeteren!';
+
+  @override
+  String get maybeLater => 'Misschien later';
+
+  @override
+  String get rateNow => 'Nu beoordelen';
+
+  @override
+  String get thankYou => 'Bedankt voor je steun!';
 }

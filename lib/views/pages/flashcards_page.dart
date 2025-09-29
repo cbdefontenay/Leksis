@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:leksis/models/folder_model.dart';
 import 'package:leksis/models/word_model.dart';
+import 'package:leksis/service/tts_service.dart';
+import 'package:leksis/views/widgets/language_selection_dialog.dart';
 import '../../l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -23,12 +25,83 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
   bool _showTranslationFirst = false;
   bool _showOptionsScreen = true;
   bool _showCompletionScreen = false;
+  late final TTSService _ttsService;
+  late TTSLanguage _currentLanguage;
 
   @override
   void initState() {
     super.initState();
-
+    _ttsService = TTSService(widget.folder.id!.toString());
+    _currentLanguage = TTSLanguage.english;
+    _initializeTTS();
     _loadWords();
+  }
+
+  Future<void> _initializeTTS() async {
+    try {
+      await _ttsService.initialize();
+      if (mounted) {
+        setState(() {
+          _currentLanguage = _ttsService.currentLanguage;
+        });
+      }
+    } catch (e) {
+      print('TTS Initialization error: $e');
+    }
+  }
+
+  Future<void> _showLanguageSelection() async {
+    try {
+      final selectedLanguage = await showDialog<TTSLanguage>(
+        context: context,
+        builder: (context) =>
+            LanguageSelectionDialog(currentLanguage: _currentLanguage),
+      );
+
+      if (selectedLanguage != null && mounted) {
+        await _ttsService.setLanguage(selectedLanguage);
+        setState(() {
+          _currentLanguage = selectedLanguage;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(
+                context,
+              )!.pronounciationMessageSet(selectedLanguage.name),
+            ),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.errorChangingLanguage),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  Future<void> _speakWord(String word) async {
+    try {
+      await _ttsService.speak(word);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.unableSpeakWord),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      await _initializeTTS();
+      try {
+        await _ttsService.speak(word);
+      } catch (e2) {
+        print('Second attempt failed: $e2');
+      }
+    }
   }
 
   Future<void> _loadWords() async {
@@ -98,10 +171,9 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
     });
 
     Fluttertoast.showToast(
-      msg:
-          markAsLearned
-              ? "${AppLocalizations.of(context)!.markedAsLearned} ⭐"
-              : "${AppLocalizations.of(context)!.markToBeLearned} ❌",
+      msg: markAsLearned
+          ? "${AppLocalizations.of(context)!.markedAsLearned} ⭐"
+          : "${AppLocalizations.of(context)!.markToBeLearned} ❌",
       backgroundColor: markAsLearned ? Colors.lightGreen : Colors.teal,
       textColor: Colors.white,
     );
@@ -152,17 +224,16 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
   void _showHelpDialog() {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(AppLocalizations.of(context)!.flashcardHelpTitle),
-            content: Text(AppLocalizations.of(context)!.flashcardHelpMessage),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(AppLocalizations.of(context)!.flashcardHelpButton),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.flashcardHelpTitle),
+        content: Text(AppLocalizations.of(context)!.flashcardHelpMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.flashcardHelpButton),
           ),
+        ],
+      ),
     );
   }
 
@@ -229,7 +300,7 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
                           ),
                           Switch(
                             value: _showTranslationFirst,
-                            activeColor: colorScheme.primary,
+                            activeThumbColor: colorScheme.primary,
                             inactiveThumbColor: colorScheme.tertiary,
                             inactiveTrackColor: colorScheme.onTertiary,
                             activeTrackColor: colorScheme.onPrimary,
@@ -322,10 +393,15 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
 
   Widget _buildFlashCard(int index) {
     final word = _filteredWords[index];
+    final bool isShowingWord = _showFront
+        ? !_showTranslationFirst
+        : _showTranslationFirst;
+    final String displayText = _showFront
+        ? (_showTranslationFirst ? word.translation : word.word)
+        : (_showTranslationFirst ? word.word : word.translation);
 
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 600),
-
       transitionBuilder: (Widget child, Animation<double> animation) {
         return FadeTransition(
           opacity: animation,
@@ -337,35 +413,56 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           ),
         );
       },
-
-      child: Container(
+      child: Stack(
+        // Change from Container to Stack
         key: ValueKey('${word.id}_$_showFront'),
-        height: 500,
-        width: 350,
-        decoration: BoxDecoration(
-          color:
-              word.isLearned
+        children: [
+          Container(
+            height: 500,
+            width: 350,
+            decoration: BoxDecoration(
+              color: word.isLearned
                   ? Theme.of(context).colorScheme.secondary
                   : Theme.of(context).colorScheme.tertiary,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: const [
-            BoxShadow(color: Colors.black26, blurRadius: 10, spreadRadius: 3),
-          ],
-        ),
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(20),
-        child: Text(
-          _showFront
-              ? (_showTranslationFirst ? word.translation : word.word)
-              : (_showTranslationFirst ? word.word : word.translation),
-
-          style: TextStyle(
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.onTertiary,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  spreadRadius: 3,
+                ),
+              ],
+            ),
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              displayText,
+              style: TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onTertiary,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
-          textAlign: TextAlign.center,
-        ),
+          // Add speaker icon in top right corner when showing the word (not translation)
+          if (isShowingWord)
+            Positioned(
+              top: 12,
+              right: 12,
+              child: IconButton(
+                icon: Icon(
+                  Icons.volume_up,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onTertiary.withOpacity(0.8),
+                  size: 24,
+                ),
+                onPressed: () => _speakWord(word.word),
+                tooltip: AppLocalizations.of(context)!.pronounceWord,
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -499,11 +596,13 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
       appBar: AppBar(
         title: Text(
           widget.folder.name,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
-          ).merge(
-            GoogleFonts.philosopher(fontSize: 20, fontWeight: FontWeight.w700),
-          ),
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)
+              .merge(
+                GoogleFonts.philosopher(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
@@ -511,6 +610,11 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
           color: Theme.of(context).colorScheme.onPrimary,
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.language),
+            onPressed: _showLanguageSelection,
+            tooltip: AppLocalizations.of(context)!.changePronunciationLanguage,
+          ),
           if (!_showOptionsScreen && !_showCompletionScreen) ...[
             IconButton(
               icon: const Icon(Icons.help_outline),
@@ -526,107 +630,106 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
         ],
       ),
 
-      body:
-          _showOptionsScreen
-              ? _buildOptionsScreen()
-              : _showCompletionScreen
-              ? _buildCompletionScreen()
-              : Column(
-                children: [
-                  // Progress bar and counter
-                  if (_filteredWords.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                        vertical: 8.0,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: LinearProgressIndicator(
-                          value: (_currentIndex + 1) / _filteredWords.length,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surfaceVariant,
-                          color: Theme.of(context).colorScheme.primary,
-                          minHeight: 8,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      '${_currentIndex + 1}/${_filteredWords.length}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-
-                  // Flashcard content
-                  Expanded(
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () => setState(() => _showFront = !_showFront),
-                        child: Dismissible(
-                          key: ValueKey(_filteredWords[_currentIndex].id),
-                          direction: DismissDirection.horizontal,
-                          onDismissed: (direction) {
-                            if (direction == DismissDirection.endToStart) {
-                              _nextCard(false);
-                            } else {
-                              _nextCard(true);
-                            }
-                          },
-                          child: _buildFlashCard(_currentIndex),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Bottom buttons
+      body: _showOptionsScreen
+          ? _buildOptionsScreen()
+          : _showCompletionScreen
+          ? _buildCompletionScreen()
+          : Column(
+              children: [
+                // Progress bar and counter
+                if (_filteredWords.isNotEmpty) ...[
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: SafeArea(
-                      top: false,
-                      bottom: true,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FloatingActionButton(
-                            onPressed: _previousCard,
-                            heroTag: 'prevBtn',
-                            backgroundColor:
-                                Theme.of(context).colorScheme.secondary,
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Theme.of(context).colorScheme.onSecondary,
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          FloatingActionButton(
-                            onPressed: () => _nextCard(false),
-                            heroTag: 'nextBtnFalse',
-                            backgroundColor:
-                                Theme.of(context).colorScheme.onError,
-                            child: Icon(
-                              Icons.close,
-                              color:
-                                  Theme.of(
-                                    context,
-                                  ).colorScheme.onErrorContainer,
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          FloatingActionButton(
-                            onPressed: () => _nextCard(true),
-                            heroTag: 'nextBtnTrue',
-                            backgroundColor: Colors.lightGreen[700],
-                            child: const Icon(Icons.check, color: Colors.white),
-                          ),
-                        ],
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 8.0,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: LinearProgressIndicator(
+                        value: (_currentIndex + 1) / _filteredWords.length,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        color: Theme.of(context).colorScheme.primary,
+                        minHeight: 8,
                       ),
                     ),
                   ),
+                  Text(
+                    '${_currentIndex + 1}/${_filteredWords.length}',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                 ],
-              ),
+
+                // Flashcard content
+                Expanded(
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () => setState(() => _showFront = !_showFront),
+                      child: Dismissible(
+                        key: ValueKey(_filteredWords[_currentIndex].id),
+                        direction: DismissDirection.horizontal,
+                        onDismissed: (direction) {
+                          if (direction == DismissDirection.endToStart) {
+                            _nextCard(false);
+                          } else {
+                            _nextCard(true);
+                          }
+                        },
+                        child: _buildFlashCard(_currentIndex),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Bottom buttons
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: SafeArea(
+                    top: false,
+                    bottom: true,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FloatingActionButton(
+                          onPressed: _previousCard,
+                          heroTag: 'prevBtn',
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.secondary,
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Theme.of(context).colorScheme.onSecondary,
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        FloatingActionButton(
+                          onPressed: () => _nextCard(false),
+                          heroTag: 'nextBtnFalse',
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.onError,
+                          child: Icon(
+                            Icons.close,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onErrorContainer,
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        FloatingActionButton(
+                          onPressed: () => _nextCard(true),
+                          heroTag: 'nextBtnTrue',
+                          backgroundColor: Colors.lightGreen[700],
+                          child: const Icon(Icons.check, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }
