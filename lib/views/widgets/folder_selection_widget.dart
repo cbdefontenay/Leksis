@@ -39,20 +39,17 @@ class _FolderSelectionWidgetState extends State<FolderSelectionWidget> {
 
   void _filterFolders(String query) {
     setState(() {
-      _filteredFolders =
-          _folders
-              .where(
-                (folder) =>
-                    folder.name.toLowerCase().contains(query.toLowerCase()),
-              )
-              .toList();
+      _filteredFolders = _folders
+          .where(
+            (folder) => folder.name.toLowerCase().contains(query.toLowerCase()),
+          )
+          .toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     return Column(
       children: [
@@ -72,60 +69,59 @@ class _FolderSelectionWidgetState extends State<FolderSelectionWidget> {
         const SizedBox(height: 16),
 
         Expanded(
-          child:
-              _filteredFolders.isEmpty
-                  ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.folder_open,
-                          size: 80,
+          child: _filteredFolders.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.folder_open,
+                        size: 80,
+                        color: colorScheme.onSurface,
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        AppLocalizations.of(context)!.createYourFirstFolder,
+                        style: GoogleFonts.firaSans(
+                          fontSize: 20,
                           color: colorScheme.onSurface,
                         ),
-                        const SizedBox(height: 20),
-                        Text(
-                          AppLocalizations.of(context)!.createYourFirstFolder,
-                          style: GoogleFonts.firaSans(
-                            fontSize: 20,
-                            color: colorScheme.onSurface,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  )
-                  : ListView.builder(
-                    itemCount: _filteredFolders.length,
-                    itemBuilder: (context, index) {
-                      final folder = _filteredFolders[index];
-
-                      return Card(
-                        color: colorScheme.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.folder,
-                              color: colorScheme.onPrimary,
-                            ),
-                            title: Text(
-                              folder.name,
-                              style: TextStyle(
-                                color: colorScheme.onPrimary,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            onTap: () => widget.onFolderSelected(folder),
-                          ),
-                        ),
-                      );
-                    },
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
+                )
+              : ListView.builder(
+                  itemCount: _filteredFolders.length,
+                  itemBuilder: (context, index) {
+                    final folder = _filteredFolders[index];
+
+                    return Card(
+                      color: colorScheme.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.folder,
+                            color: colorScheme.onPrimary,
+                          ),
+                          title: Text(
+                            folder.name,
+                            style: TextStyle(
+                              color: colorScheme.onPrimary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onTap: () => widget.onFolderSelected(folder),
+                        ),
+                      ),
+                    );
+                  },
+                ),
         ),
       ],
     );

@@ -89,17 +89,52 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
     try {
       await _ttsService.speak(word);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.unableSpeakWord),
-          duration: const Duration(seconds: 2),
-        ),
-      );
-      await _initializeTTS();
-      try {
-        await _ttsService.speak(word);
-      } catch (e2) {
-        print('Second attempt failed: $e2');
+      String errorMessage = AppLocalizations.of(context)!.unableSpeakWord;
+
+      if (e.toString().contains('NO_TTS_ENGINE')) {
+        errorMessage = AppLocalizations.of(context)!.noTtsEngineFound;
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            duration: const Duration(seconds: 4),
+            action: e.toString().contains('NO_TTS_ENGINE')
+                ? SnackBarAction(
+                    label: "Help",
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(
+                            AppLocalizations.of(context)!.ttsHelpTitle,
+                          ),
+                          content: Text(
+                            AppLocalizations.of(context)!.ttsHelpMessage,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("OK"),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                : null,
+          ),
+        );
+      }
+
+      if (!e.toString().contains('NO_TTS_ENGINE')) {
+        await _initializeTTS();
+        try {
+          await _ttsService.speak(word);
+        } catch (e2) {
+          print('Second attempt failed: $e2');
+        }
       }
     }
   }

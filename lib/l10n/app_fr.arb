@@ -152,5 +152,14 @@
   "ratingPrompt": "Veux-tu noter Leksis sur le Google Play Store ? Cela nous aide à améliorer Leksis !",
   "maybeLater": "Peut-être plus tard",
   "rateNow": "Noter maintenant",
-  "thankYou": "Merci pour ton soutien !"
+  "thankYou": "Merci pour ton soutien !",
+  "searchNoResultsDescription": "Essayez de rechercher autre chose",
+  "overviewEmptyDescription": "Essayez d'apprendre des mots dans vos dossiers !",
+  "noFolderExercisesPrompt": "Vous devez d'abord créer un dossier pour commencer les exercices.",
+  "formatExcel": "Excel (.xlsx)",
+  "formatJson": "JSON (.json)",
+  "formatCsv": "CSV (.csv)",
+  "noTtsEngineFound": "Aucun moteur TTS trouvé. Certains appareils (comme GrapheneOS) nécessitent l'installation d'un moteur TTS (ex: RHVoice ou eSpeak NG) depuis F-Droid.",
+  "ttsHelpTitle": "Moteur TTS requis",
+  "ttsHelpMessage": "Votre appareil ne semble pas avoir de moteur de synthèse vocale installé.\\n\\nComme vous utilisez GrapheneOS, vous devez probablement installer un moteur open-source comme RHVoice ou eSpeak NG depuis F-Droid, puis l'activer dans Paramètres Système > Accessibilité > Sortie de synthèse vocale."
 }

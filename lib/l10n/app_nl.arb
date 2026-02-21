@@ -152,5 +152,14 @@
   "ratingPrompt": "Wil je Leksis beoordelen in de Play Store? Het helpt de app te verbeteren!",
   "maybeLater": "Misschien later",
   "rateNow": "Nu beoordelen",
-  "thankYou": "Bedankt voor je steun!"
+  "thankYou": "Bedankt voor je steun!",
+  "searchNoResultsDescription": "Probeer iets anders te zoeken",
+  "overviewEmptyDescription": "Probeer enkele woorden in je mappen te leren!",
+  "noFolderExercisesPrompt": "Je moet eerst een map aanmaken om met oefeningen te beginnen.",
+  "formatExcel": "Excel (.xlsx)",
+  "formatJson": "JSON (.json)",
+  "formatCsv": "CSV (.csv)",
+  "noTtsEngineFound": "Geen TTS-engine gevonden. Sommige apparaten (zoals GrapheneOS) vereisen het installeren van een TTS-engine (bijv. RHVoice of eSpeak NG) via F-Droid.",
+  "ttsHelpTitle": "TTS-engine vereist",
+  "ttsHelpMessage": "Uw apparaat lijkt geen tekst-naar-spraak-engine te hebben geïnstalleerd.\\n\\nAangezien u GrapheneOS gebruikt, moet u waarschijnlijk een open-source engine zoals RHVoice of eSpeak NG van F-Droid installeren en deze vervolgens inschakelen in Systeeminstellingen > Toegankelijkheid > Tekst-naar-spraak-output."
 }

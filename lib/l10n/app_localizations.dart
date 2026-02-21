@@ -899,6 +899,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Thank you for your support!'**
   String get thankYou;
+
+  /// No description provided for @searchNoResultsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Try searching for something else'**
+  String get searchNoResultsDescription;
+
+  /// No description provided for @overviewEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Try learning some words in your folders!'**
+  String get overviewEmptyDescription;
+
+  /// No description provided for @noFolderExercisesPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to create a folder first to start exercises.'**
+  String get noFolderExercisesPrompt;
+
+  /// No description provided for @formatExcel.
+  ///
+  /// In en, this message translates to:
+  /// **'Excel (.xlsx)'**
+  String get formatExcel;
+
+  /// No description provided for @formatJson.
+  ///
+  /// In en, this message translates to:
+  /// **'JSON (.json)'**
+  String get formatJson;
+
+  /// No description provided for @formatCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV (.csv)'**
+  String get formatCsv;
+
+  /// No description provided for @noTtsEngineFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No TTS engine found. Some devices (like GrapheneOS) require installing a TTS engine (e.g., RHVoice or eSpeak NG) from F-Droid.'**
+  String get noTtsEngineFound;
+
+  /// No description provided for @ttsHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'TTS Engine Required'**
+  String get ttsHelpTitle;
+
+  /// No description provided for @ttsHelpMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your device doesn\'t seem to have a Text-to-Speech engine installed.\\n\\nSince you are using GrapheneOS, you likely need to install an open-source engine like RHVoice or eSpeak NG from F-Droid, then enable it in System Settings > Accessibility > Text-to-speech output.'**
+  String get ttsHelpMessage;
 }
 
 class _AppLocalizationsDelegate

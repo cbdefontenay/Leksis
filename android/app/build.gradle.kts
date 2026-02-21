@@ -17,15 +17,15 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.cyprien.leksis"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "29.0.14033849"
+    ndkVersion = "29.0.14206865"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
@@ -35,8 +35,8 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = 6
-        versionName = "2.0.2"
+        versionCode = 7
+        versionName = "2.0.3"
     }
 
 signingConfigs {
@@ -62,4 +62,12 @@ signingConfigs {
 
 flutter {
     source = "../.."
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("androidx.core:core:1.15.0")
+        force("androidx.core:core-ktx:1.15.0")
+        force("androidx.browser:browser:1.8.0")
+    }
 }

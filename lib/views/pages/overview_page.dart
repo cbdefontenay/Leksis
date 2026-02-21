@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../l10n/app_localizations.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:leksis/data/notifiers.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:leksis/models/word_model.dart';
+import 'package:leksis/theme/app_styles.dart';
+import 'package:leksis/views/widgets/empty_state_view.dart';
+import '../../l10n/app_localizations.dart';
 
 class OverviewPage extends StatefulWidget {
   const OverviewPage({super.key});
@@ -38,10 +41,12 @@ class _OverviewPageState extends State<OverviewPage>
 
     if (!mounted) return;
 
-    learnedWordsNotifier.value =
-        words.where((word) => word.isLearned == false).toList();
-    notLearnedWordsNotifier.value =
-        words.where((word) => word.isLearned == true).toList();
+    learnedWordsNotifier.value = words
+        .where((word) => word.isLearned == false)
+        .toList();
+    notLearnedWordsNotifier.value = words
+        .where((word) => word.isLearned == true)
+        .toList();
 
     if (mounted) {
       setState(() {
@@ -129,62 +134,47 @@ class _OverviewPageState extends State<OverviewPage>
         title: Text(
           AppLocalizations.of(context)!.overviewTitle,
           style: GoogleFonts.philosopher(
-            fontSize: 25,
-            fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.onPrimary,
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        centerTitle: true,
         bottom: TabBar(
           key: const ValueKey('overview_tab_bar'),
           controller: _tabController,
-          indicatorColor: Theme.of(context).colorScheme.onTertiary,
-          indicatorWeight: 3,
-          indicatorPadding: const EdgeInsets.symmetric(horizontal: 16),
-          labelColor: Theme.of(context).colorScheme.onTertiary,
-          unselectedLabelColor: Theme.of(context).colorScheme.onTertiary,
+          indicatorSize: TabBarIndicatorSize.label,
           labelStyle: GoogleFonts.firaSans(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
           ),
           unselectedLabelStyle: GoogleFonts.firaSans(
             fontWeight: FontWeight.w500,
-            fontSize: 14,
+            fontSize: 15,
           ),
           tabs: [
             Tab(
               key: const ValueKey('not_learned_tab'),
-              icon: Icon(
-                Icons.star_border,
-                color: Theme.of(context).colorScheme.onTertiary,
-              ),
+              icon: const Icon(Icons.star_border_rounded),
               text: AppLocalizations.of(context)!.notLearned,
             ),
             Tab(
               key: const ValueKey('learned_tab'),
-              icon: Icon(
-                Icons.star,
-                color: Theme.of(context).colorScheme.onTertiary,
-              ),
+              icon: const Icon(Icons.star_rounded),
               text: AppLocalizations.of(context)!.learned,
             ),
           ],
         ),
       ),
 
-      body:
-          isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : TabBarView(
+      body: Container(
+        decoration: BoxDecoration(gradient: AppStyles.pageGradient(context)),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : TabBarView(
                 controller: _tabController,
-
                 children: [
                   _buildAnimatedWordList(
                     learnedWordsNotifier,
-
                     _learnedListKey,
-
                     0,
                   ),
                   _buildAnimatedWordList(
@@ -194,6 +184,7 @@ class _OverviewPageState extends State<OverviewPage>
                   ),
                 ],
               ),
+      ),
     );
   }
 
@@ -227,39 +218,11 @@ class _OverviewPageState extends State<OverviewPage>
         }
 
         if (words.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.auto_awesome, size: 64, color: colorScheme.primary),
-                const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: colorScheme.tertiary,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    '0 ${AppLocalizations.of(context)!.words}',
-                    style: textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onTertiary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  AppLocalizations.of(context)!.noWordsAvailable,
-                  style: textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-              ],
-            ),
-          );
+          return EmptyStateView(
+            icon: Icons.auto_awesome_rounded,
+            title: AppLocalizations.of(context)!.noWordsAvailable,
+            description: AppLocalizations.of(context)!.overviewEmptyDescription,
+          ).animate().fadeIn();
         }
 
         return Column(
@@ -320,10 +283,9 @@ class _OverviewPageState extends State<OverviewPage>
           trailing: IconButton(
             icon: Icon(
               word.isLearned ? Icons.star : Icons.star_border,
-              color:
-                  word.isLearned
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.secondary,
+              color: word.isLearned
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.secondary,
             ),
             onPressed: () async {
               await _toggleWordLearnStatus(word, listIndex);

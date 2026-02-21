@@ -422,4 +422,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thankYou => 'Thank you for your support!';
+
+  @override
+  String get searchNoResultsDescription => 'Try searching for something else';
+
+  @override
+  String get overviewEmptyDescription =>
+      'Try learning some words in your folders!';
+
+  @override
+  String get noFolderExercisesPrompt =>
+      'You need to create a folder first to start exercises.';
+
+  @override
+  String get formatExcel => 'Excel (.xlsx)';
+
+  @override
+  String get formatJson => 'JSON (.json)';
+
+  @override
+  String get formatCsv => 'CSV (.csv)';
+
+  @override
+  String get noTtsEngineFound =>
+      'No TTS engine found. Some devices (like GrapheneOS) require installing a TTS engine (e.g., RHVoice or eSpeak NG) from F-Droid.';
+
+  @override
+  String get ttsHelpTitle => 'TTS Engine Required';
+
+  @override
+  String get ttsHelpMessage =>
+      'Your device doesn\'t seem to have a Text-to-Speech engine installed.\\n\\nSince you are using GrapheneOS, you likely need to install an open-source engine like RHVoice or eSpeak NG from F-Droid, then enable it in System Settings > Accessibility > Text-to-speech output.';
 }

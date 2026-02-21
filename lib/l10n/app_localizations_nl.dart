@@ -423,4 +423,35 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get thankYou => 'Bedankt voor je steun!';
+
+  @override
+  String get searchNoResultsDescription => 'Probeer iets anders te zoeken';
+
+  @override
+  String get overviewEmptyDescription =>
+      'Probeer enkele woorden in je mappen te leren!';
+
+  @override
+  String get noFolderExercisesPrompt =>
+      'Je moet eerst een map aanmaken om met oefeningen te beginnen.';
+
+  @override
+  String get formatExcel => 'Excel (.xlsx)';
+
+  @override
+  String get formatJson => 'JSON (.json)';
+
+  @override
+  String get formatCsv => 'CSV (.csv)';
+
+  @override
+  String get noTtsEngineFound =>
+      'Geen TTS-engine gevonden. Sommige apparaten (zoals GrapheneOS) vereisen het installeren van een TTS-engine (bijv. RHVoice of eSpeak NG) via F-Droid.';
+
+  @override
+  String get ttsHelpTitle => 'TTS-engine vereist';
+
+  @override
+  String get ttsHelpMessage =>
+      'Uw apparaat lijkt geen tekst-naar-spraak-engine te hebben geïnstalleerd.\\n\\nAangezien u GrapheneOS gebruikt, moet u waarschijnlijk een open-source engine zoals RHVoice of eSpeak NG van F-Droid installeren en deze vervolgens inschakelen in Systeeminstellingen > Toegankelijkheid > Tekst-naar-spraak-output.';
 }

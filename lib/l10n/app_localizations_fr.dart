@@ -426,4 +426,35 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get thankYou => 'Merci pour ton soutien !';
+
+  @override
+  String get searchNoResultsDescription => 'Essayez de rechercher autre chose';
+
+  @override
+  String get overviewEmptyDescription =>
+      'Essayez d\'apprendre des mots dans vos dossiers !';
+
+  @override
+  String get noFolderExercisesPrompt =>
+      'Vous devez d\'abord créer un dossier pour commencer les exercices.';
+
+  @override
+  String get formatExcel => 'Excel (.xlsx)';
+
+  @override
+  String get formatJson => 'JSON (.json)';
+
+  @override
+  String get formatCsv => 'CSV (.csv)';
+
+  @override
+  String get noTtsEngineFound =>
+      'Aucun moteur TTS trouvé. Certains appareils (comme GrapheneOS) nécessitent l\'installation d\'un moteur TTS (ex: RHVoice ou eSpeak NG) depuis F-Droid.';
+
+  @override
+  String get ttsHelpTitle => 'Moteur TTS requis';
+
+  @override
+  String get ttsHelpMessage =>
+      'Votre appareil ne semble pas avoir de moteur de synthèse vocale installé.\\n\\nComme vous utilisez GrapheneOS, vous devez probablement installer un moteur open-source comme RHVoice ou eSpeak NG depuis F-Droid, puis l\'activer dans Paramètres Système > Accessibilité > Sortie de synthèse vocale.';
 }

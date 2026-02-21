@@ -152,5 +152,14 @@
   "ratingPrompt": "Would you mind rating Leksis on the Play Store? It helps us improve!",
   "maybeLater": "Maybe Later",
   "rateNow": "Rate Now",
-  "thankYou": "Thank you for your support!"
+  "thankYou": "Thank you for your support!",
+  "searchNoResultsDescription": "Try searching for something else",
+  "overviewEmptyDescription": "Try learning some words in your folders!",
+  "noFolderExercisesPrompt": "You need to create a folder first to start exercises.",
+  "formatExcel": "Excel (.xlsx)",
+  "formatJson": "JSON (.json)",
+  "formatCsv": "CSV (.csv)",
+  "noTtsEngineFound": "No TTS engine found. Some devices (like GrapheneOS) require installing a TTS engine (e.g., RHVoice or eSpeak NG) from F-Droid.",
+  "ttsHelpTitle": "TTS Engine Required",
+  "ttsHelpMessage": "Your device doesn't seem to have a Text-to-Speech engine installed.\\n\\nSince you are using GrapheneOS, you likely need to install an open-source engine like RHVoice or eSpeak NG from F-Droid, then enable it in System Settings > Accessibility > Text-to-speech output."
 }

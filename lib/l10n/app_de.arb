@@ -152,5 +152,14 @@
   "ratingPrompt": "Würdest du Leksis im Play Store bewerten? Es hilft die App besser zu werden!",
   "maybeLater": "Vielleicht später",
   "rateNow": "Jetzt bewerten",
-  "thankYou": "Vielen Dank für deine Unterstützung!"
+  "thankYou": "Vielen Dank für deine Unterstützung!",
+  "searchNoResultsDescription": "Versuchen Sie es mit einer anderen Suche",
+  "overviewEmptyDescription": "Versuchen Sie, einige Wörter in Ihren Ordnern zu lernen!",
+  "noFolderExercisesPrompt": "Sie müssen zuerst einen Ordner erstellen, um mit den Übungen zu beginnen.",
+  "formatExcel": "Excel (.xlsx)",
+  "formatJson": "JSON (.json)",
+  "formatCsv": "CSV (.csv)",
+  "noTtsEngineFound": "Keine TTS-Engine gefunden. Einige Geräte (wie GrapheneOS) erfordern die Installation einer TTS-Engine (z. B. RHVoice oder eSpeak NG) von F-Droid.",
+  "ttsHelpTitle": "TTS-Engine erforderlich",
+  "ttsHelpMessage": "Auf Ihrem Gerät scheint keine Text-to-Speech-Engine installiert zu sein.\\n\\nDa Sie GrapheneOS verwenden, müssen Sie wahrscheinlich eine Open-Source-Engine wie RHVoice oder eSpeak NG von F-Droid installieren und diese dann in den Systemeinstellungen > Bedienungshilfen > Text-zu-Sprache-Ausgabe aktivieren."
 }

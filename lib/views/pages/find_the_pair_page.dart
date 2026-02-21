@@ -393,7 +393,7 @@ class _FindThePairPageState extends State<FindThePairPage> {
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<String>(
-                    value:
+                    initialValue:
                         AppLocalizations.of(
                           context,
                         )!.normal, // Use localized value
@@ -465,7 +465,7 @@ class _FindThePairPageState extends State<FindThePairPage> {
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<int>(
-                    value: rounds,
+                    initialValue: rounds,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),

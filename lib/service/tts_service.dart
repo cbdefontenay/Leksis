@@ -22,10 +22,10 @@ enum TTSLanguage {
   russian('ru-RU', 'Русский', 'ru_RU'),
   turkish('tr-TR', 'Türkçe', 'tr_TR'),
   japanese('ja-JP', '日本語', 'ja_JP'),
-  chinese('zh-CN', '日本語', 'zh_CN'),
-  korean('ko-KR', '한국인', 'ko_KR'),
-  arabic('ar', 'عربي', 'ar'),
-  hindi('hi-IN', 'हिंदी"', 'hi_IN');
+  chinese('zh-CN', '简体中文', 'zh_CN'),
+  korean('ko-KR', '한국어', 'ko_KR'),
+  arabic('ar', 'العربية', 'ar'),
+  hindi('hi-IN', 'हिन्दी', 'hi_IN');
 
   final String code;
   final String name;
@@ -46,6 +46,21 @@ class TTSService {
   bool _disposed = false;
 
   bool get isDisposed => _disposed;
+  bool get isInitialized => _initialized;
+
+  /// Checks if any TTS engines are installed on the device
+  Future<bool> hasTtsEngine() async {
+    try {
+      if (Platform.isAndroid) {
+        final engines = await _flutterTts.getEngines;
+        return engines != null && (engines as List).isNotEmpty;
+      }
+      return true; // Assume true for other platforms for now
+    } catch (e) {
+      print('Error checking for TTS engines: $e');
+      return false;
+    }
+  }
 
   Future<void> initialize() async {
     if (_initialized || _disposed) return;
@@ -122,10 +137,32 @@ class TTSService {
   Future<void> _speakWithFlutterTts(String text) async {
     try {
       if (_disposed) return;
-      await _flutterTts.speak(text);
+
+      // Double check language setting
+      await _flutterTts.setLanguage(_currentLanguage.code);
+
+      final result = await _flutterTts.speak(text);
+      if (result != 1) {
+        // Some engines return 0 if failed
+        throw Exception('TTS Engine failed to speak');
+      }
     } catch (e) {
+      print('FlutterTTS error: $e');
+
+      // Check if the error is due to missing engine
+      final hasEngine = await hasTtsEngine();
+      if (!hasEngine) {
+        throw Exception('NO_TTS_ENGINE');
+      }
+
       _initialized = false;
       await initialize();
+      try {
+        await _flutterTts.speak(text);
+      } catch (e2) {
+        print('Retry failed: $e2');
+        rethrow;
+      }
     }
   }
 
