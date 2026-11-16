@@ -223,16 +223,13 @@ class _FolderPageState extends ConsumerState<FolderPage> {
 
     Future<void> importFromExcel() async {
       try {
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
+        final file = await FilePicker.pickFile(
           type: FileType.custom,
           allowedExtensions: ['xlsx'],
-          allowMultiple: false,
         );
 
-        if (result == null || result.files.isEmpty) return;
-        final file = result.files.first;
-        if (file.path == null) return;
-        final bytes = await File(file.path!).readAsBytes();
+        if (file == null) return;
+        final bytes = await file.readAsBytes();
 
         if (bytes.length < 4 || !(bytes[0] == 0x50 && bytes[1] == 0x4B)) {
           throw Exception(AppLocalizations.of(context)!.notValidExcel);
@@ -289,17 +286,14 @@ class _FolderPageState extends ConsumerState<FolderPage> {
 
     Future<void> importFromJsonOrCsv() async {
       try {
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
+        final file = await FilePicker.pickFile(
           type: FileType.custom,
           allowedExtensions: ['json', 'csv'],
-          allowMultiple: false,
         );
 
-        if (result == null || result.files.isEmpty) return;
-        final file = result.files.first;
-        if (file.path == null) return;
+        if (file == null) return;
 
-        final String content = await File(file.path!).readAsString();
+        final String content = utf8.decode(await file.readAsBytes());
         int importedCount = 0;
 
         if (file.extension == 'json') {

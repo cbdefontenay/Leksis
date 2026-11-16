@@ -36,6 +36,9 @@ Whether you're:
 
 ## 🛠️ Built With
 
+Android builds target **Android 17 (API 37)** and require **Android 7.0 (API 24)** or newer.
+The build uses Android Gradle Plugin 9.1.1, Gradle 9.3.1, and Kotlin 2.2.10.
+
 - 💙 **Flutter** – For Android native performance.
 - 🧠 SQLite – To persist vocabulary locally on device and for more security. You own your data, no one can see them or steal them from you.
 - 🌍 **Multilingual Support** – Available in **English**, **French**, **German**, and **Dutch**.

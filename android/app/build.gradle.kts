@@ -1,5 +1,9 @@
+// Flutter plugins currently require the legacy AGP DSL (android.newDsl=false).
+@file:Suppress("DEPRECATION", "DEPRECATION_ERROR")
+
 import java.util.Properties
 import java.io.FileInputStream
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("com.android.application")
@@ -16,16 +20,12 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.cyprien.leksis"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = "29.0.14206865"
+    compileSdk = 37
+    ndkVersion = "30.0.16248370"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
@@ -33,14 +33,14 @@ android {
         applicationId = "com.cyprien.leksis"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = 8
-        versionName = "2.0.4"
+        minSdk = 24
+        targetSdk = 37
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
     }
 
-signingConfigs {
-        create("release") {
+    signingConfigs {
+        if (keystorePropertiesFile.exists()) create("release") {
             keyAlias = keystoreProperties["keyAlias"] as String
             keyPassword = keystoreProperties["keyPassword"] as String
             storeFile = keystoreProperties["storeFile"]?.let { file(it) }
@@ -52,13 +52,19 @@ signingConfigs {
             signingConfig = signingConfigs.getByName("debug")
         }
         getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
         }
     }
 }
 
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
+}
 
 flutter {
     source = "../.."

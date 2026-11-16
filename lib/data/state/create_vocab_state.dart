@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:leksis/data/state/folder_state.dart';
 import 'package:leksis/database/database_helpers.dart';
 import 'package:leksis/models/word_model.dart';
